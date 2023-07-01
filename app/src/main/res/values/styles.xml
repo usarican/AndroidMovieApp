@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavigationItem" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/playfair_display_bold</item>
+    </style>
+
+    <style name="BottomNavigation">
+        <item name="android:background">@color/white</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationItem</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavigationItem</item>
+        <item name="itemIconTint">@color/bottom_navigation_item_selector</item>
+        <item name="itemTextColor">@color/bottom_navigation_item_selector</item>
+        <item name="itemIconSize">@dimen/widget_32</item>
+        <item name="labelVisibilityMode">labeled</item>
+    </style>
+</resources>
