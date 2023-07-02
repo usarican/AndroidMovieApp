@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseActivity<VDB : ViewDataBinding>: AppCompatActivity() {
+abstract class BaseActivity<VDB : ViewDataBinding>(): AppCompatActivity() {
 
     open val binding : VDB by lazy {  bindingFactory(layoutInflater) }
 
@@ -20,6 +20,7 @@ abstract class BaseActivity<VDB : ViewDataBinding>: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.lifecycleOwner = this
+        setContentView(binding.root)
         setUpViews(savedInstanceState)
         setUpListeners()
         setUpObservers()

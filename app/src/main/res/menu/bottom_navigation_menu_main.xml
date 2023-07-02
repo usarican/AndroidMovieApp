@@ -12,14 +12,14 @@
     <item
         android:id="@+id/my_list_nav_graph"
         android:icon="@drawable/nav_my_list_item_selector"
-        android:title="@string/home"
+        android:title="@string/my_list"
         android:orderInCategory="101"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/profile_nav_graph"
         android:icon="@drawable/nav_profile_item_selector"
-        android:title="@string/home"
+        android:title="@string/profile"
         android:orderInCategory="102"
         app:showAsAction="ifRoom" />
 </menu>
