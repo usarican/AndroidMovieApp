@@ -1,4 +1,4 @@
-package com.example.mymovieapp.features.home
+package com.example.mymovieapp.features.home.ui
 
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
