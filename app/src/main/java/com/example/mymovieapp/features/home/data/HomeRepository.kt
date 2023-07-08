@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
 
-    suspend fun getTrendingMoviesOfWeek(language : String) : Flow<State<MovieResponse>>
+    fun getTrendingMoviesOfWeek(language : String) : Flow<State<MovieResponse>>
 
     suspend fun getPopularMovies(page : Int, language : String) : Flow<PagingData<MovieDto>>
 
@@ -18,5 +18,5 @@ interface HomeRepository {
 
     suspend fun getUpComingMovies(page : Int, language : String) : Flow<PagingData<MovieDto>>
 
-    suspend fun getMovieGenreList(language : String) : Flow<GenreListDto>
+    fun getMovieGenreList(language : String) : Flow<GenreListDto>
 }

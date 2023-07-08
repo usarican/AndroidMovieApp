@@ -14,7 +14,7 @@ class GetGenreListUseCase @Inject constructor(
     private val genreListMapper: GenreListMapper
 ) {
 
-    suspend operator fun invoke(language: String): Flow<Map<Int, String>> {
+    operator fun invoke(language: String): Flow<Map<Int, String>> {
         return homeRepository.getMovieGenreList(language).map { genreListDto ->
             genreListMapper.mapOnGenresToMap(genreListDto)
         }

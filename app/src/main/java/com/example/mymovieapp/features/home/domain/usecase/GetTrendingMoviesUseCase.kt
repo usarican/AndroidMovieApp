@@ -19,7 +19,7 @@ class GetTrendingMoviesUseCase @Inject constructor(
     private val movieMapper: MovieMapper,
     private val genreListUseCase: GetGenreListUseCase
 ){
-    suspend operator fun invoke(language : String) : Flow<State<List<Movie>>> {
+    operator fun invoke(language : String) : Flow<State<List<Movie>>> {
         return combine(
             homeRepository.getTrendingMoviesOfWeek(language),
             genreListUseCase(language)

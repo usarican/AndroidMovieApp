@@ -12,13 +12,14 @@ import com.example.mymovieapp.features.home.data.remote.HomeRemoteDataSource
 import com.example.mymovieapp.utils.Constants
 import com.example.mymovieapp.utils.MoviesPagingSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class HomeRepositoryImp @Inject constructor(
     private val homeRemoteDataSource: HomeRemoteDataSource
 ) : HomeRepository, BaseRepository(){
 
-    override suspend fun getTrendingMoviesOfWeek(language: String): Flow<State<MovieResponse>> {
+    override fun getTrendingMoviesOfWeek(language: String): Flow<State<MovieResponse>> {
        return apiCall { homeRemoteDataSource.getTrendingMoviesOfWeek(language) }
     }
 
@@ -82,7 +83,9 @@ class HomeRepositoryImp @Inject constructor(
         ).flow
     }
 
-    override suspend fun getMovieGenreList(language: String): Flow<State<GenreListDto>> {
-        return apiCall { homeRemoteDataSource.getMovieGenreList(language) }
+    override fun getMovieGenreList(language: String): Flow<GenreListDto> {
+        return flow {
+            emit( homeRemoteDataSource.getMovieGenreList(language))
+        }
     }
 }
