@@ -5,28 +5,41 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/banner_movie_item_container"
         android:layout_width="match_parent"
-        app:cardElevation="20dp"
+        android:layout_height="match_parent"
         android:layout_marginVertical="@dimen/space_4"
-        android:layout_marginHorizontal="@dimen/space_64"
+        app:cardElevation="20dp"
         app:cardCornerRadius="@dimen/space_16"
         android:ambientShadowAlpha="1"
         android:spotShadowAlpha="1"
         android:outlineSpotShadowColor="@color/colorAccent"
         android:outlineAmbientShadowColor="@color/colorAccent"
-        android:layout_height="300dp">
+        >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/banner_movie_item_card_view"
             android:layout_width="match_parent"
+            android:layout_margin="@dimen/space_4"
+            app:cardElevation="21dp"
+            app:cardCornerRadius="@dimen/space_16"
+            android:padding="10dp"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/banner_movie_item_image"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                />
+                android:layout_height="match_parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/banner_movie_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </com.google.android.material.card.MaterialCardView>
+
+
 </layout>

@@ -1,10 +1,14 @@
 package com.example.mymovieapp.features.home.ui
 
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentHomeBinding
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
+import com.example.mymovieapp.utils.ViewPagerTransformer
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -27,7 +31,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
     private fun setUpViewPager(){
         bannerMoviesAdapter = BannerMoviesAdapter()
-        binding.bannerMoviesViewPager.adapter = bannerMoviesAdapter
+        binding.bannerMoviesViewPager.apply {
+            adapter = bannerMoviesAdapter
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+            val compositePagerTransformer = CompositePageTransformer()
+            compositePagerTransformer.addTransformer(MarginPageTransformer(40))
+            compositePagerTransformer.addTransformer(ViewPagerTransformer())
+            setPageTransformer(compositePagerTransformer)
+        }
+
     }
 
     companion object {

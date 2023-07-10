@@ -85,6 +85,7 @@ class BannerMovieView @JvmOverloads constructor(
 
                     mBinding.bannerMovieItemContainer.outlineSpotShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
                     mBinding.bannerMovieItemContainer.outlineAmbientShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
+                    mBinding.bannerMovieItemContainer.setCardBackgroundColor(ColorUtils.setAlphaComponent(dominantColor,165))
                 }
             }
         }
