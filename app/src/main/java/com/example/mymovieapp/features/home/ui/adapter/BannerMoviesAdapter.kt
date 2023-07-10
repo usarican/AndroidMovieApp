@@ -10,7 +10,6 @@ import com.example.mymovieapp.features.home.domain.model.Movie
 
 class BannerMoviesAdapter() : BaseAdapter<Movie,BannerMovieItemBinding>(BANNER_MOVIE_DIFF_UTIL_CALLBACK) {
     override fun getResourceId(): Int = R.layout.banner_movie_item
-
     override fun createHolderInstance(binding: BannerMovieItemBinding): BaseViewHolder {
         return object : BaseViewHolder(binding){
             override fun bind(model: Movie) {
@@ -20,6 +19,7 @@ class BannerMoviesAdapter() : BaseAdapter<Movie,BannerMovieItemBinding>(BANNER_M
 
         }
     }
+
 
     companion object {
         private val BANNER_MOVIE_DIFF_UTIL_CALLBACK = object : DiffUtil.ItemCallback<Movie>(){

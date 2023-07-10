@@ -20,4 +20,6 @@
     <dimen name="space_8">8dp</dimen>
     <dimen name="space_16">16dp</dimen>
     <dimen name="space_24">24dp</dimen>
+    <dimen name="space_32">32dp</dimen>
+    <dimen name="space_64">64dp</dimen>
 </resources>
