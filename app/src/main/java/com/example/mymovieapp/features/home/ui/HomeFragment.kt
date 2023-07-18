@@ -25,7 +25,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
     override fun setUpObservers() {
         viewModel.getTrendingMoviesOfWeekLiveData().observe(viewLifecycleOwner){
             bannerMoviesAdapter.submitList(it)
-            Timber.tag(TAG).d(it.toString())
+            binding.bannerMovieIndicator.setViewPager2(binding.bannerMoviesViewPager)
         }
     }
 
@@ -43,8 +43,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
             compositePagerTransformer.addTransformer(ViewPagerTransformer())
             setPageTransformer(compositePagerTransformer)
         }
-
     }
+
 
     companion object {
         private val TAG = HomeFragment::class.java.name
