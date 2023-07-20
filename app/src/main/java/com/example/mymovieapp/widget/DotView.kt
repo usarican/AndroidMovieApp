@@ -1,5 +1,7 @@
 package com.example.mymovieapp.widget
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -24,6 +26,8 @@ class DotView @JvmOverloads constructor(
     private var isActive : Boolean = false
     private var heightCircle = 0
     private var circleCenter = 0F
+
+    private val animDuration = 150L
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -67,6 +71,17 @@ class DotView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun animateSelection(selected: Boolean) {
+        val scale = if (selected) 1.5f else 1.0f
+        val animator = ObjectAnimator.ofPropertyValuesHolder(
+            this,
+            PropertyValuesHolder.ofFloat("scaleX", scale),
+            PropertyValuesHolder.ofFloat("scaleY", scale)
+        )
+        animator.duration = animDuration
+        animator.start()
+    }
+
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -75,7 +90,7 @@ class DotView @JvmOverloads constructor(
         val centerY = height / 2.toFloat()
 
         if (isActive){
-            paint.color = ColorUtils.setAlphaComponent(activeColor,120)
+            paint.color = ColorUtils.setAlphaComponent(activeColor,255)
         } else {
             paint.color = resources.getColor(inActiveColor)
         }

@@ -1,12 +1,12 @@
 package com.example.mymovieapp.features.home.domain.mapper
 
-import com.example.mymovieapp.core.data.remote.response.GenreListDto
+import com.example.mymovieapp.core.data.remote.response.GenreListResponse
 import javax.inject.Inject
 
 class GenreListMapper @Inject constructor() {
 
     fun mapOnGenresToMap(
-        genreListResponse: GenreListDto
+        genreListResponse: GenreListResponse
     ) : Map<Int,String> {
         return genreListResponse.genres.map { it.id to it.name }.toMap()
     }

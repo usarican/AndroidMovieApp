@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.features.home.domain.model.Movie
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
+import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,10 +31,16 @@ class HomeViewModel @Inject constructor(
         getTrendingMoviesUseCase.invoke("en")
             .doOnSuccess { movieList ->
                 _trendingMoviesOfWeekMutableLiveData.value = movieList
+            }.doOnError {
+                Timber.tag(TAG).e(it)
             }
             .onEach { state ->
                 _trendingMoviesOfWeekStateMutableLiveData.value = LayoutViewState(state)
             }
             .launchIn(viewModelScope)
+    }
+
+    companion object {
+        private val TAG = HomeViewModel::class.java.simpleName
     }
 }

@@ -5,13 +5,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.mymovieapp.core.data.BaseRepository
 import com.example.mymovieapp.core.data.State
-import com.example.mymovieapp.core.data.remote.response.GenreListDto
+import com.example.mymovieapp.core.data.remote.response.GenreListResponse
 import com.example.mymovieapp.core.data.remote.response.MovieDto
 import com.example.mymovieapp.core.data.remote.response.MovieResponse
 import com.example.mymovieapp.features.home.data.remote.HomeRemoteDataSource
 import com.example.mymovieapp.utils.Constants
 import com.example.mymovieapp.utils.MoviesPagingSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -83,9 +84,11 @@ class HomeRepositoryImp @Inject constructor(
         ).flow
     }
 
-    override fun getMovieGenreList(language: String): Flow<GenreListDto> {
+    override fun getMovieGenreList(language: String): Flow<GenreListResponse> {
         return flow {
             emit( homeRemoteDataSource.getMovieGenreList(language))
+        }.catch { error ->
+            error.printStackTrace()
         }
     }
 }

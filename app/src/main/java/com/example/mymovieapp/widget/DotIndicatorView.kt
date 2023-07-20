@@ -3,6 +3,7 @@ package com.example.mymovieapp.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -17,12 +18,13 @@ import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DotIndicatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : HorizontalScrollView(context,attrs,defStyle) {
+) : LinearLayout(context,attrs,defStyle) {
 
     private var viewPager2 : ViewPager2? = null
     private var dotsNum : Int = 0
@@ -30,26 +32,25 @@ class DotIndicatorView @JvmOverloads constructor(
     private var dotSize = DEFAULT_DOT_SIZE.dp
     private val dotMargin = DEFAULT_DOT_MARGIN.dp
 
-    private val dotContainer: LinearLayout
-
     private var activeColor : Int = R.color.icon_select_color
 
+
     init {
-        val customDot = DotView(context).apply {
-            this.layoutParams = LayoutParams(dotSize,dotSize).apply {
-                setMargins(dotMargin,dotMargin,dotMargin,dotMargin)
-            }
-        }
-        val width = customDot.width
-        dotContainer = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            layoutParams = LayoutParams(width * 5, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        }
+        orientation = HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
 
-        addView(dotContainer)
+    }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        val itemWidth = getChildAt(0)?.measuredWidth ?: 0
+        val itemHeight = getChildAt(0)?.measuredHeight ?: 0
+        val height = itemHeight * 1.5
+        val totalWidth = itemWidth * MAX_VISIBLE_ITEM_COUNT * 2
+
+        setMeasuredDimension(totalWidth,height.toInt())
     }
 
     fun setViewPager2(viewPager2: ViewPager2){
@@ -60,7 +61,6 @@ class DotIndicatorView @JvmOverloads constructor(
                 val adapter = viewPager2.adapter as BannerMoviesAdapter
                 val movie = adapter.currentList[position]
                 setDotViewColor(movie)
-                scrollToIndex(position)
             }
         })
         setNumDots(viewPager2.adapter?.itemCount ?: 0)
@@ -77,24 +77,21 @@ class DotIndicatorView @JvmOverloads constructor(
     }
 
     private fun update() {
-        dotContainer.removeAllViews()
+        this.removeAllViews()
 
-        for (i in 0 until dotsNum){
+        for (i in 0 until MAX_VISIBLE_ITEM_COUNT){
             val dot = DotView(context).apply {
                 this.setActiveColor(activeColor)
-                if (i == activeDotIndex) this.setIsActive(true) else this.setIsActive(false)
+                if (i == activeDotIndex % 5) {
+                    this.setIsActive(true)
+                    this.animateSelection(true)
+                } else this.setIsActive(false)
                 this.layoutParams = LayoutParams(dotSize,dotSize).apply {
                     setMargins(dotMargin,dotMargin,dotMargin,dotMargin)
                 }
             }
-            dotContainer.addView(dot)
+            this.addView(dot)
         }
-    }
-
-    private fun scrollToIndex(index: Int) {
-        val item = dotContainer.getChildAt(index)
-        val scrollToX = item.left - (this.width - item.width) / 2
-        this.smoothScrollTo(scrollToX, 0)
     }
 
     private fun setDotViewColor(movieItem : Movie) {

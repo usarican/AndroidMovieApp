@@ -1,7 +1,7 @@
 package com.example.mymovieapp.features.home.data.remote
 
 import com.example.mymovieapp.core.data.remote.MovieGenreService
-import com.example.mymovieapp.core.data.remote.response.GenreListDto
+import com.example.mymovieapp.core.data.remote.response.GenreListResponse
 import com.example.mymovieapp.core.data.remote.response.MovieResponse
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class HomeRemoteDataSource @Inject constructor(
         )
     }
 
-    suspend fun getMovieGenreList(language : String) : GenreListDto {
+    suspend fun getMovieGenreList(language : String) : GenreListResponse {
         return movieGenreService.getMovieGenreList(language)
     }
 }
