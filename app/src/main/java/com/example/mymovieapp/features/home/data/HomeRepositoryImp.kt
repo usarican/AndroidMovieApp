@@ -24,7 +24,7 @@ class HomeRepositoryImp @Inject constructor(
        return apiCall { homeRemoteDataSource.getTrendingMoviesOfWeek(language) }
     }
 
-    override suspend fun getPopularMovies(page: Int, language: String): Flow<PagingData<MovieDto>> {
+    override fun getPopularMovies(language: String): Flow<PagingData<MovieDto>> {
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.ITEMS_PER_PAGE
@@ -42,8 +42,7 @@ class HomeRepositoryImp @Inject constructor(
         ).flow
     }
 
-    override suspend fun getTopRatedMovies(
-        page: Int,
+    override fun getTopRatedMovies(
         language: String
     ): Flow<PagingData<MovieDto>> {
         return Pager(
@@ -63,8 +62,7 @@ class HomeRepositoryImp @Inject constructor(
         ).flow
     }
 
-    override suspend fun getUpComingMovies(
-        page: Int,
+    override fun getUpComingMovies(
         language: String
     ): Flow<PagingData<MovieDto>> {
         return Pager(
@@ -84,11 +82,7 @@ class HomeRepositoryImp @Inject constructor(
         ).flow
     }
 
-    override fun getMovieGenreList(language: String): Flow<GenreListResponse> {
-        return flow {
-            emit( homeRemoteDataSource.getMovieGenreList(language))
-        }.catch { error ->
-            error.printStackTrace()
-        }
+    override fun getMovieGenreList(language: String): Flow<State<GenreListResponse>> {
+        return apiCall { homeRemoteDataSource.getMovieGenreList(language) }
     }
 }

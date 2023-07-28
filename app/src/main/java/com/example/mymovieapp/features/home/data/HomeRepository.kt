@@ -12,11 +12,11 @@ interface HomeRepository {
 
     fun getTrendingMoviesOfWeek(language : String) : Flow<State<MovieResponse>>
 
-    suspend fun getPopularMovies(page : Int, language : String) : Flow<PagingData<MovieDto>>
+    fun getPopularMovies(language : String) : Flow<PagingData<MovieDto>>
 
-    suspend fun getTopRatedMovies(page : Int, language : String) : Flow<PagingData<MovieDto>>
+    fun getTopRatedMovies(language : String) : Flow<PagingData<MovieDto>>
 
-    suspend fun getUpComingMovies(page : Int, language : String) : Flow<PagingData<MovieDto>>
+    fun getUpComingMovies(language : String) : Flow<PagingData<MovieDto>>
 
-    fun getMovieGenreList(language : String) : Flow<GenreListResponse>
+    fun getMovieGenreList(language : String) : Flow<State<GenreListResponse>>
 }

@@ -1,16 +1,12 @@
 package com.example.mymovieapp.features.home.domain.model
-
-
-
-
-
 data class Movie(
     val id : Int,
     val title : String,
     val content : String,
     val image : String?,
     val genreList : List<String?>,
-    val voteScore : Double
+    val voteScore : String,
+    val releaseYear : String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

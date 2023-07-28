@@ -4,6 +4,7 @@ import com.example.mymovieapp.core.data.remote.response.MovieDto
 import com.example.mymovieapp.core.data.remote.response.MovieResponse
 import com.example.mymovieapp.features.home.domain.model.Movie
 import com.example.mymovieapp.utils.ImageApi
+import com.example.mymovieapp.utils.extensions.releaseDateToYear
 import javax.inject.Inject
 
 class MovieMapper @Inject constructor(
@@ -20,7 +21,8 @@ class MovieMapper @Inject constructor(
                 imageUrl = movieResponse.posterPath
             ),
             genreList = emptyList(),
-            voteScore = 0.0
+            voteScore = movieResponse.voteAverage.toString(),
+            releaseYear = movieResponse.releaseDate?.releaseDateToYear() ?: ""
         )
     }
 }

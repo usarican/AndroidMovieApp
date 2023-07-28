@@ -8,7 +8,7 @@ class GenreListMapper @Inject constructor() {
     fun mapOnGenresToMap(
         genreListResponse: GenreListResponse
     ) : Map<Int,String> {
-        return genreListResponse.genres.map { it.id to it.name }.toMap()
+        return genreListResponse.genres.associate { it.id to it.name }
     }
 
     fun mapOnGenreListKeyToValue(

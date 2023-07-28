@@ -19,6 +19,9 @@
     <color name="icon_select_color">#0077b6</color>
     <color name="icon_unselect_color">#969696</color>
 
+    <color name="dark">#009faf</color>
+    <color name="surface">#CEEDF1FB</color>
+
 
     <color name="primary_color_dark">#003459</color>
     <color name="secondary_color_dark">#48cae4</color>

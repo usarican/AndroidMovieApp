@@ -44,4 +44,123 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="CategoryItemName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/text_24</item>
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textColor">@color/title_text_color</item>
+    </style>
+    <style name="CategoryItemSeeAll">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:fontFamily">@font/playfair_display_black_semibold</item>
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="CategoryMovieItemName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/text_10</item>
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textColor">@color/icon_unselect_color</item>
+        <item name="layout_constraintHorizontal_chainStyle">packed</item>
+    </style>
+
+
+    <style name="Movies.H1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Movies.H2" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Movies.H4" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.H3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Movies.S1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+
+    </style>
+
+    <style name="Movies.S2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.Button" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/playfair_display_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.Button2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.Cast.Item_Headline" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/playfair_display_black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Movies.Cast.Item_Subtitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/playfair_display_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.B1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.B2" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/playfair_display_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="UnfilledBorderedButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAppearance">@style/Movies.Button</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">@dimen/medium_margin</item>
+        <item name="strokeColor">@color/primary_color</item>
+        <item name="strokeWidth">@dimen/medium_margin</item>
+        <item name="rippleColor">#33AAAAAA</item>
+    </style>
+
 </resources>
