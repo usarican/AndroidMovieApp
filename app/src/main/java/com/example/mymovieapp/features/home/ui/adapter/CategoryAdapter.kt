@@ -9,11 +9,15 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseAdapter
 import com.example.mymovieapp.databinding.CategoryItemBinding
 import com.example.mymovieapp.features.home.domain.model.Category
+import com.example.mymovieapp.utils.HandlePagingLoadState
+import com.example.mymovieapp.utils.PagingLoadStateCallBack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : BaseAdapter<Category,CategoryItemBinding>(CATEGORY_ITEM_DIFF_UTIL) {
     override fun getResourceId(): Int = R.layout.category_item
+
+    private lateinit var pagingLoadStateCallBack : PagingLoadStateCallBack
 
     override fun createHolderInstance(binding: CategoryItemBinding): BaseViewHolder {
         return object : BaseViewHolder(binding){
@@ -32,6 +36,16 @@ class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : Ba
         lifeCycleScope.launch(Dispatchers.IO) {
             category.categoryItems?.let { adapter.submitData(it) }
         }
+        HandlePagingLoadState(
+            adapter = adapter,
+            doOnLoading = { pagingLoadStateCallBack.doOnLoading(category.categoryType) },
+            doOnSuccess = { pagingLoadStateCallBack.doOnSuccess(category.categoryType) },
+            doOnError = { errorMessage -> pagingLoadStateCallBack.doOnError(errorMessage,category.categoryType) }
+        )
+    }
+
+    fun setPagingLoadStateCallBack(pagingLoadStateCallBack: PagingLoadStateCallBack) {
+        this.pagingLoadStateCallBack = pagingLoadStateCallBack
     }
 
     companion object {

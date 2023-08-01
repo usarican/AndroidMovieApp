@@ -1,13 +1,16 @@
 package com.example.mymovieapp.features.home.ui
 
 import androidx.lifecycle.*
+import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.core.ui.LayoutViewState
-import com.example.mymovieapp.features.home.domain.model.CategoryList
-import com.example.mymovieapp.features.home.domain.model.Movie
+import com.example.mymovieapp.features.home.domain.model.*
 import com.example.mymovieapp.features.home.domain.usecase.GetCategoryMoviesUseCase
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
+import com.example.mymovieapp.utils.PagingLoadStateCallBack
 import com.example.mymovieapp.utils.extensions.doOnError
+import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
+import com.example.mymovieapp.utils.extensions.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -22,14 +25,28 @@ class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel(){
 
+    private val homeUIState = HomeUIState(
+        trendingMoviesState = UserInterfaceState.DisplayLoading,
+        categoryMoviesState = UserInterfaceState.DisplayLoading
+    )
+
+    private val categoryMoviesUIState = CategoryMoviesUIState(
+        topRatedMoviesState = UserInterfaceState.DisplayLoading,
+        upComingMoviesState = UserInterfaceState.DisplayLoading,
+        popularMoviesState = UserInterfaceState.DisplayLoading
+    )
+
+
+
+
     private val _trendingMoviesOfWeekMutableLiveData = MutableLiveData<List<Movie>>()
     fun getTrendingMoviesOfWeekLiveData() : LiveData<List<Movie>> = _trendingMoviesOfWeekMutableLiveData
 
     private val _categoryMoviesMutableStateFlow = MutableStateFlow<CategoryList?>(null)
     fun getCategoryMoviesStateFlow() : StateFlow<CategoryList?> = _categoryMoviesMutableStateFlow.asStateFlow()
 
-    private val _trendingMoviesOfWeekStateMutableLiveData = MutableLiveData<LayoutViewState>()
-    fun getTrendingMoviesOfWeekStateLiveData() : LiveData<LayoutViewState> = _trendingMoviesOfWeekStateMutableLiveData
+    private val _homeStateMutableStateFlow = MutableStateFlow<UserInterfaceState>(UserInterfaceState.DisplayLoading)
+    fun getHomeState() : StateFlow<UserInterfaceState> = _homeStateMutableStateFlow.asStateFlow()
 
 
     val viewPagerSavedState : StateFlow<Int> = savedStateHandle.getStateFlow(
@@ -43,13 +60,16 @@ class HomeViewModel @Inject constructor(
 
     fun getTrendMoviesOfWeek() {
         getTrendingMoviesUseCase.invoke("en")
+            .doOnLoading {
+                viewModelScope.launch {
+                    _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayLoading)
+                }
+            }
             .doOnSuccess { movieList ->
                 _trendingMoviesOfWeekMutableLiveData.value = movieList
-            }.doOnError {
-                Timber.tag(TAG).e(it)
-            }
-            .onEach { state ->
-                _trendingMoviesOfWeekStateMutableLiveData.value = LayoutViewState(state)
+                homeUIState.trendingMoviesState = UserInterfaceState.DisplayUI
+            }.doOnError{
+                homeUIState.trendingMoviesState = UserInterfaceState.DisplayError(error = it)
             }
             .launchIn(viewModelScope)
     }
@@ -57,11 +77,42 @@ class HomeViewModel @Inject constructor(
     fun getCategoryMoviesList() {
         getCategoryMoviesUseCase.invoke("en",viewModelScope)
             .doOnSuccess { categoryList ->
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     _categoryMoviesMutableStateFlow.emit(categoryList)
                 }
+            }.launchIn(viewModelScope)
+    }
+
+    val pagingLoadStateCallBack = object : PagingLoadStateCallBack {
+        override fun doOnLoading(categoryType: CategoryType) {
+            Timber.tag(TAG).d("Paging Adapter Is Loading...${categoryType.name}")
+            viewModelScope.launch {
+                _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayLoading)
             }
-            .launchIn(viewModelScope)
+        }
+
+        override fun doOnSuccess(categoryType: CategoryType) {
+            Timber.tag(TAG).d("Paging Adapter Is Success ${categoryType.name}")
+            when(categoryType){
+                CategoryType.POPULAR -> categoryMoviesUIState.popularMoviesState = UserInterfaceState.DisplayUI
+                CategoryType.UP_COMING -> categoryMoviesUIState.upComingMoviesState = UserInterfaceState.DisplayUI
+                CategoryType.TOP_RATED -> categoryMoviesUIState.topRatedMoviesState = UserInterfaceState.DisplayUI
+            }
+            Timber.tag(TAG).d("$categoryMoviesUIState ")
+
+            if (categoryMoviesUIState.categoryMoviesIsDisplay() && homeUIState.trendingMoviesState is UserInterfaceState.DisplayUI) {
+                viewModelScope.launch {
+                    _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayUI)
+                }
+            }
+        }
+
+        override fun doOnError(error : Throwable, categoryType: CategoryType) {
+            viewModelScope.launch {
+                _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayError(error))
+            }
+        }
+
     }
 
     companion object {

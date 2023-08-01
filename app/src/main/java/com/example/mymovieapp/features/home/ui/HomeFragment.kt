@@ -1,5 +1,6 @@
 package com.example.mymovieapp.features.home.ui
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentHomeBinding
+import com.example.mymovieapp.features.home.domain.model.UserInterfaceState
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
 import com.example.mymovieapp.utils.ViewPagerTransformer
@@ -60,6 +62,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
                 categoryAdapter.submitList(categoryListItem?.categoryList)
             }
         }
+        lifecycleScope.launch {
+            viewModel.getHomeState().collectLatest { state ->
+                Timber.tag(TAG).d("HOME STATES ARE = $state")
+                when(state) {
+                    is UserInterfaceState.DisplayLoading -> {
+                        binding.container.visibility = View.INVISIBLE
+                        binding.progressCircular.visibility = View.VISIBLE
+                    }
+                    is UserInterfaceState.DisplayUI -> {
+                        lifecycleScope.launch {
+                            delay(1000)
+                            withContext(Dispatchers.Main){
+                                binding.container.visibility = View.VISIBLE
+                                binding.progressCircular.visibility = View.INVISIBLE
+                            }
+                        }
+                    }
+                    is UserInterfaceState.DisplayError -> {}
+                }
+            }
+        }
     }
 
     private fun setUpViewPager(){
@@ -85,6 +108,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
     private fun setUpRecyclerView(){
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(this.context,RecyclerView.VERTICAL,false)
         binding.categoryRecyclerView.adapter = categoryAdapter
+        categoryAdapter.setPagingLoadStateCallBack(viewModel.pagingLoadStateCallBack)
     }
 
 

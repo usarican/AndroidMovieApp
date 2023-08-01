@@ -26,72 +26,75 @@ class GetCategoryMoviesUseCase @Inject constructor(
     private val genreListMapper: GenreListMapper,
     private val stringProvider: StringProvider
 ) {
-    operator fun invoke(language : String,scope : CoroutineScope) : Flow<State<CategoryList>> {
+    operator fun invoke(language: String, scope: CoroutineScope): Flow<State<CategoryList>> {
         return combine(
             homeRepository.getPopularMovies(language).cachedIn(scope),
             homeRepository.getTopRatedMovies(language).cachedIn(scope),
             homeRepository.getUpComingMovies(language).cachedIn(scope),
             genreListUseCase(language)
-        ){ popularMoviesPagingData : PagingData<MovieDto>,
-           topRatedMoviesPagingData : PagingData<MovieDto>,
-           upComingMoviesPagingData : PagingData<MovieDto>,
-           stateGenreList : State<Map<Int, String>> ->
+        ) { popularMoviesPagingData: PagingData<MovieDto>,
+            topRatedMoviesPagingData: PagingData<MovieDto>,
+            upComingMoviesPagingData: PagingData<MovieDto>,
+            stateGenreList: State<Map<Int, String>> ->
 
             State.Loading
             val mutableCategoryList = mutableListOf<Category>()
 
-            val genreListMap = if (stateGenreList is State.Success) stateGenreList.data else emptyMap()
-
-            val popularMoviesCategoryItem = Category(
-                categoryType = CategoryType.POPULAR,
-                categoryName = stringProvider.getString(R.string.Category_Name_Popular),
-                categoryItems = popularMoviesPagingData.map { movieDto ->
-                    val movie = movieMapper.mapOnMovieDto(movieDto)
-                    movie.copy(
-                        genreList = genreListMapper.mapOnGenreListKeyToValue(
-                            genreListMap = genreListMap,
-                            genreKeys = movieDto.genreIds
+            if (stateGenreList is State.Success) {
+                val genreListMap = stateGenreList.data
+                val popularMoviesCategoryItem = Category(
+                    categoryType = CategoryType.POPULAR,
+                    categoryName = stringProvider.getString(R.string.Category_Name_Popular),
+                    categoryItems = popularMoviesPagingData.map { movieDto ->
+                        val movie = movieMapper.mapOnMovieDto(movieDto)
+                        movie.copy(
+                            genreList = genreListMapper.mapOnGenreListKeyToValue(
+                                genreListMap = genreListMap,
+                                genreKeys = movieDto.genreIds
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
 
-            val topRatedMoviesCategoryItem = Category(
-                categoryType = CategoryType.TOP_RATED,
-                categoryName = stringProvider.getString(R.string.Category_Name_Top_Rated),
-                categoryItems = topRatedMoviesPagingData.map { movieDto ->
-                    val movie = movieMapper.mapOnMovieDto(movieDto)
-                    movie.copy(
-                        genreList = genreListMapper.mapOnGenreListKeyToValue(
-                            genreListMap = genreListMap,
-                            genreKeys = movieDto.genreIds
+                val topRatedMoviesCategoryItem = Category(
+                    categoryType = CategoryType.TOP_RATED,
+                    categoryName = stringProvider.getString(R.string.Category_Name_Top_Rated),
+                    categoryItems = topRatedMoviesPagingData.map { movieDto ->
+                        val movie = movieMapper.mapOnMovieDto(movieDto)
+                        movie.copy(
+                            genreList = genreListMapper.mapOnGenreListKeyToValue(
+                                genreListMap = genreListMap,
+                                genreKeys = movieDto.genreIds
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
 
-            val upComingMoviesCategoryItem = Category(
-                categoryType = CategoryType.UP_COMING,
-                categoryName = stringProvider.getString(R.string.Category_Name_Up_Coming),
-                categoryItems = upComingMoviesPagingData.map { movieDto ->
-                    val movie = movieMapper.mapOnMovieDto(movieDto)
-                    movie.copy(
-                        genreList = genreListMapper.mapOnGenreListKeyToValue(
-                            genreListMap = genreListMap,
-                            genreKeys = movieDto.genreIds
+                val upComingMoviesCategoryItem = Category(
+                    categoryType = CategoryType.UP_COMING,
+                    categoryName = stringProvider.getString(R.string.Category_Name_Up_Coming),
+                    categoryItems = upComingMoviesPagingData.map { movieDto ->
+                        val movie = movieMapper.mapOnMovieDto(movieDto)
+                        movie.copy(
+                            genreList = genreListMapper.mapOnGenreListKeyToValue(
+                                genreListMap = genreListMap,
+                                genreKeys = movieDto.genreIds
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
 
-            mutableCategoryList.add(popularMoviesCategoryItem)
-            mutableCategoryList.add(topRatedMoviesCategoryItem)
-            mutableCategoryList.add(upComingMoviesCategoryItem)
+                mutableCategoryList.add(popularMoviesCategoryItem)
+                mutableCategoryList.add(topRatedMoviesCategoryItem)
+                mutableCategoryList.add(upComingMoviesCategoryItem)
 
-            val categoryListItem = CategoryList(
-                categoryList = mutableCategoryList
-            )
-            State.Success(categoryListItem)
+                val categoryListItem = CategoryList(
+                    categoryList = mutableCategoryList
+                )
+                State.Success(categoryListItem)
+            } else {
+                State.Loading
+            }
         }.catch { throwable ->
             State.Error(throwable)
         }
