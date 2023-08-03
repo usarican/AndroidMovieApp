@@ -1,8 +1,6 @@
 package com.example.mymovieapp.features.home.ui
 
 import androidx.lifecycle.*
-import com.example.mymovieapp.core.data.State
-import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.features.home.domain.model.*
 import com.example.mymovieapp.features.home.domain.usecase.GetCategoryMoviesUseCase
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
@@ -10,9 +8,7 @@ import com.example.mymovieapp.utils.PagingLoadStateCallBack
 import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
-import com.example.mymovieapp.utils.extensions.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber

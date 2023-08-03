@@ -1,22 +1,17 @@
 package com.example.mymovieapp.features.home.ui
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.mymovieapp.R
-import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentHomeBinding
-import com.example.mymovieapp.features.home.domain.model.UserInterfaceState
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
 import com.example.mymovieapp.utils.ViewPagerTransformer
@@ -68,14 +63,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
                 when(state) {
                     is UserInterfaceState.DisplayLoading -> {
                         binding.container.visibility = View.INVISIBLE
-                        binding.progressCircular.visibility = View.VISIBLE
+                        binding.layoutLoading.loadingContainer.visibility = View.VISIBLE
                     }
                     is UserInterfaceState.DisplayUI -> {
                         lifecycleScope.launch {
-                            delay(1000)
+                            delay(1500)
                             withContext(Dispatchers.Main){
                                 binding.container.visibility = View.VISIBLE
-                                binding.progressCircular.visibility = View.INVISIBLE
+                                binding.layoutLoading.loadingContainer.visibility = View.INVISIBLE
                             }
                         }
                     }

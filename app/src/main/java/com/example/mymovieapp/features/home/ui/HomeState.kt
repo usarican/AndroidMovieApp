@@ -1,6 +1,5 @@
-package com.example.mymovieapp.features.home.domain.model
+package com.example.mymovieapp.features.home.ui
 
-import com.example.mymovieapp.core.data.State
 
 data class HomeUIState(
     var trendingMoviesState: UserInterfaceState,

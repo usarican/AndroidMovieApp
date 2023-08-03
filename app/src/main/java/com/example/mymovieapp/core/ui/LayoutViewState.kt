@@ -2,8 +2,7 @@ package com.example.mymovieapp.core.ui
 
 import android.content.Context
 import com.example.mymovieapp.R
-import com.example.mymovieapp.core.data.State
-import com.example.mymovieapp.features.home.domain.model.UserInterfaceState
+import com.example.mymovieapp.features.home.ui.UserInterfaceState
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
