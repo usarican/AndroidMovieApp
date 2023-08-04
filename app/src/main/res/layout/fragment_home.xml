@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="layoutViewState"
+            type="com.example.mymovieapp.core.ui.LayoutViewState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +48,8 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            isVisible="@{layoutViewState.success}"
+            android:visibility="invisible"
             tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +93,7 @@
         <include
             android:id="@+id/layout_loading"
             layout="@layout/layout_loading"
+            app:layoutStateView="@{layoutViewState}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_1"

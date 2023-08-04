@@ -35,7 +35,6 @@ abstract class BaseFragment<VDB : ViewDataBinding>(private val layoutId : Int ) 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setUpObservers()
     }
 

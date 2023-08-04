@@ -12,6 +12,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="@dimen/movie_row_width"
         android:layout_height="wrap_content"
+        app:strokeColor="@null"
         android:layout_margin="@dimen/medium_margin"
         app:cardCornerRadius="@dimen/medium_corner_radius">
 

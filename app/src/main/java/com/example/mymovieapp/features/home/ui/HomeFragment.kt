@@ -3,6 +3,7 @@ package com.example.mymovieapp.features.home.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
+import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.databinding.FragmentHomeBinding
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
@@ -24,7 +26,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
-    private val viewModel : HomeViewModel by activityViewModels()
+    private val viewModel : HomeViewModel by viewModels()
 
     private val bannerMoviesAdapter: BannerMoviesAdapter by lazy {
         BannerMoviesAdapter()
@@ -54,28 +56,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
         lifecycleScope.launch {
             viewModel.getCategoryMoviesStateFlow().collectLatest { categoryListItem ->
+                Timber.tag(TAG).d("category Item List added $categoryListItem")
                 categoryAdapter.submitList(categoryListItem?.categoryList)
             }
         }
         lifecycleScope.launch {
             viewModel.getHomeState().collectLatest { state ->
                 Timber.tag(TAG).d("HOME STATES ARE = $state")
-                when(state) {
-                    is UserInterfaceState.DisplayLoading -> {
-                        binding.container.visibility = View.INVISIBLE
-                        binding.layoutLoading.loadingContainer.visibility = View.VISIBLE
-                    }
-                    is UserInterfaceState.DisplayUI -> {
-                        lifecycleScope.launch {
-                            delay(1500)
-                            withContext(Dispatchers.Main){
-                                binding.container.visibility = View.VISIBLE
-                                binding.layoutLoading.loadingContainer.visibility = View.INVISIBLE
-                            }
-                        }
-                    }
-                    is UserInterfaceState.DisplayError -> {}
-                }
+                val layoutViewState = LayoutViewState(state)
+                binding.layoutViewState = layoutViewState
+                Timber.tag(TAG).d("Layout View State is Loading ${layoutViewState.isLoading()} is Success ${layoutViewState.isSuccess()}")
             }
         }
     }
@@ -102,8 +92,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
     private fun setUpRecyclerView(){
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(this.context,RecyclerView.VERTICAL,false)
-        binding.categoryRecyclerView.adapter = categoryAdapter
         categoryAdapter.setPagingLoadStateCallBack(viewModel.pagingLoadStateCallBack)
+        binding.categoryRecyclerView.adapter = categoryAdapter
+        Timber.tag(TAG).d("PagingLoadState is = ${viewModel.pagingLoadStateCallBack}")
     }
 
 
