@@ -62,9 +62,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
             }
         }
         lifecycleScope.launch {
-            viewModel.getHomeState().collectLatest { state ->
-                Timber.tag(TAG).d("HOME STATES ARE = $state")
-                val layoutViewState = LayoutViewState(state)
+            viewModel.getHomeState().collectLatest { layoutViewState ->
+                Timber.tag(TAG).d("HOME STATES SUCCESS = ${layoutViewState.isSuccess()} - ERROR = ${layoutViewState.isError()} - LOADING =  ${layoutViewState.isLoading()}")
                 binding.layoutViewState = layoutViewState
                 binding.executePendingBindings()
                 inflateLayoutError(layoutViewState)

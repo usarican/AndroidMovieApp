@@ -41,7 +41,7 @@ class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : Ba
                 EqualSpacingItemDecoration.HORIZONTAL
             )
         )
-        lifeCycleScope.launch(Dispatchers.IO) {
+        lifeCycleScope.launch {
             category.categoryItems?.let { adapter.submitData(it) }
         }
         HandlePagingLoadState(

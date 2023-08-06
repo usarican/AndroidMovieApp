@@ -41,7 +41,7 @@ class LoadingDotView @JvmOverloads constructor(
 
     private fun initializeAnimation() {
         animationJob = CoroutineScope(Dispatchers.IO).launch {
-            while (isLoading ){
+            while (isLoading){
                 dotViews[currentIndex].startAnimation(scaleDownAnimation)
                 delay(250L)
 
@@ -98,8 +98,8 @@ class LoadingDotView @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
         animationJob?.cancel()
+        super.onDetachedFromWindow()
     }
 
     companion object {
