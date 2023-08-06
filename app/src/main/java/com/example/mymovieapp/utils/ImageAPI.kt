@@ -7,7 +7,7 @@ object ImageApi {
         baseUrl: String = IMAGE_BASE_URL,
         imageSize: String = ImageSize.ORIGINAL.path,
         imageUrl: String?
-    ) = "$baseUrl$imageSize/$imageUrl"
+    ) = "$baseUrl$imageSize$imageUrl"
 }
 
 enum class ImageSize(val path: String) {

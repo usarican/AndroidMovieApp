@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.mymovieapp"
-        minSdk 26
+        minSdk 28
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -102,6 +102,9 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Platte
+    implementation 'androidx.palette:palette:1.0.0'
 
     //Test Implementation
     testImplementation 'junit:junit:4.13.2'

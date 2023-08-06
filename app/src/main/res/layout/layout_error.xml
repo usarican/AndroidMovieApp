@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="layoutStateView"
+            type="com.example.mymovieapp.core.ui.LayoutViewState" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        isVisible="@{layoutStateView.error}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            drawableRes="@{layoutStateView.errorImage}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@drawable/ic_error" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_16"
+            android:gravity="center"
+            android:text="@{layoutStateView.getErrorMessage(context)}"
+            style="@style/ErrorLayout.Text"
+            tools:text="@string/no_internet_connection" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonErrorAction"
+            android:backgroundTint="@color/primary_color"
+            android:fontFamily="@font/playfair_display_bold"
+            android:letterSpacing="0"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_18"
+            app:cornerRadius="@dimen/widget_32"
+            android:onClick="@{() -> layoutStateView.errorTryAgainFunc()}"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_width="@dimen/error_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_24"
+            android:text="@string/try_again" />
+
+    </LinearLayout>
+</layout>

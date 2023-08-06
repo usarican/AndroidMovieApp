@@ -7,6 +7,11 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="my_list">My List</string>
+    <string name="Category_Name_Popular">Popular</string>
+    <string name="Category_Name_Up_Coming">Up Coming</string>
+    <string name="Category_Name_Top_Rated">Top Rated</string>
+    <string name="loading">Loading…</string>
+    <string name="see_all">See All</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
