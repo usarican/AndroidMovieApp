@@ -21,9 +21,7 @@ class LoadingDotView @JvmOverloads constructor(
     private var dotSize = DEFAULT_DOT_SIZE.dp
     private var dotSpace = DEFAULT_DOT_SPACE.dp
     private var numberOfDots = DEFAULT_DOTS_COUNT
-    private var dotColor: Int = R.color.secondary_color
-
-    private var timout : Int = 0
+    private var isLoading : Boolean = true
 
     private var currentIndex = 0
     private var animationJob : Job? = null
@@ -42,8 +40,8 @@ class LoadingDotView @JvmOverloads constructor(
     }
 
     private fun initializeAnimation() {
-        animationJob = CoroutineScope(Dispatchers.Main).launch {
-            while (timout < 10){
+        animationJob = CoroutineScope(Dispatchers.IO).launch {
+            while (isLoading ){
                 dotViews[currentIndex].startAnimation(scaleDownAnimation)
                 delay(250L)
 
@@ -52,8 +50,6 @@ class LoadingDotView @JvmOverloads constructor(
 
                 dotViews[currentIndex].startAnimation(scaleUpAnimation)
                 delay(250L)
-
-                timout++
             }
         }
     }
@@ -97,6 +93,10 @@ class LoadingDotView @JvmOverloads constructor(
         return scaleAnimation
     }
 
+    fun setIsLoading(isLoading : Boolean){
+        this.isLoading = isLoading
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         animationJob?.cancel()
@@ -105,6 +105,6 @@ class LoadingDotView @JvmOverloads constructor(
     companion object {
         const val DEFAULT_DOTS_COUNT = 3
         const val DEFAULT_DOT_SIZE = 12
-        const val DEFAULT_DOT_SPACE = 12
+        const val DEFAULT_DOT_SPACE = 8
     }
 }

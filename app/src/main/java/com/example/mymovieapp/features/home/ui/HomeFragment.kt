@@ -16,6 +16,7 @@ import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.databinding.FragmentHomeBinding
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
+import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.ViewPagerTransformer
 import com.example.mymovieapp.utils.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +66,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
                 Timber.tag(TAG).d("HOME STATES ARE = $state")
                 val layoutViewState = LayoutViewState(state)
                 binding.layoutViewState = layoutViewState
-                Timber.tag(TAG).d("Layout View State is Loading ${layoutViewState.isLoading()} is Success ${layoutViewState.isSuccess()}")
+                binding.executePendingBindings()
+                inflateLayoutError(layoutViewState)
             }
         }
     }
@@ -94,9 +96,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(this.context,RecyclerView.VERTICAL,false)
         categoryAdapter.setPagingLoadStateCallBack(viewModel.pagingLoadStateCallBack)
         binding.categoryRecyclerView.adapter = categoryAdapter
+        binding.categoryRecyclerView.addItemDecoration(
+            EqualSpacingItemDecoration(
+                16.dp,
+                EqualSpacingItemDecoration.VERTICAL
+            )
+        )
         Timber.tag(TAG).d("PagingLoadState is = ${viewModel.pagingLoadStateCallBack}")
     }
 
+    private fun inflateLayoutError(layoutViewState: LayoutViewState) {
+        binding.layoutError.viewStub?.inflate(layoutViewState.isError())
+    }
 
     companion object {
         private val TAG = HomeFragment::class.java.name

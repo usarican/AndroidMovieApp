@@ -1,6 +1,9 @@
 package com.example.mymovieapp.features.home.ui
 
 import androidx.lifecycle.*
+import com.example.mymovieapp.core.ui.EventListenerViewModel
+import com.example.mymovieapp.core.ui.event.MyEvent
+import com.example.mymovieapp.core.ui.event.RetryNetworkCallEvent
 import com.example.mymovieapp.features.home.domain.model.*
 import com.example.mymovieapp.features.home.domain.usecase.GetCategoryMoviesUseCase
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
@@ -9,6 +12,7 @@ import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -19,7 +23,7 @@ class HomeViewModel @Inject constructor(
     private val getTrendingMoviesUseCase: GetTrendingMoviesUseCase,
     private val getCategoryMoviesUseCase: GetCategoryMoviesUseCase,
     private val savedStateHandle: SavedStateHandle
-) : ViewModel(){
+) : EventListenerViewModel(){
 
     private val homeUIState = HomeUIState(
         trendingMoviesState = UserInterfaceState.DisplayLoading,
@@ -31,8 +35,6 @@ class HomeViewModel @Inject constructor(
         upComingMoviesState = UserInterfaceState.DisplayLoading,
         popularMoviesState = UserInterfaceState.DisplayLoading
     )
-
-
 
 
     private val _trendingMoviesOfWeekMutableLiveData = MutableLiveData<List<Movie>>()
@@ -65,7 +67,12 @@ class HomeViewModel @Inject constructor(
                 _trendingMoviesOfWeekMutableLiveData.value = movieList
                 homeUIState.trendingMoviesState = UserInterfaceState.DisplayUI
             }.doOnError{
-                homeUIState.trendingMoviesState = UserInterfaceState.DisplayError(error = it)
+                viewModelScope.launch {
+                    delay(1000L)
+                    _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayError(it))
+                }
+            }.onEach {
+                Timber.tag("TAG").d("TrendingMovieList State : $it")
             }
             .launchIn(viewModelScope)
     }
@@ -76,7 +83,14 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     _categoryMoviesMutableStateFlow.emit(categoryList)
                 }
-            }.launchIn(viewModelScope)
+            }
+            .doOnError {
+                viewModelScope.launch {
+                    delay(1000L)
+                    _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayError(it))
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     val pagingLoadStateCallBack = object : PagingLoadStateCallBack {
@@ -98,6 +112,7 @@ class HomeViewModel @Inject constructor(
 
             if (categoryMoviesUIState.categoryMoviesIsDisplay() && homeUIState.trendingMoviesState is UserInterfaceState.DisplayUI) {
                 viewModelScope.launch {
+                    delay(1000L)
                     _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayUI)
                 }
             }
@@ -105,10 +120,24 @@ class HomeViewModel @Inject constructor(
 
         override fun doOnError(error : Throwable, categoryType: CategoryType) {
             viewModelScope.launch {
+                delay(1000L)
                 _homeStateMutableStateFlow.emit(UserInterfaceState.DisplayError(error))
             }
         }
 
+    }
+
+    private fun retryNetworkCall(){
+        getTrendMoviesOfWeek()
+        getCategoryMoviesList()
+    }
+
+    override fun onEventReceiver(myEvent: MyEvent) {
+        when(myEvent){
+            is RetryNetworkCallEvent -> {
+                retryNetworkCall()
+            }
+        }
     }
 
     companion object {

@@ -29,9 +29,11 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             style="@style/CategoryItemSeeAll"
+            android:text="@string/see_all"
             tools:text="See All"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/category_item_name"
+            app:layout_constraintBottom_toBottomOf="@id/category_item_name"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/category_item_recycler_view"

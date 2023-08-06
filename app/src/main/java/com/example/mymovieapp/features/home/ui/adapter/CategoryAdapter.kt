@@ -9,8 +9,10 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseAdapter
 import com.example.mymovieapp.databinding.CategoryItemBinding
 import com.example.mymovieapp.features.home.domain.model.Category
+import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.HandlePagingLoadState
 import com.example.mymovieapp.utils.PagingLoadStateCallBack
+import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -33,6 +35,12 @@ class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : Ba
         val adapter = CategoryMoviesAdapter()
         binding.categoryItemRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL,false)
         binding.categoryItemRecyclerView.adapter = adapter
+        binding.categoryItemRecyclerView.addItemDecoration(
+            EqualSpacingItemDecoration(
+                8.dp,
+                EqualSpacingItemDecoration.HORIZONTAL
+            )
+        )
         lifeCycleScope.launch(Dispatchers.IO) {
             category.categoryItems?.let { adapter.submitData(it) }
         }

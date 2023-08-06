@@ -2,6 +2,8 @@ package com.example.mymovieapp.core.ui
 
 import android.content.Context
 import com.example.mymovieapp.R
+import com.example.mymovieapp.core.ui.event.MyEventManager
+import com.example.mymovieapp.core.ui.event.RetryNetworkCallEvent
 import com.example.mymovieapp.features.home.ui.UserInterfaceState
 import retrofit2.HttpException
 import java.io.IOException
@@ -18,8 +20,8 @@ class LayoutViewState(
 
     fun getErrorImage(): Int? = if (state is UserInterfaceState.DisplayError) {
         when (state.error) {
-            is IOException -> 0
-            else -> 0
+            is IOException -> R.drawable.ic_no_connection
+            else -> R.drawable.ic_error
         }
     } else {
         null
@@ -36,4 +38,8 @@ class LayoutViewState(
         } else {
             null
         }
+
+    fun errorTryAgainFunc(){
+        MyEventManager.sendEvent(RetryNetworkCallEvent())
+    }
 }

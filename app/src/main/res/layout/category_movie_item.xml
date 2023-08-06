@@ -13,7 +13,6 @@
         android:layout_width="@dimen/movie_row_width"
         android:layout_height="wrap_content"
         app:strokeColor="@null"
-        android:layout_margin="@dimen/medium_margin"
         app:cardCornerRadius="@dimen/medium_corner_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/movie_item_image"
-                android:layout_width="@dimen/movie_row_image_width"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/movie_row_image_height"
                 android:importantForAccessibility="no"
                 android:scaleType="fitXY"
@@ -62,8 +61,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{movie.title}"
-                android:paddingEnd="@dimen/medium_padding"
-                android:paddingStart="0dp"
                 android:textAppearance="@style/Movies.H3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -79,10 +76,10 @@
                 android:lines="1"
                 android:ellipsize="end"
                 android:text="@{movie.releaseYear}"
-                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginTop="@dimen/extra_small_margin"
                 android:layout_marginBottom="@dimen/small_margin"
                 android:layout_marginStart="@dimen/medium_margin"
-                app:layout_constraintStart_toStartOf="@+id/movie_item_image"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movie_item_name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="2020" />
@@ -95,7 +92,7 @@
                 android:lines="1"
                 android:ellipsize="end"
                 android:text="@{movie.genreList[0]}"
-                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginTop="@dimen/extra_small_margin"
                 android:layout_marginBottom="@dimen/small_margin"
                 android:layout_marginStart="@dimen/small_margin"
                 app:layout_constraintStart_toEndOf="@+id/movie_item_relasedate"
