@@ -12,6 +12,7 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.example.mymovieapp.R
 import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.*
@@ -28,6 +29,8 @@ class LoadingDotView @JvmOverloads constructor(
     private var numberOfDots = DEFAULT_DOTS_COUNT
     private var isLoading : Boolean = true
 
+    private var dotViewsColor : Int = 0
+
     private var loadingAnimation : ValueAnimator? = null
 
     private val dotViews = ArrayList<DotView>()
@@ -38,8 +41,25 @@ class LoadingDotView @JvmOverloads constructor(
         clipChildren = false
         clipToPadding = false
 
+        init(attrs)
+
         initializeDots()
         initializeAnimation()
+    }
+
+    private fun init(attrs: AttributeSet?) {
+        val defaultColor = context.getColor(R.color.icon_unselect_color)
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.LoadingDotView,
+            0, 0).apply {
+
+            try {
+                dotViewsColor = getColor(R.styleable.LoadingDotView_dotColor,defaultColor)
+            } finally {
+                recycle()
+            }
+        }
     }
 
     private fun dotViewAnimation (dotView: DotView) : Animator {
@@ -92,7 +112,9 @@ class LoadingDotView @JvmOverloads constructor(
 
     private fun initializeDots() {
         for (i in 0 until numberOfDots) {
-            val dot = DotView(context)
+            val dot = DotView(context).apply {
+                setInactiveColor(dotViewsColor)
+            }
             val layoutParams = LayoutParams(dotSize, dotSize)
             layoutParams.setMargins(dotSpace, dotSpace, dotSpace, dotSpace)
             dot.layoutParams = layoutParams

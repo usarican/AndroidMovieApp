@@ -21,7 +21,7 @@ class DotView @JvmOverloads constructor(
     // Properties
     private val paint : Paint = Paint().apply { isAntiAlias = true }
     private var activeColor : Int = 0
-    private var inActiveColor : Int = R.color.icon_unselect_color
+    private var inActiveColor : Int = 0
 
     private var isActive : Boolean = false
     private var heightCircle = 0
@@ -96,7 +96,7 @@ class DotView @JvmOverloads constructor(
         if (isActive){
             paint.color = ColorUtils.setAlphaComponent(activeColor,255)
         } else {
-            paint.color = resources.getColor(inActiveColor)
+            paint.color = ColorUtils.setAlphaComponent(inActiveColor,255)
         }
         canvas?.drawCircle(
             radius,
