@@ -1,4 +1,8 @@
 package com.example.mymovieapp.features.main
 
-class MainViewModel {
+import com.example.mymovieapp.core.ui.BaseViewModel
+
+
+class MainViewModel : BaseViewModel() {
+
 }

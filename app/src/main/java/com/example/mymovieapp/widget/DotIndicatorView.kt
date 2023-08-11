@@ -96,18 +96,23 @@ class DotIndicatorView @JvmOverloads constructor(
 
     private fun setDotViewColor(movieItem : Movie) {
         CoroutineScope(Dispatchers.IO).launch{
-            val bitmap = GlideHelpers.getBitmapOfImage(context, movieItem.image)
-            Palette.from(bitmap).generate {
-                it?.let { palette ->
-                    val dominantColor = palette.getVibrantColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.background_color
+            try {
+                val bitmap = GlideHelpers.getBitmapOfImage(context, movieItem.image)
+                Palette.from(bitmap).generate {
+                    it?.let { palette ->
+                        val dominantColor = palette.getVibrantColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.background_color
+                            )
                         )
-                    )
-                    setActiveColor(dominantColor)
-                    update()
+                        setActiveColor(dominantColor)
+                        update()
+                    }
                 }
+            }catch (e : Exception){
+                return@launch
+                TODO()
             }
         }
     }

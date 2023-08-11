@@ -38,8 +38,23 @@ abstract class BaseFragment<VDB : ViewDataBinding>(private val layoutId : Int ) 
         setUpObservers()
     }
 
+    open fun showLoadingDialog(isShow : Boolean){
+        val baseActivity = requireActivity()
+        if (baseActivity is BaseActivity<*>){
+            baseActivity.showLoadingDialog(isShow)
+        }
+    }
+
+    open fun setBaseViewModel(viewModel: BaseViewModel){
+        val baseActivity = requireActivity()
+        if (baseActivity is BaseActivity<*>){
+            baseActivity.setBaseViewModel(viewModel)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 }

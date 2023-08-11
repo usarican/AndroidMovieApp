@@ -21,7 +21,7 @@ class DotView @JvmOverloads constructor(
     // Properties
     private val paint : Paint = Paint().apply { isAntiAlias = true }
     private var activeColor : Int = 0
-    private val inActiveColor : Int = R.color.icon_unselect_color
+    private var inActiveColor : Int = R.color.icon_unselect_color
 
     private var isActive : Boolean = false
     private var heightCircle = 0
@@ -68,6 +68,10 @@ class DotView @JvmOverloads constructor(
 
     fun setActiveColor(color: Int){
         this.activeColor = color
+        invalidate()
+    }
+    fun setInactiveColor(color: Int){
+        this.inActiveColor = color
         invalidate()
     }
 
