@@ -1,6 +1,10 @@
 package com.example.mymovieapp.core.di
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
+import com.example.mymovieapp.core.ui.LayoutViewState
+import com.example.mymovieapp.features.dialog.LoadingDialog
+import com.example.mymovieapp.utils.NetworkUtils
 import com.example.mymovieapp.utils.StringProvider
 import dagger.Module
 import dagger.Provides
@@ -17,4 +21,8 @@ object ApplicationModule {
     @Provides
     fun provideStringResource(@ApplicationContext context: Context) : StringProvider =
         StringProvider(context)
+
+    @Provides
+    fun provideNetworkUtils(@ApplicationContext context: Context) : NetworkUtils =
+        NetworkUtils(context)
 }

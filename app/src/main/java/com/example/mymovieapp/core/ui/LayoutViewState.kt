@@ -9,7 +9,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-class LayoutViewState(
+class LayoutViewState (
     private val state : UserInterfaceState
 ) {
     fun isLoading() = state is UserInterfaceState.DisplayLoading

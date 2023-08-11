@@ -1,12 +1,18 @@
 package com.example.mymovieapp.widget
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.example.mymovieapp.R
 import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.*
@@ -23,10 +29,9 @@ class LoadingDotView @JvmOverloads constructor(
     private var numberOfDots = DEFAULT_DOTS_COUNT
     private var isLoading : Boolean = true
 
-    private var currentIndex = 0
-    private var animationJob : Job? = null
-    private val scaleUpAnimation: Animation = createScaleUpAnimation(250)
-    private val scaleDownAnimation: Animation = createScaleDownAnimation(250)
+    private var dotViewsColor : Int = 0
+
+    private var loadingAnimation : ValueAnimator? = null
 
     private val dotViews = ArrayList<DotView>()
 
@@ -36,69 +41,121 @@ class LoadingDotView @JvmOverloads constructor(
         clipChildren = false
         clipToPadding = false
 
+        init(attrs)
+
         initializeDots()
+        initializeAnimation()
     }
 
-    private fun initializeAnimation() {
-        animationJob = CoroutineScope(Dispatchers.IO).launch {
-            while (isLoading){
-                dotViews[currentIndex].startAnimation(scaleDownAnimation)
-                delay(250L)
+    private fun init(attrs: AttributeSet?) {
+        val defaultColor = context.getColor(R.color.icon_unselect_color)
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.LoadingDotView,
+            0, 0).apply {
 
-                currentIndex = (currentIndex + 1) % dotViews.size
-                Timber.tag("LoadingDot").d(currentIndex.toString())
-
-                dotViews[currentIndex].startAnimation(scaleUpAnimation)
-                delay(250L)
+            try {
+                dotViewsColor = getColor(R.styleable.LoadingDotView_dotColor,defaultColor)
+            } finally {
+                recycle()
             }
         }
     }
 
+    private fun dotViewAnimation (dotView: DotView) : Animator {
+        val animatorSetScaleUp = AnimatorSet()
+        val animatorSetScaleDown = AnimatorSet()
+        val animatorSetDotView = AnimatorSet()
+        val scaleXUpAnimation = ObjectAnimator.ofFloat(dotView,"scaleX",1.0f,1.5f).apply {
+            duration = 250L
+        }
+        val scaleXDownAnimation = ObjectAnimator.ofFloat(dotView,"scaleX",1.5f,1.0f).apply {
+            duration = 250L
+        }
+        val scaleYUpAnimation = ObjectAnimator.ofFloat(dotView,"scaleY",1.0f,1.5f).apply {
+            duration = 250L
+        }
+        val scaleYDownAnimation = ObjectAnimator.ofFloat(dotView,"scaleY",1.5f,1.0f).apply {
+            duration = 250L
+        }
+
+        animatorSetScaleUp.playTogether(
+            scaleXUpAnimation,
+            scaleYUpAnimation
+        )
+        animatorSetScaleDown.playTogether(
+            scaleXDownAnimation,
+            scaleYDownAnimation
+        )
+        animatorSetDotView.playSequentially(
+            animatorSetScaleUp,
+            animatorSetScaleDown
+        )
+        animatorSetDotView.duration = 250L
+        return animatorSetDotView
+    }
+
+    private fun initializeAnimation(){
+        loadingAnimation?.cancel()
+        loadingAnimation = ValueAnimator.ofInt(0,numberOfDots)
+        loadingAnimation?.addUpdateListener {
+            if (it.animatedValue != numberOfDots ){
+                val dotView = dotViews[it.animatedValue as Int]
+                dotViewAnimation(dotView).start()
+            }
+        }
+        loadingAnimation?.repeatMode = ValueAnimator.RESTART
+        loadingAnimation?.repeatCount = ValueAnimator.INFINITE
+        loadingAnimation?.duration = 1000L
+        loadingAnimation?.interpolator = LinearInterpolator()
+    }
+
     private fun initializeDots() {
-        animationJob?.cancel()
         for (i in 0 until numberOfDots) {
-            val dot = DotView(context)
+            val dot = DotView(context).apply {
+                setInactiveColor(dotViewsColor)
+            }
             val layoutParams = LayoutParams(dotSize, dotSize)
             layoutParams.setMargins(dotSpace, dotSpace, dotSpace, dotSpace)
             dot.layoutParams = layoutParams
             dotViews.add(dot)
             addView(dot)
         }
-        initializeAnimation()
-    }
-
-    private fun createScaleUpAnimation(duration: Long): ScaleAnimation {
-        val scaleAnimation = ScaleAnimation(
-            1f, // From x-scale (start scale)
-            1.5f, // To x-scale (end scale)
-            1f, // From y-scale (start scale)
-            1.5f, // To y-scale (end scale)
-            Animation.RELATIVE_TO_SELF, 0.5f, // Pivot X (centered horizontally)
-            Animation.RELATIVE_TO_SELF, 0.5f  // Pivot Y (centered vertically)
-        )
-        scaleAnimation.duration = duration
-        return scaleAnimation
-    }
-
-    private fun createScaleDownAnimation(duration: Long): ScaleAnimation {
-        val scaleAnimation = ScaleAnimation(
-            1.5f, // From x-scale (start scale)
-            1f, // To x-scale (end scale)
-            1.5f, // From y-scale (start scale)
-            1f, // To y-scale (end scale)
-            Animation.RELATIVE_TO_SELF, 0.5f, // Pivot X (centered horizontally)
-            Animation.RELATIVE_TO_SELF, 0.5f  // Pivot Y (centered vertically)
-        )
-        scaleAnimation.duration = duration
-        return scaleAnimation
     }
 
     fun setIsLoading(isLoading : Boolean){
         this.isLoading = isLoading
     }
 
+    private fun startAnimation(){
+        if (isLoading){
+            animationStart()
+        }
+    }
+
+    private fun animationStart(){
+        loadingAnimation?.let {
+            if (it.isRunning.not()){
+                it.start()
+            }
+        }
+    }
+
+    private fun animationEnd(){
+        loadingAnimation?.let {
+            if (it.isRunning){
+                it.end()
+            }
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        startAnimation()
+        super.onAttachedToWindow()
+    }
+
     override fun onDetachedFromWindow() {
-        animationJob?.cancel()
+        animationEnd()
         super.onDetachedFromWindow()
     }
 

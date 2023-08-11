@@ -97,7 +97,7 @@
 
         <include
             android:id="@+id/layout_loading"
-            layout="@layout/layout_loading"
+            layout="@layout/layout_home_loading"
             app:layoutStateView="@{layoutViewState}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

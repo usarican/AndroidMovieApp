@@ -72,21 +72,25 @@ class BannerMovieView @JvmOverloads constructor(
         imageSource = url
 
         CoroutineScope(Dispatchers.IO).launch{
-            val bitmap = GlideHelpers.getBitmapOfImage(context, url)
+            try {
+                val bitmap = GlideHelpers.getBitmapOfImage(context, url)
 
-            Palette.from(bitmap).generate {
-                it?.let { palette ->
-                    val dominantColor = palette.getVibrantColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.background_color
+                Palette.from(bitmap).generate {
+                    it?.let { palette ->
+                        val dominantColor = palette.getVibrantColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.background_color
+                            )
                         )
-                    )
 
-                    mBinding.bannerMovieItemContainer.outlineSpotShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
-                    mBinding.bannerMovieItemContainer.outlineAmbientShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
-                    mBinding.bannerMovieItemContainer.setCardBackgroundColor(ColorUtils.setAlphaComponent(dominantColor,165))
+                        mBinding.bannerMovieItemContainer.outlineSpotShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
+                        mBinding.bannerMovieItemContainer.outlineAmbientShadowColor = ColorUtils.setAlphaComponent(dominantColor,255)
+                        mBinding.bannerMovieItemContainer.setCardBackgroundColor(ColorUtils.setAlphaComponent(dominantColor,165))
+                    }
                 }
+            }catch (e:Exception){
+                return@launch
             }
         }
     }

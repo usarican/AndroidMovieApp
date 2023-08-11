@@ -3,4 +3,8 @@
     <declare-styleable name="BannerMovieView">
         <attr name="imageSource" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="LoadingDotView">
+        <attr name="dotColor" format="color" />
+    </declare-styleable>
 </resources>
