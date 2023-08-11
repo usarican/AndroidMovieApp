@@ -39,6 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         setBaseViewModel(viewModel)
+        viewModel.setUIStateLoading()
         viewModel.getTrendMoviesOfWeek()
         viewModel.getCategoryMoviesList()
         setUpViewPager()

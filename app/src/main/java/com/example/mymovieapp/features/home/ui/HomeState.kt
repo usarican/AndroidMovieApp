@@ -1,10 +1,6 @@
 package com.example.mymovieapp.features.home.ui
 
 
-data class HomeUIState(
-    var trendingMoviesState: UserInterfaceState,
-    var categoryMoviesState: UserInterfaceState
-)
 data class CategoryMoviesUIState(
     var popularMoviesState: UserInterfaceState,
     var upComingMoviesState: UserInterfaceState,

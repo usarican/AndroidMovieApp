@@ -1,6 +1,5 @@
 package com.example.mymovieapp.features.home.ui
 
-import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import com.example.mymovieapp.core.ui.BaseViewModel
@@ -19,7 +18,6 @@ import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -35,6 +33,7 @@ class HomeViewModel @Inject constructor(
 
     private val handler = CoroutineExceptionHandler { context, exception ->
         viewModelScope.launch {
+            delay(UI_STATE_DELAY)
             _homeStateMutableStateFlow.emit(LayoutViewState(UserInterfaceState.DisplayError(exception)
                 )
             )
@@ -43,10 +42,7 @@ class HomeViewModel @Inject constructor(
 
     private var networkSearchingJob : Job? = null
 
-    private val homeUIState = HomeUIState(
-        trendingMoviesState = UserInterfaceState.DisplayLoading,
-        categoryMoviesState = UserInterfaceState.DisplayLoading
-    )
+    private var trendingMovieState : UserInterfaceState = UserInterfaceState.DisplayLoading
 
     private val categoryMoviesUIState = CategoryMoviesUIState(
         topRatedMoviesState = UserInterfaceState.DisplayLoading,
@@ -89,10 +85,10 @@ class HomeViewModel @Inject constructor(
             }
             .doOnSuccess { movieList ->
                 _trendingMoviesOfWeekMutableLiveData.value = movieList
-                homeUIState.trendingMoviesState = UserInterfaceState.DisplayUI
+                trendingMovieState = UserInterfaceState.DisplayUI
             }.doOnError {
                 viewModelScope.launch {
-                    delay(1000L)
+                    delay(UI_STATE_DELAY)
                     _homeStateMutableStateFlow.emit(
                         LayoutViewState(
                             UserInterfaceState.DisplayError(
@@ -101,10 +97,14 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
-            }.onEach {
-                Timber.tag("TAG").d("TrendingMovieList State : $it")
             }
             .launchIn(viewModelScope)
+    }
+
+    fun setUIStateLoading(){
+        viewModelScope.launch {
+            _homeStateMutableStateFlow.emit(LayoutViewState(UserInterfaceState.DisplayLoading))
+        }
     }
 
     fun getCategoryMoviesList() {
@@ -121,7 +121,7 @@ class HomeViewModel @Inject constructor(
             }
             .doOnError {
                 viewModelScope.launch {
-                    delay(1000L)
+                    delay(UI_STATE_DELAY)
                     _homeStateMutableStateFlow.emit(
                         LayoutViewState(
                             UserInterfaceState.DisplayError(
@@ -153,9 +153,9 @@ class HomeViewModel @Inject constructor(
                     UserInterfaceState.DisplayUI
             }
 
-            if (categoryMoviesUIState.categoryMoviesIsDisplay() && homeUIState.trendingMoviesState == UserInterfaceState.DisplayUI) {
+            if (categoryMoviesUIState.categoryMoviesIsDisplay() && trendingMovieState == UserInterfaceState.DisplayUI) {
                 viewModelScope.launch {
-                    delay(1000L)
+                    delay(UI_STATE_DELAY * 2)
                     _homeStateMutableStateFlow.emit(LayoutViewState(UserInterfaceState.DisplayUI))
                 }
             }
@@ -164,7 +164,7 @@ class HomeViewModel @Inject constructor(
         override fun doOnError(error: Throwable, categoryType: CategoryType) {
             Timber.tag(TAG).d("Paging Adapter Is Error ${categoryType.name}")
             viewModelScope.launch {
-                delay(1000L)
+                delay(UI_STATE_DELAY)
                 _homeStateMutableStateFlow.emit(
                     LayoutViewState(
                         UserInterfaceState.DisplayError(
@@ -176,20 +176,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setUIStatesLoading() {
-        homeUIState.trendingMoviesState = UserInterfaceState.DisplayLoading
-        homeUIState.categoryMoviesState = UserInterfaceState.DisplayLoading
-
-        categoryMoviesUIState.topRatedMoviesState = UserInterfaceState.DisplayLoading
-        categoryMoviesUIState.upComingMoviesState = UserInterfaceState.DisplayLoading
-        categoryMoviesUIState.popularMoviesState = UserInterfaceState.DisplayLoading
-
-    }
-
     private fun retryNetworkCall() {
         viewModelScope.launch {
             _homeStateMutableStateFlow.emit(LayoutViewState(UserInterfaceState.DisplayLoading))
-            setUIStatesLoading()
+            trendingMovieState = UserInterfaceState.DisplayLoading
             var retryTimeOut = 0L
             var waitingFotNetworkConnection = true
             networkSearchingJob = CoroutineScope(Dispatchers.IO).launch(handler) {
@@ -199,11 +189,11 @@ class HomeViewModel @Inject constructor(
                         waitingFotNetworkConnection = false
                     } else {
                         if (retryTimeOut > 3000){
-                            throw Throwable()
+                            throw IOException()
                         }
                     }
                     retryTimeOut += 500L
-                    delay(500L)
+                    delay(SEARCHING_NETWORK_DELAY)
                 }
                 throw Exception()
             }
@@ -214,7 +204,7 @@ class HomeViewModel @Inject constructor(
         fragmentManager?.let {
             fragmentUtils.refreshFragment(it)
         } ?: viewModelScope.launch {
-            delay(1000L)
+            delay(UI_STATE_DELAY)
             _homeStateMutableStateFlow.emit(LayoutViewState(UserInterfaceState.DisplayError(Throwable())))
         }
     }
@@ -238,5 +228,7 @@ class HomeViewModel @Inject constructor(
     companion object {
         private val TAG = HomeViewModel::class.java.simpleName
         const val VIEW_PAGER_2_STATE = "ViewPager2State"
+        private const val UI_STATE_DELAY = 500L
+        private const val SEARCHING_NETWORK_DELAY = 500L
     }
 }

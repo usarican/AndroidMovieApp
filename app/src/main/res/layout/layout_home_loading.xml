@@ -28,12 +28,11 @@
             android:id="@+id/loading_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Movies.S1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/LoadingText"
+            app:layout_constraintStart_toStartOf="@id/loading_dot_view"
+            app:layout_constraintEnd_toEndOf="@id/loading_dot_view"
             app:layout_constraintTop_toBottomOf="@id/loading_dot_view"
-            android:layout_marginTop="@dimen/space_8"
-            android:textColor="@color/primary_color_dark"
+            android:textColor="@color/icon_unselect_color"
             android:text="@string/loading" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

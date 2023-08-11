@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.example.mymovieapp.R
 import kotlin.math.min
@@ -21,7 +22,7 @@ class DotView @JvmOverloads constructor(
     // Properties
     private val paint : Paint = Paint().apply { isAntiAlias = true }
     private var activeColor : Int = 0
-    private var inActiveColor : Int = 0
+    private var inActiveColor : Int = Color.GRAY
 
     private var isActive : Boolean = false
     private var heightCircle = 0
@@ -96,7 +97,7 @@ class DotView @JvmOverloads constructor(
         if (isActive){
             paint.color = ColorUtils.setAlphaComponent(activeColor,255)
         } else {
-            paint.color = ColorUtils.setAlphaComponent(inActiveColor,255)
+            paint.color = inActiveColor
         }
         canvas?.drawCircle(
             radius,

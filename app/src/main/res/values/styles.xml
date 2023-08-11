@@ -109,6 +109,13 @@
 
     </style>
 
+    <style name="LoadingText" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
     <style name="Movies.S2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:fontFamily">@font/playfair_display_regular</item>
         <item name="android:textSize">12sp</item>
