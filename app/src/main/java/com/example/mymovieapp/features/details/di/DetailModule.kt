@@ -21,7 +21,6 @@ abstract class DetailModule {
     ) : MovieDetailsRepository
 
     companion object {
-      @Singleton
       @Provides
       fun provideMovieDetailService(retrofit: Retrofit) : MovieDetailService =
           retrofit.create(MovieDetailService::class.java)

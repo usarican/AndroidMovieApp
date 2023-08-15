@@ -6,9 +6,14 @@ import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.core.ui.event.MyEvent
 import com.example.mymovieapp.core.ui.event.RetryNetworkCallEvent
+import com.example.mymovieapp.features.details.domain.usecase.MovieDetailUseCase
+import com.example.mymovieapp.features.dialog.BannerMovieDetailDialog
+import com.example.mymovieapp.features.dialog.BannerMovieItemDetailDialogFragment
+import com.example.mymovieapp.features.dialog.DialogManager
 import com.example.mymovieapp.features.home.domain.model.*
 import com.example.mymovieapp.features.home.domain.usecase.GetCategoryMoviesUseCase
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
+import com.example.mymovieapp.utils.BannerMovieItemClickListener
 import com.example.mymovieapp.utils.FragmentUtils
 import com.example.mymovieapp.utils.NetworkUtils
 import com.example.mymovieapp.utils.PagingLoadStateCallBack
@@ -28,7 +33,8 @@ class HomeViewModel @Inject constructor(
     private val getCategoryMoviesUseCase: GetCategoryMoviesUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val networkUtils: NetworkUtils,
-    private val fragmentUtils: FragmentUtils
+    private val fragmentUtils: FragmentUtils,
+    private val movieDetailUseCase: MovieDetailUseCase
 ) : BaseViewModel() {
 
     private val handler = CoroutineExceptionHandler { context, exception ->
@@ -198,6 +204,23 @@ class HomeViewModel @Inject constructor(
                 throw Exception()
             }
         }
+    }
+
+    val bannerMovieItemClickListener = object : BannerMovieItemClickListener {
+        override fun clickBannerMovie(movieId: Int) {
+            showLoading.value = true
+            movieDetailUseCase.getMovieDetail(movieId)
+                .doOnSuccess { movieDetailItem ->
+                    showLoading.value = false
+                    showDialog.value = BannerMovieDetailDialog(movieDetailItem)
+                }
+                .doOnError {
+                    showLoading.value = false
+                    Timber.tag(TAG).d("Banner Movie Error = ${it.message}")
+                }
+                .launchIn(viewModelScope)
+        }
+
     }
 
     fun refreshFragment(fragmentManager: FragmentManager?){

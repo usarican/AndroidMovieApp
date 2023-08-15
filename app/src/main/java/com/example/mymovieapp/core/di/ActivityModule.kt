@@ -1,6 +1,7 @@
 package com.example.mymovieapp.core.di
 
 import androidx.fragment.app.FragmentActivity
+import com.example.mymovieapp.features.dialog.DialogManager
 import com.example.mymovieapp.features.dialog.LoadingDialog
 import dagger.Module
 import dagger.Provides
@@ -15,4 +16,9 @@ object ActivityModule {
     fun provideLoadingDialog(
         activity : FragmentActivity
     ) : LoadingDialog = LoadingDialog(activity)
+
+    @Provides
+    fun provideDialogManager(
+        activity: FragmentActivity
+    ) : DialogManager = DialogManager(activity.supportFragmentManager)
 }

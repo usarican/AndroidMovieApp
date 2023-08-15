@@ -5,6 +5,7 @@ import com.squareup.moshi.Json
 
 data class MovieDetailDto(
     val id : Int,
+    val title : String,
     @Json(name = "overview") val content : String,
     @Json(name = "runtime") val movieTime : Int,
     @Json(name = "poster_path") val posterPath: String?,

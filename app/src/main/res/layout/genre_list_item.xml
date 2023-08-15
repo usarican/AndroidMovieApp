@@ -7,7 +7,8 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/genre_item_chip"
-        android:background="@color/icon_unselect_color"
+        android:backgroundTint="@color/title_text_color"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"

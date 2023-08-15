@@ -90,6 +90,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
     private fun setUpViewPager(){
         binding.bannerMoviesViewPager.apply {
             adapter = bannerMoviesAdapter
+            bannerMoviesAdapter.setBannerMovieItemClickListener(
+                viewModel.bannerMovieItemClickListener
+            )
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
