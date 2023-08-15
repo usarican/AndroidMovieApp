@@ -4,7 +4,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.*
@@ -14,7 +18,11 @@ import com.example.mymovieapp.databinding.DialogLayoutBannerMovieDetailsBinding
 import com.example.mymovieapp.features.details.domain.model.MovieDetail
 import com.example.mymovieapp.features.details.ui.adapter.BannerMovieGenreListAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
+import com.example.mymovieapp.utils.GlideHelpers
 import com.example.mymovieapp.utils.extensions.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBannerMovieDetailsBinding>(R.layout.dialog_layout_banner_movie_details) {
@@ -46,6 +54,31 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
     }
 
     override fun setUpUI() {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val context = activity?.applicationContext
+                context?.let {
+                    val bitmap = GlideHelpers.getBitmapOfImage(context, movieDetailItem?.image)
+
+                    Palette.from(bitmap).generate {
+                        it?.let { palette ->
+                            val dominantColor = palette.getVibrantColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.background_color
+                                )
+                            )
+
+                            val color = ColorUtils.setAlphaComponent(dominantColor,25)
+
+                            binding.container.setBackgroundColor(color)
+                        }
+                    }
+                }
+            }catch (e:Exception){
+                return@launch
+            }
+        }
         dialog?.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

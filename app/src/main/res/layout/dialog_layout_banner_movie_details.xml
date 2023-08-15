@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="movieDetail"
             type="com.example.mymovieapp.features.details.domain.model.MovieDetail" />
@@ -15,110 +16,96 @@
         android:layout_height="match_parent"
         tools:background="#26000000">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_percent="0.85"
-            app:cardCornerRadius="@dimen/widget_16"
-            android:backgroundTint="@android:color/transparent"
-            app:cardElevation="@dimen/space_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.85">
 
-            >
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/banner_movie_detail_image_height"
+                android:backgroundTint="@android:color/transparent"
+                app:cardCornerRadius="@dimen/widget_16"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toTopOf="@id/banner_movie_detail_time_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.9">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/image_container"
-                    android:layout_width="0dp"
+
+                <com.example.mymovieapp.widget.BannerMovieView
+                    android:id="@+id/banner_movie_detail_image"
+                    getImageSource="@{movieDetail.image}"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/banner_movie_detail_image_height"
-                    app:cardCornerRadius="@dimen/widget_16"
-                    android:backgroundTint="@android:color/transparent"
-                    app:cardElevation="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/banner_movie_detail_time_container"
-                    app:layout_constraintWidth_percent="0.7">
+                    android:padding="@dimen/space_2"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/spiderman_nowayhome"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+            </com.google.android.material.card.MaterialCardView>
 
-                    <com.example.mymovieapp.widget.BannerMovieView
-                        android:id="@+id/banner_movie_detail_image"
-                        android:layout_width="match_parent"
-                        android:padding="@dimen/space_2"
-                        android:layout_height="@dimen/banner_movie_detail_image_height"
-                        android:scaleType="fitXY"
-                        getImageSource="@{movieDetail.image}"
-                        android:src="@drawable/spiderman_nowayhome"
-                        app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:id="@+id/banner_movie_detail_time_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@id/image_container"
+                app:layout_constraintStart_toStartOf="@id/image_container"
+                app:layout_constraintTop_toBottomOf="@id/image_container">
 
-                </com.google.android.material.card.MaterialCardView>
-
-                <LinearLayout
-                    android:id="@+id/banner_movie_detail_time_container"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/space_8"
-                    app:layout_constraintStart_toStartOf="@id/image_container"
-                    app:layout_constraintEnd_toEndOf="@id/image_container"
-                    app:layout_constraintTop_toBottomOf="@id/image_container"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_time"
-                        app:tint="@color/white"
-                        />
-
-                    <TextView
-                        android:layout_marginStart="@dimen/space_4"
-                        android:textColor="@color/white"
-                        android:id="@+id/banner_movie_detail_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{movieDetail.movieTime}"
-                        tools:text="2h 37m"
-                        />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/banner_movie_detail_title"
-                    style="@style/Movies.H3"
-                    android:layout_width="0dp"
-                    android:textColor="@color/white"
-                    android:gravity="center_horizontal"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@{movieDetail.movieTitle}"
-                    android:layout_marginHorizontal="@dimen/space_32"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/banner_movie_detail_time_container"
-                    tools:text="SPIDERMAN - NO WAY HOME" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/genre_list_recycler_view"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    tools:itemCount="3"
-                    android:layout_marginTop="@dimen/space_8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/banner_movie_detail_title"
-                    tools:listitem="@layout/genre_list_item"
-                    />
+                    android:src="@drawable/ic_time"
+                    app:tint="@color/white" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/banner_movie_detail_time"
+                    style="@style/Movies.S1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_4"
+                    android:text="@{movieDetail.movieTime}"
+                    android:textColor="@color/white"
+                    tools:text="2h 37m" />
+            </LinearLayout>
 
+            <TextView
+                android:id="@+id/banner_movie_detail_title"
+                style="@style/Movies.H2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:gravity="center_horizontal"
+                android:text="@{movieDetail.movieTitle}"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/image_container"
+                app:layout_constraintStart_toStartOf="@id/image_container"
+                app:layout_constraintTop_toBottomOf="@id/banner_movie_detail_time_container"
+                tools:text="SPIDERMAN - NO WAY HOME" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/genre_list_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@id/image_container"
+                app:layout_constraintStart_toStartOf="@id/image_container"
+                app:layout_constraintTop_toBottomOf="@id/banner_movie_detail_title"
+                tools:itemCount="3"
+                tools:listitem="@layout/genre_list_item" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
