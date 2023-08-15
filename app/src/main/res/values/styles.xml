@@ -109,6 +109,26 @@
 
     </style>
 
+    <style name="Movies.Detail.Score" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_black_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="Movies.Detail.Year" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_black_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.Detail.Content" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+
+    </style>
+
     <style name="LoadingText" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:fontFamily">@font/playfair_display_medium</item>
         <item name="android:textSize">16sp</item>
@@ -162,7 +182,7 @@
     <style name="TabLayoutStyle" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
         <item name="fontFamily">@font/playfair_display_bold</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="UnfilledBorderedButton" parent="Widget.AppCompat.Button.Borderless">
@@ -172,7 +192,7 @@
         <item name="backgroundTint">@android:color/transparent</item>
         <item name="cornerRadius">@dimen/medium_margin</item>
         <item name="strokeColor">@color/primary_color</item>
-        <item name="strokeWidth">@dimen/medium_margin</item>
+        <item name="strokeWidth">@dimen/extra_small_margin</item>
         <item name="rippleColor">#33AAAAAA</item>
     </style>
 
