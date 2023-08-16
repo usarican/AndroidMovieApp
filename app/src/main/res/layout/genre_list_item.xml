@@ -8,6 +8,7 @@
     <com.google.android.material.chip.Chip
         android:id="@+id/genre_item_chip"
         android:backgroundTint="@color/title_text_color"
+        android:clickable="false"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

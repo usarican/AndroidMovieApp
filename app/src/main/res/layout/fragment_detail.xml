@@ -79,6 +79,18 @@
                         android:layout_gravity="center_vertical"
                         />
 
+                    <TextView
+                        android:id="@+id/movie_detail_review_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color"
+                        tools:text="(4k reviews)"
+                        android:layout_marginStart="@dimen/space_4"
+                        style="@style/Movies.Detail.Year"
+                        android:textSize="@dimen/text_14"
+                        android:layout_gravity="center_vertical"
+                        />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -99,32 +111,14 @@
                         android:layout_gravity="center_vertical"
                         />
                     
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/movie_detail_production_company_container"
-                        android:layout_width="wrap_content"
-                        android:background="@android:color/transparent"
-                        app:strokeWidth="2dp"
-                        android:layout_marginStart="@dimen/space_8"
-                        app:strokeColor="@color/primary_color"
-                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/movie_detail_production_company"
-                            android:padding="@dimen/space_4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="Columbia Pictures"
-                            style="@style/Movies.Detail.Content"
-                            android:textColor="@color/primary_color"
-                            />
-                    </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/movie_detail_production_country_container"
                         android:layout_width="wrap_content"
                         android:background="@android:color/transparent"
                         app:strokeWidth="2dp"
-                        android:layout_marginStart="@dimen/space_8"
+                        android:layout_marginStart="@dimen/space_16"
                         app:strokeColor="@color/primary_color"
                         android:layout_height="wrap_content">
 
@@ -209,6 +203,25 @@
                     app:layout_constraintTop_toBottomOf="@id/detail_page_tab_layout"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ViewStub
+                android:id="@+id/layout_error"
+                android:layout="@layout/layout_error"
+                app:layoutStateView="@{layoutViewState}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <include
+                android:id="@+id/layout_loading"
+                layout="@layout/layout_home_loading"
+                app:layoutStateView="@{layoutViewState}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
