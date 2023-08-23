@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="movie"
+            type="com.example.mymovieapp.features.details.domain.model.MovieDetailSimilarMovie" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/movie_detail_similar_movie_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            loadImage="@{movie.backImage}"
+            tools:src="@drawable/spiderman_nowayhome" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#BF000000"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/space_4">
+
+                <TextView
+                    android:id="@+id/movie_detail_similar_movie_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="Spiderman No Way Home"
+                    android:text="@{movie.title}"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/space_4"
+                    style="@style/Movies.Similar.Item_Headline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/movie_detail_similar_movie_genres"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="Horror | Drama | Action"
+                    android:text="@{movie.genreList}"
+                    style="@style/Movies.Similar.Item_Subtitle"
+                    android:layout_marginStart="@dimen/space_8"
+                    app:layout_constraintTop_toTopOf="@id/movie_detail_similar_movie_title"
+                    app:layout_constraintBottom_toBottomOf="@id/movie_detail_similar_movie_title"
+                    app:layout_constraintStart_toEndOf="@id/movie_detail_similar_movie_title"
+                    />
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ratingBar"
+                    tools:rating="4.4"
+                    android:rating="@{movie.movieScore}"
+                    app:layout_constraintTop_toBottomOf="@id/movie_detail_similar_movie_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/space_4"
+                    android:layout_marginStart="@dimen/space_4"
+                     />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

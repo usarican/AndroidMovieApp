@@ -5,5 +5,5 @@ import com.squareup.moshi.Json
 data class MovieDetailCastDto(
     val name : String,
     @Json(name = "character") val characterName : String,
-    @Json(name = "profile_path") val profilePicture : String
+    @Json(name = "profile_path") val profilePicture : String?
 )

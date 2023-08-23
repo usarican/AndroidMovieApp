@@ -6,17 +6,14 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".features.details.ui.MovieDetailCommentsFragment">
+        android:layout_height="match_parent">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:gravity="center"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movie_detail_comments_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="MOVIE DETAIL COMMENTS" />
-
-    </FrameLayout>
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

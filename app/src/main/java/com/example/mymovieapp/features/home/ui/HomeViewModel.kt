@@ -136,6 +136,8 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+            }.onEach {
+                Timber.tag(TAG).d("Category List State $it")
             }
             .launchIn(viewModelScope)
     }

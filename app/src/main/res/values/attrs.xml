@@ -7,4 +7,8 @@
     <declare-styleable name="LoadingDotView">
         <attr name="dotColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="MyWebView">
+        <attr name="videoKey" format="string"/>
+    </declare-styleable>
 </resources>

@@ -4,6 +4,8 @@ import androidx.databinding.BindingAdapter
 import com.example.mymovieapp.widget.BannerMovieView
 
 @BindingAdapter("getImageSource")
-fun loadImageSource(view : BannerMovieView, url : String){
-    view.setImageResource(url)
+fun loadImageSource(view : BannerMovieView, url : String?){
+    url?.let {
+        view.setImageResource(it)
+    }
 }

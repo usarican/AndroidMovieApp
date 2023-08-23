@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.mymovieapp.R
+import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,6 +13,18 @@ object GlideHelpers {
 
     fun setImage(imageView: ImageView, source : String?) {
         Glide.with(imageView.context).load(source).error(R.drawable.ic_error_with_running).into(imageView)
+    }
+
+
+    fun setProfileImage(imageView: ShapeableImageView, source : String) {
+        val sourceLast4String = source.takeLast(4)
+        if (sourceLast4String != "null") {
+            Glide.with(imageView.context).load(source).placeholder(R.drawable.user_photo)
+                .error(R.drawable.ic_error_with_running).into(imageView)
+        } else {
+            Glide.with(imageView.context).load(R.drawable.user_photo).into(imageView)
+        }
+
     }
 
     fun getBitmapOfImage(context : Context, source: String?): Bitmap =

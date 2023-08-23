@@ -9,6 +9,7 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseAdapter
 import com.example.mymovieapp.databinding.CategoryItemBinding
 import com.example.mymovieapp.features.home.domain.model.Category
+import com.example.mymovieapp.utils.CategoryMovieItemClickListeners
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.HandlePagingLoadState
 import com.example.mymovieapp.utils.PagingLoadStateCallBack
@@ -16,7 +17,10 @@ import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : BaseAdapter<Category,CategoryItemBinding>(CATEGORY_ITEM_DIFF_UTIL) {
+class CategoryAdapter(
+    private val lifeCycleScope : LifecycleCoroutineScope,
+    private val clickListeners: CategoryMovieItemClickListeners
+    ) : BaseAdapter<Category,CategoryItemBinding>(CATEGORY_ITEM_DIFF_UTIL) {
     override fun getResourceId(): Int = R.layout.category_item
 
     private lateinit var pagingLoadStateCallBack : PagingLoadStateCallBack
@@ -33,6 +37,7 @@ class CategoryAdapter(private val lifeCycleScope : LifecycleCoroutineScope) : Ba
     }
     private fun initializeRecyclerView(binding: CategoryItemBinding,context : Context, category: Category){
         val adapter = CategoryMoviesAdapter()
+        adapter.setClickListener(clickListeners)
         binding.categoryItemRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL,false)
         binding.categoryItemRecyclerView.adapter = adapter
         binding.categoryItemRecyclerView.addItemDecoration(
