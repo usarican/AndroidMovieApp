@@ -43,7 +43,7 @@ class MyWebView @JvmOverloads constructor(
     
     <iframe
         width="100%"
-        height="500"
+        height=""
         src="https://www.youtube.com/embed/$videoId"
         frameborder="0"
         allowfullscreen>

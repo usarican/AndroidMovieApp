@@ -19,7 +19,7 @@ class MovieDetailTrailersFragment : BaseFragment<FragmentMovieDetailTrailersBind
     private val viewModel : MovieDetailViewModel by viewModels({requireParentFragment()})
 
     private val movieDetailTrailerAdapter : MovieDetailTrailerAdapter by lazy {
-        MovieDetailTrailerAdapter()
+        MovieDetailTrailerAdapter(viewLifecycleOwner.lifecycle)
     }
 
     override fun setUpUI() {

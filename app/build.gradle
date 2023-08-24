@@ -106,6 +106,9 @@ dependencies {
     // Platte
     implementation 'androidx.palette:palette:1.0.0'
 
+    // Youtube Player WebView
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
+
     //Test Implementation
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.ext:junit-ktx:1.1.3'

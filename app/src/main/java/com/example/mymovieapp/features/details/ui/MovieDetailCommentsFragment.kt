@@ -40,7 +40,6 @@ class MovieDetailCommentsFragment : BaseFragment<FragmentMovieDetailCommentsBind
 
     override fun setUpObservers() {
         viewModel.getMovieDetailInformationLiveData().observe(viewLifecycleOwner){ movieDetailPageItem ->
-            Timber.tag("MovieDetailCommentsFragment").d(movieDetailPageItem.toString())
             movieDetailPageItem.movieReviews?.let {
                 lifecycleScope.launch {
                     movieDetailCommentsAdapter.submitData(it)

@@ -114,6 +114,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_movie"
                         app:tint="@color/title_text_color"
+                        android:layout_marginTop="3dp"
                         />
 
                     <TextView
