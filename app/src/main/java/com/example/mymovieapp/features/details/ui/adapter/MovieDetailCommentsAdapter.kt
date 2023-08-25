@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.mymovieapp.databinding.MovieDetailCommentItemBinding
 import com.example.mymovieapp.features.details.domain.model.MovieDetailReview
+import com.example.mymovieapp.utils.extensions.whenReady
 
 class MovieDetailCommentsAdapter : PagingDataAdapter<MovieDetailReview, MovieDetailCommentViewHolder>(
     COMMENT_DIFF_UTIL) {
@@ -52,5 +53,8 @@ class MovieDetailCommentsAdapter : PagingDataAdapter<MovieDetailReview, MovieDet
 class MovieDetailCommentViewHolder(private val binding: MovieDetailCommentItemBinding) : ViewHolder(binding.root) {
     fun bind(movieDetailCommentItem : MovieDetailReview){
         binding.movieDetailComment = movieDetailCommentItem
+        binding.authorComment.whenReady {
+            binding.authorComment.performClick()
+        }
     }
 }

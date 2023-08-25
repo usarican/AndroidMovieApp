@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -16,6 +17,10 @@ import com.example.mymovieapp.features.details.domain.model.MovieDetailReview
 import com.example.mymovieapp.features.details.ui.adapter.MovieDetailCommentsAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.extensions.dp
+import com.example.mymovieapp.utils.extensions.toGone
+import com.example.mymovieapp.utils.extensions.toVisible
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -46,6 +51,42 @@ class MovieDetailCommentsFragment : BaseFragment<FragmentMovieDetailCommentsBind
                 }
             }
         }
+        lifecycleScope.launch {
+            movieDetailCommentsAdapter.loadStateFlow.collectLatest {
+                when (it.refresh){
+                    is LoadState.Loading -> {
+                        Timber.tag(TAG).d("LoadStateIsTriggered")
+                        binding.movieDetailFragmentProgressBar.toVisible()
+                        binding.movieDetailCommentsRecyclerview.toGone()
+                        binding.notFoundView.root.toGone()
+                    }
+                    is LoadState.NotLoading -> {
+                        delay(1000L)
+                        if (movieDetailCommentsAdapter.itemCount < 1) {
+                            binding.movieDetailFragmentProgressBar.toGone()
+                            binding.movieDetailCommentsRecyclerview.toGone()
+                            binding.notFoundView.root.toVisible()
+                            binding.notFoundView.notFoundText.text = "There Is No Comment for This Movie"
+                        } else {
+                            binding.movieDetailFragmentProgressBar.toGone()
+                            binding.movieDetailCommentsRecyclerview.toVisible()
+                            binding.notFoundView.root.toGone()
+                        }
+                    }
+                    is LoadState.Error -> {
+                        delay(1000L)
+                        binding.movieDetailFragmentProgressBar.toGone()
+                        binding.movieDetailCommentsRecyclerview.toGone()
+                        binding.notFoundView.root.toVisible()
+                        binding.notFoundView.notFoundText.text = (it.refresh as LoadState.Error).error.message
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        private val TAG = MovieDetailCommentsFragment::class.java.simpleName
     }
 
 

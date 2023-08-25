@@ -14,10 +14,12 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.databinding.FragmentHomeBinding
+import com.example.mymovieapp.features.details.ui.MovieDetailFragment
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
 import com.example.mymovieapp.utils.CategoryMovieItemClickListeners
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
+import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.ViewPagerTransformer
 import com.example.mymovieapp.utils.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -129,9 +131,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
         Timber.tag(TAG).d("PagingLoadState is = ${viewModel.pagingLoadStateCallBack}")
     }
 
+    override fun setUpListeners() {
+        super.setUpListeners()
+        val bannerMovieMoreDetailButtonClickListener = object : MyClickListeners<Int> {
+            override fun click(item: Int) {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment().setMovieId(item)
+                findNavController().navigate(action)
+            }
+        }
+
+        viewModel.setClickListener(bannerMovieMoreDetailButtonClickListener)
+    }
+
     private fun inflateLayoutError(layoutViewState: LayoutViewState) {
         binding.layoutError.viewStub?.inflate(layoutViewState.isError())
     }
+
+    /*private fun visibleToolBar(){
+        binding.apply {
+            categoryRecyclerView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                Timber.tag(TAG).d(" Old Scroll Y = $oldScrollY new Scroll Y = $scrollY")
+                if (scrollY > oldScrollY) {
+                    bannerMoviesViewPager.toInvisible()
+                } else {
+                    if (scrollY < movieDetailToolbar.height){
+                        movieDetailToolbar.toVisible()
+                    } else {
+                        movieDetailToolbar.toInvisible()
+                    }
+                }
+            }
+        }
+    }*/
 
     companion object {
         private val TAG = HomeFragment::class.java.name

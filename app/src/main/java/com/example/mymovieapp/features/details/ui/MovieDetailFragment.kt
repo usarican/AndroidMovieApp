@@ -3,11 +3,10 @@ package com.example.mymovieapp.features.details.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,8 +23,7 @@ import com.example.mymovieapp.databinding.FragmentDetailBinding
 import com.example.mymovieapp.features.details.ui.adapter.BannerMovieGenreListAdapter
 import com.example.mymovieapp.features.details.ui.adapter.MovieDetailCastListAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
-import com.example.mymovieapp.utils.extensions.dp
-import com.example.mymovieapp.utils.extensions.inflate
+import com.example.mymovieapp.utils.extensions.*
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,24 +45,16 @@ class MovieDetailFragment : BaseFragment<FragmentDetailBinding>(R.layout.fragmen
     }
     private var movieId : Int = 0
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val window = this.activity?.window
-        window?.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-    }
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         setBaseViewModel(viewModel)
         this.movieId = args.movieId
         viewModel.getMovieDetailInformation(movieId,"en")
         initRecyclerViews()
         initViewPager()
+        handleToolbarOverlaps()
+        visibleToolBar()
     }
 
-    override fun onDetach() {
-        val window = this.activity?.window
-        window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        super.onDetach()
-    }
     override fun setUpListeners() {
         binding.movieDetailBackButton.setOnClickListener {
             findNavController().popBackStack()
@@ -133,5 +123,46 @@ class MovieDetailFragment : BaseFragment<FragmentDetailBinding>(R.layout.fragmen
 
     private fun inflateLayoutError(layoutViewState: LayoutViewState) {
         binding.layoutError.viewStub?.inflate(layoutViewState.isError())
+    }
+
+    private fun handleToolbarOverlaps(){
+        ViewCompat.setOnApplyWindowInsetsListener(binding.movieDetailToolbar) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view. Here the system is setting
+            // only the bottom, left, and right dimensions, but apply whichever insets are
+            // appropriate to your layout. You can also update the view padding
+            // if that's more appropriate.
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams>{
+                leftMargin = insets.left
+                bottomMargin = insets.bottom
+                rightMargin = insets.right
+                topMargin = insets.top
+            }
+
+
+            // Return CONSUMED if you don't want want the window insets to keep being
+            // passed down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+    private fun visibleToolBar(){
+        binding.apply { 
+            movieDetailScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                Timber.tag(TAG).d(" Old Scroll Y = $oldScrollY new Scroll Y = $scrollY")
+                if (scrollY > oldScrollY) {
+                    movieDetailToolbar.toInvisible()
+                } else {
+                    if (scrollY < movieDetailToolbar.height){
+                        movieDetailToolbar.toVisible()
+                    } else {
+                        movieDetailToolbar.toInvisible()
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        private val TAG = MovieDetailFragment::class.java.simpleName
     }
 }

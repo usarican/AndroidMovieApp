@@ -22,7 +22,10 @@ class MovieDetailMapper @Inject constructor(){
             genres = emptyList(),
             voteCount = movieDetailDto.voteCount,
             movieScore = movieDetailDto.voteAverage,
-            status = movieDetailDto.status
+            status = movieDetailDto.status,
+            backImage = ImageApi.getImage(
+                imageUrl = movieDetailDto.backdropPath
+            )
         )
     }
 

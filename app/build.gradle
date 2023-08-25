@@ -106,8 +106,11 @@ dependencies {
     // Platte
     implementation 'androidx.palette:palette:1.0.0'
 
+    // 3rd Party Lib
     // Youtube Player WebView
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
+    // Expandable TextView
+    implementation 'io.github.glailton.expandabletextview:expandabletextview:1.0.4'
 
     //Test Implementation
     testImplementation 'junit:junit:4.13.2'

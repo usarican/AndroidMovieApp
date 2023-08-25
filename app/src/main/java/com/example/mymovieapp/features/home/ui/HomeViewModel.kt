@@ -13,10 +13,7 @@ import com.example.mymovieapp.features.dialog.DialogManager
 import com.example.mymovieapp.features.home.domain.model.*
 import com.example.mymovieapp.features.home.domain.usecase.GetCategoryMoviesUseCase
 import com.example.mymovieapp.features.home.domain.usecase.GetTrendingMoviesUseCase
-import com.example.mymovieapp.utils.BannerMovieItemClickListener
-import com.example.mymovieapp.utils.FragmentUtils
-import com.example.mymovieapp.utils.NetworkUtils
-import com.example.mymovieapp.utils.PagingLoadStateCallBack
+import com.example.mymovieapp.utils.*
 import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
@@ -44,6 +41,12 @@ class HomeViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    private lateinit var clickListener : MyClickListeners<Int>
+
+    fun setClickListener(clickListeners: MyClickListeners<Int>){
+        this.clickListener = clickListeners
     }
 
     private var networkSearchingJob : Job? = null
@@ -214,7 +217,7 @@ class HomeViewModel @Inject constructor(
             movieDetailUseCase.getMovieDetail(movieId)
                 .doOnSuccess { movieDetailItem ->
                     showLoading.value = false
-                    showDialog.value = BannerMovieDetailDialog(movieDetailItem)
+                    showDialog.value = BannerMovieDetailDialog(movieDetailItem,clickListener)
                 }
                 .doOnError {
                     showLoading.value = false

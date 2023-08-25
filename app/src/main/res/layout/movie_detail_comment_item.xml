@@ -11,11 +11,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_4">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/line_color"
             style="@style/CustomCardViewStyle"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="@dimen/space_16"
@@ -70,15 +72,21 @@
                     android:layout_marginTop="@dimen/space_4"
                     android:layout_marginStart="40dp" />
 
-                <TextView
+                <io.github.glailton.expandabletextview.ExpandableTextView
                     android:id="@+id/author_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/divider"
                     android:layout_marginTop="@dimen/space_4"
+                    app:animDuration="500"
+                    app:collapsedLines="3"
+                    app:readMoreText="@string/show_more"
+                    app:readLessText="@string/show_less"
+                    app:textMode="line"
+                    app:isExpanded="false"
+                    style="@style/Movies.Review.Item_Comment"
+                    app:expandType="layout"
                     android:text="@{movieDetailComment.userComment}"
-                    android:maxLines="5"
-                    android:ellipsize="end"
                     tools:text="Rating: 9.5\r\n\r\nOverall, another groundbreaking film in the franchise that only builds on everything they created in the previous film as the brilliant animation and incredible writing is used to show the audience a well-rounded story about a Spider-Man who is trying to find his place in the world, with the only major drawback of the movie being that it suffers from the flaws of it being one of two parts." />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

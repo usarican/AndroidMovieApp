@@ -14,6 +14,7 @@ class DialogManager(
                 val fragment = BannerMovieItemDetailDialogFragment.newInstance(
                     movieDetailItem = dialog.movieDetailItem
                 )
+                fragment.setClickListener(dialog.clickListeners)
                 showDialog(fragment)
             }
         }

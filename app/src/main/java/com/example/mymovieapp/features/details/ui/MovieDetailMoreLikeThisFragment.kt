@@ -2,6 +2,7 @@ package com.example.mymovieapp.features.details.ui
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
@@ -22,7 +23,8 @@ class MovieDetailMoreLikeThisFragment : BaseFragment<FragmentMovieDetailMoreLike
 
     private val myClickListener = object : MyClickListeners<Int> {
         override fun click(item: Int) {
-            viewModel.getMovieDetailInformation(item,"en")
+            val action = MovieDetailFragmentDirections.actionMovieDetailFragmentSelf().setMovieId(item)
+            findNavController().navigate(action)
         }
 
     }

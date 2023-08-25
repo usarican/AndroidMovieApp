@@ -86,10 +86,17 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
     <style name="ErrorLayout.Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/playfair_display_bold</item>
         <item name="android:textColor">@color/icon_unselect_color</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="NoFoundLayout.Text" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/playfair_display_bold</item>
+        <item name="android:textColor">@color/icon_unselect_color</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Movies.H4" parent="TextAppearance.MaterialComponents.Headline3">
@@ -194,6 +201,12 @@
         <item name="android:fontFamily">@font/playfair_display_regular</item>
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Movies.Review.Item_Comment" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/playfair_display_italic</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="Movies.Similar.Item_Headline" parent="TextAppearance.MaterialComponents.Headline6">
