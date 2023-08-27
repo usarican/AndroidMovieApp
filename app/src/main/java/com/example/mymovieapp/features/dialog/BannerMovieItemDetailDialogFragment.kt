@@ -1,6 +1,9 @@
 package com.example.mymovieapp.features.dialog
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
@@ -8,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +21,10 @@ import com.example.mymovieapp.core.ui.BaseDialogFragment
 import com.example.mymovieapp.databinding.DialogLayoutBannerMovieDetailsBinding
 import com.example.mymovieapp.features.details.domain.model.MovieDetail
 import com.example.mymovieapp.features.details.ui.adapter.BannerMovieGenreListAdapter
+import com.example.mymovieapp.features.home.ui.HomeFragmentDirections
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.GlideHelpers
+import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +34,7 @@ import kotlinx.coroutines.launch
 class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBannerMovieDetailsBinding>(R.layout.dialog_layout_banner_movie_details) {
 
     private var movieDetailItem : MovieDetail? = null
+    private var clickListener : MyClickListeners<Int>? = null
     private val movieGenreListAdapter : BannerMovieGenreListAdapter by lazy {
         BannerMovieGenreListAdapter()
     }
@@ -48,9 +55,17 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         binding.movieDetail = movieDetailItem
         setupRecyclerView()
-        binding.container.setOnClickListener {
+        binding.imageContainer.setOnClickListener {
             this.dismiss()
         }
+        binding.moreInformationButton.setOnClickListener {
+            dismiss()
+            clickListener?.click(movieDetailItem?.id ?: -1)
+        }
+    }
+
+    fun setClickListener(clickListeners: MyClickListeners<Int>){
+        this.clickListener = clickListeners
     }
 
     override fun setUpUI() {
@@ -59,6 +74,9 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
                 val context = activity?.applicationContext
                 context?.let {
                     val bitmap = GlideHelpers.getBitmapOfImage(context, movieDetailItem?.image)
+
+                    val bitmapDrawable = BitmapDrawable(bitmap)
+                    bitmapDrawable.alpha = 100
 
                     Palette.from(bitmap).generate {
                         it?.let { palette ->
@@ -74,6 +92,8 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
                             binding.container.setBackgroundColor(color)
                         }
                     }
+
+                    binding.bannerMovieDetailBackgroundImage.setImageDrawable(bitmapDrawable)
                 }
             }catch (e:Exception){
                 return@launch

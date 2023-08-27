@@ -25,3 +25,15 @@ fun View.isVisible(isVisible : Boolean){
         visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 }
+
+fun View.toVisible() {
+    if (this.visibility != View.VISIBLE) this.visibility = View.VISIBLE
+}
+
+fun View.toInvisible() {
+    if (this.visibility != View.INVISIBLE) this.visibility = View.INVISIBLE
+}
+
+fun View.toGone() {
+    if (this.visibility != View.GONE) this.visibility = View.GONE
+}

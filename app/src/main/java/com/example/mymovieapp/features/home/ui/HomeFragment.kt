@@ -2,10 +2,8 @@ package com.example.mymovieapp.features.home.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +14,11 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.databinding.FragmentHomeBinding
-import com.example.mymovieapp.features.dialog.LoadingDialog
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
+import com.example.mymovieapp.utils.CategoryMovieItemClickListeners
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
+import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.ViewPagerTransformer
 import com.example.mymovieapp.utils.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,15 +26,24 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
     private val viewModel : HomeViewModel by viewModels()
 
+    private val categoryMovieItemClickListeners = object : CategoryMovieItemClickListeners {
+        override fun clickCategoryItem(movieId: Int) {
+            val action = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment().setMovieId(movieId)
+            findNavController().navigate(action)
+        }
+
+    }
+
     private val bannerMoviesAdapter: BannerMoviesAdapter by lazy {
         BannerMoviesAdapter()
     }
-    private val categoryAdapter : CategoryAdapter by lazy { CategoryAdapter(lifecycleScope) }
+    private val categoryAdapter : CategoryAdapter by lazy { CategoryAdapter(lifecycleScope,categoryMovieItemClickListeners) }
 
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         setBaseViewModel(viewModel)
@@ -121,6 +129,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
             )
         )
         Timber.tag(TAG).d("PagingLoadState is = ${viewModel.pagingLoadStateCallBack}")
+    }
+
+    override fun setUpListeners() {
+        super.setUpListeners()
+        val bannerMovieMoreDetailButtonClickListener = object : MyClickListeners<Int> {
+            override fun click(item: Int) {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment().setMovieId(item)
+                findNavController().navigate(action)
+            }
+        }
+
+        viewModel.setClickListener(bannerMovieMoreDetailButtonClickListener)
     }
 
     private fun inflateLayoutError(layoutViewState: LayoutViewState) {

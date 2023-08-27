@@ -14,5 +14,6 @@ data class MovieDetail(
     val genres: List<String>,
     val voteCount: Int,
     val movieScore: Double,
-    val status : String
+    val status : String,
+    val backImage : String?
 ) : Parcelable

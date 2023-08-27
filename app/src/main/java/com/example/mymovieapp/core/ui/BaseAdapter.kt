@@ -38,14 +38,3 @@ abstract class BaseAdapter<T : Any, VDB : ViewDataBinding>(
 
 
 }
-
-class DiffUtilCallBack<T : Any> : DiffUtil.ItemCallback<T>(){
-    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-        return oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-        return (oldItem as Movie) == newItem
-    }
-
-}

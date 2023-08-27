@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="movieDetailCastItem"
+            type="com.example.mymovieapp.features.details.domain.model.MovieDetailCast" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/cast_profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ProfileImage"
+            app:srcCompat="@drawable/user_photo"
+            android:scaleType="fitXY"
+            loadImage="@{movieDetailCastItem.castProfilePicture}"
+            tools:src="@drawable/user_photo" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/space_4"
+            app:layout_constraintStart_toEndOf="@id/cast_profile_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/cast_name"
+                style="@style/Movies.Detail.Cast.Item.Cast.Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{movieDetailCastItem.castName}"
+                android:textColor="@color/text_color"
+                app:layout_constraintStart_toEndOf="@id/cast_profile_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Tom Holland"/>
+
+
+            <TextView
+                android:id="@+id/cast_character_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Spiderman"
+                android:text="@{movieDetailCastItem.castCharacterName}"
+                style="@style/Movies.Detail.Cast.Item.Cast.Character.Name"
+                android:textColor="@color/title_text_color"
+                app:layout_constraintStart_toEndOf="@id/cast_profile_image"
+                app:layout_constraintTop_toBottomOf="@id/cast_name"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </LinearLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

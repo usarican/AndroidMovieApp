@@ -6,3 +6,7 @@ import android.util.TypedValue
 fun Int.toDp(resources: Resources): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), resources.displayMetrics)
 }
+
+fun Int.dpToPx(resources: Resources) : Float {
+    return this * resources.displayMetrics.density
+}

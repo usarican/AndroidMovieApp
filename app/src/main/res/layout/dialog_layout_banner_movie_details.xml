@@ -16,7 +16,19 @@
         android:layout_height="match_parent"
         tools:background="#26000000">
 
+        <ImageView
+            android:id="@+id/banner_movie_detail_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:src="@drawable/spiderman_nowayhome"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintHeight_percent="0.75"
+
+            />
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,6 +116,18 @@
                 app:layout_constraintTop_toBottomOf="@id/banner_movie_detail_title"
                 tools:itemCount="3"
                 tools:listitem="@layout/genre_list_item" />
+
+            <TextView
+                android:id="@+id/more_information_button"
+                android:layout_width="wrap_content"
+                android:text="@string/more_detail"
+                style="@style/Movies.S1"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/genre_list_recycler_view"
+                app:layout_constraintEnd_toEndOf="@id/image_container"
+                app:layout_constraintStart_toStartOf="@id/image_container"
+                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="movieDetailComment"
+            type="com.example.mymovieapp.features.details.domain.model.MovieDetailReview" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_4">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/line_color"
+            style="@style/CustomCardViewStyle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_8"
+            android:layout_marginEnd="@dimen/space_8"
+            android:elevation="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Utku Sarıçan"
+                    android:layout_marginTop="@dimen/space_8"
+                    android:text="@{movieDetailComment.userName}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/Movies.Review.Item_Headline"
+                    android:layout_marginStart="45dp" />
+
+                <TextView
+                    android:id="@+id/comment_created_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Movies.Review.Item_Subtitle"
+                    tools:text="Mar 17th 2016"
+                    android:text="@{movieDetailComment.createdDate}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/author_name"
+                    android:textColor="@color/icon_unselect_color"
+                    android:layout_marginStart="45dp" />
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ratingBar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_margin="@dimen/space_8"
+                    isVisible="@{movieDetailComment.userMovieRate != null}"
+                    android:rating="@{movieDetailComment.userMovieRate}" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/comment_created_date"
+                    android:background="@color/icon_unselect_color"
+                    android:layout_marginTop="@dimen/space_4"
+                    android:layout_marginStart="40dp" />
+
+                <io.github.glailton.expandabletextview.ExpandableTextView
+                    android:id="@+id/author_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    android:layout_marginTop="@dimen/space_4"
+                    app:animDuration="500"
+                    app:collapsedLines="3"
+                    app:readMoreText="@string/show_more"
+                    app:readLessText="@string/show_less"
+                    app:textMode="line"
+                    app:isExpanded="false"
+                    style="@style/Movies.Review.Item_Comment"
+                    app:expandType="layout"
+                    android:text="@{movieDetailComment.userComment}"
+                    tools:text="Rating: 9.5\r\n\r\nOverall, another groundbreaking film in the franchise that only builds on everything they created in the previous film as the brilliant animation and incredible writing is used to show the audience a well-rounded story about a Spider-Man who is trying to find his place in the world, with the only major drawback of the movie being that it suffers from the flaws of it being one of two parts." />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/cast_profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/space_4"
+            android:layout_marginTop="@dimen/space_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ProfileImage"
+            app:srcCompat="@drawable/user_photo"
+            loadProfileImage="@{movieDetailComment.userProfilePicture}"
+            android:elevation="5dp"
+            android:scaleType="fitXY"
+            tools:src="@drawable/user_photo" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
