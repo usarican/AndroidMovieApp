@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-
+import com.example.mymovieapp.utils.StringProvider
+import javax.inject.Inject
 abstract class BaseFragment<VDB : ViewDataBinding>(private val layoutId : Int ) : Fragment(layoutId) {
+
+    @Inject
+    protected lateinit var stringProvider : StringProvider
 
     private var _binding: VDB? = null
 

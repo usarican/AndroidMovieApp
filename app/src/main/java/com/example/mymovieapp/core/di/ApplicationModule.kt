@@ -19,7 +19,7 @@ object ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideStringResource(@ApplicationContext context: Context) : StringProvider =
+    fun provideStringResource(@ApplicationContext context: Context) =
         StringProvider(context)
 
     @Provides

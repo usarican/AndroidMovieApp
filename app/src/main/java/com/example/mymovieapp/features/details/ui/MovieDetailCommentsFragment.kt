@@ -1,29 +1,27 @@
 package com.example.mymovieapp.features.details.ui
 
-import android.os.Bundle
-import android.view.View
-import androidx.core.os.bundleOf
+
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.paging.PagingData
+
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
+
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentMovieDetailCommentsBinding
-import com.example.mymovieapp.features.details.domain.model.MovieDetailReview
 import com.example.mymovieapp.features.details.ui.adapter.MovieDetailCommentsAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.extensions.dp
 import com.example.mymovieapp.utils.extensions.toGone
 import com.example.mymovieapp.utils.extensions.toVisible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
+@AndroidEntryPoint
 class MovieDetailCommentsFragment : BaseFragment<FragmentMovieDetailCommentsBinding>(R.layout.fragment_movie_detail_comments) {
 
     private val viewModel : MovieDetailViewModel by viewModels({requireParentFragment()})
@@ -66,7 +64,7 @@ class MovieDetailCommentsFragment : BaseFragment<FragmentMovieDetailCommentsBind
                             binding.movieDetailFragmentProgressBar.toGone()
                             binding.movieDetailCommentsRecyclerview.toGone()
                             binding.notFoundView.root.toVisible()
-                            binding.notFoundView.notFoundText.text = "There Is No Comment for This Movie"
+                            binding.notFoundView.notFoundText.text = stringProvider.getString(R.string.movie_detail_comment_empty_list_string)
                         } else {
                             binding.movieDetailFragmentProgressBar.toGone()
                             binding.movieDetailCommentsRecyclerview.toVisible()
