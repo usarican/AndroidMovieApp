@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_homeFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_exploreFragment"
+            app:destination="@id/exploreFragment" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
@@ -22,6 +25,17 @@
             android:defaultValue="0" />
         <action
             android:id="@+id/action_movieDetailFragment_self"
+            app:destination="@id/movieDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.mymovieapp.features.explore.ui.ExploreFragment"
+        android:label="ExploreFragment" >
+        <argument
+            android:name="categoryType"
+            app:argType="com.example.mymovieapp.features.home.domain.model.CategoryType" />
+        <action
+            android:id="@+id/action_exploreFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
     </fragment>
 </navigation>

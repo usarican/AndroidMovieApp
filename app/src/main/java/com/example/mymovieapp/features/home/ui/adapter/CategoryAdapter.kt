@@ -9,17 +9,15 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseAdapter
 import com.example.mymovieapp.databinding.CategoryItemBinding
 import com.example.mymovieapp.features.home.domain.model.Category
-import com.example.mymovieapp.utils.CategoryMovieItemClickListeners
-import com.example.mymovieapp.utils.EqualSpacingItemDecoration
-import com.example.mymovieapp.utils.HandlePagingLoadState
-import com.example.mymovieapp.utils.PagingLoadStateCallBack
+import com.example.mymovieapp.features.home.domain.model.CategoryType
+import com.example.mymovieapp.utils.*
 import com.example.mymovieapp.utils.extensions.dp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoryAdapter(
     private val lifeCycleScope : LifecycleCoroutineScope,
-    private val clickListeners: CategoryMovieItemClickListeners
+    private val clickListeners: CategoryMovieItemClickListeners,
+    private val seeAllClickListener : MyClickListeners<CategoryType>
     ) : BaseAdapter<Category,CategoryItemBinding>(CATEGORY_ITEM_DIFF_UTIL) {
     override fun getResourceId(): Int = R.layout.category_item
 
@@ -30,6 +28,9 @@ class CategoryAdapter(
             override fun bind(model: Category) {
                 val context = binding.root.context
                 binding.category = model
+                binding.categoryItemSeeAllButton.setOnClickListener {
+                    seeAllClickListener.click(model.categoryType)
+                }
                 initializeRecyclerView(binding,context,model)
             }
 
