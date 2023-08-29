@@ -20,6 +20,9 @@
     <string name="more_detail">More detail…</string>
     <string name="movie_detail_comment_empty_list_string">There Is No Comment for This Movie</string>
     <string name="movie_detail_trailer_empty_list_string">There Is No Trailer for This Movie</string>
+    <string name="your_search_not_found">Opps.. We Could Not Find Your Search</string>
+
+    <string name="search_your_movie">Search your movie…</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

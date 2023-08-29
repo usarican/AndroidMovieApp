@@ -63,6 +63,7 @@
     <dimen name="movie_row_image_width">165dp</dimen>
     <dimen name="movie_row_image_min_height">320dp</dimen>
     <dimen name="movie_row_image_height">160dp</dimen>
+    <dimen name="explore_movie_row_image_height">180dp</dimen>
 
 
     <dimen name="error_button_width">250dp</dimen>

@@ -14,6 +14,7 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.databinding.FragmentHomeBinding
+import com.example.mymovieapp.features.home.domain.model.CategoryType
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
 import com.example.mymovieapp.features.home.ui.adapter.CategoryAdapter
 import com.example.mymovieapp.utils.CategoryMovieItemClickListeners
@@ -37,13 +38,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
             val action = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment().setMovieId(movieId)
             findNavController().navigate(action)
         }
+    }
+    private val seeAllButtonClickListener = object : MyClickListeners<CategoryType> {
+        override fun click(item: CategoryType) {
+            val action = HomeFragmentDirections.actionHomeFragmentToExploreFragment(item)
+            findNavController().navigate(action)
+        }
 
     }
 
     private val bannerMoviesAdapter: BannerMoviesAdapter by lazy {
         BannerMoviesAdapter()
     }
-    private val categoryAdapter : CategoryAdapter by lazy { CategoryAdapter(lifecycleScope,categoryMovieItemClickListeners) }
+    private val categoryAdapter : CategoryAdapter by lazy { CategoryAdapter(lifecycleScope,categoryMovieItemClickListeners,seeAllButtonClickListener) }
 
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         setBaseViewModel(viewModel)

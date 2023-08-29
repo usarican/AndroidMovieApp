@@ -248,6 +248,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+
     <style name="TabLayoutStyle" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
         <item name="fontFamily">@font/playfair_display_bold</item>
@@ -294,6 +295,23 @@
         <item name="android:minHeight">25dp</item>
         <item name="android:maxHeight">23dp</item>
         <item name="android:progressTint">@color/icon_select_color</item>
+    </style>
+
+
+    <style name="Button.IconOnly" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="colorPrimary">@color/greyishBrown</item>
+        <item name="colorPrimaryDark">@color/greyishBrown</item>
+        <item name="colorOnSurface">@color/greyishBrown</item>
+        <item name="cornerRadius">36dp</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@color/greyishBrown</item>
+        <item name="iconTintMode">multiply</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minWidth">36dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="rippleColor">@color/ripple_greyish_brown</item>
     </style>
 
 </resources>
