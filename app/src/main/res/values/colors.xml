@@ -7,6 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="warm_grey">#969696</color>
+    <color name="white_three">#f7f7f7</color>
 
     <color name="colorAccent">#4CAF50</color>
 
@@ -18,6 +20,7 @@
     <color name="line_color">#d8d8d8</color>
     <color name="icon_select_color">#0077b6</color>
     <color name="icon_unselect_color">#969696</color>
+    <color name="disabled_button">#ededed</color>
 
     <color name="dark">#009faf</color>
     <color name="surface">#CEEDF1FB</color>

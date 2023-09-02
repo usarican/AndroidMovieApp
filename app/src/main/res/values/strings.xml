@@ -24,5 +24,46 @@
 
     <string name="search_your_movie">Search your movie…</string>
 
+    <string name="sort_and_filter">Sort &amp; Filter</string>
+    <string name="regions">Regions</string>
+    <string name="genres">Genres</string>
+    <string name="time_period">Time/Period</string>
+    <string name="sort">Sort</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    <string name="all_genres">All Genres</string>
+    <string name="all_regions">All Regions</string>
+    <string name="all_periods">All Periods</string>
+
+    <string name="tr">Turkiye</string>
+    <string name="us">United State of America</string>
+    <string name="az">Azerbaijan</string>
+    <string name="cn">China</string>
+    <string name="kr">South Korea</string>
+    <string name="de">Germany</string>
+    <string name="jp">Japan</string>
+    <string name="ru">Russia</string>
+
+    <string name="popularity">Popularity</string>
+    <string name="latest_release">Latest Release</string>
+    <string name="movie_score">Movie Score</string>
+
+    <string-array name="movieFilterRegionList">
+        <item>@string/tr</item>
+        <item>@string/us</item>
+        <item>@string/az</item>
+        <item>@string/cn</item>
+        <item>@string/kr</item>
+        <item>@string/de</item>
+        <item>@string/jp</item>
+        <item>@string/ru</item>
+    </string-array>
+
+    <string-array name="movieFilterSortList">
+        <item>@string/popularity</item>
+        <item>@string/latest_release</item>
+        <item>@string/movie_score</item>
+    </string-array>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

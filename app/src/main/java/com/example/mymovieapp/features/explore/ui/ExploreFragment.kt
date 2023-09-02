@@ -19,11 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentExploreBinding
+import com.example.mymovieapp.features.explore.ui.dialog.ExploreMovieFilterDialog
 import com.example.mymovieapp.features.home.domain.model.CategoryType
 import com.example.mymovieapp.features.home.domain.model.Movie
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.extensions.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -157,6 +159,10 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
             container.setOnClickListener {
                 searchTextInputField.clearFocus()
                 it.hideKeyboard()
+            }
+            exploreFilterButton.setOnClickListener {
+                val statsFilterBottomSheetFragment = ExploreMovieFilterDialog()
+                statsFilterBottomSheetFragment.show(childFragmentManager,"")
             }
         }
     }
