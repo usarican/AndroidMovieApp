@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,11 +16,16 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentExploreBinding
+import com.example.mymovieapp.features.explore.ui.adapter.ExploreMovieFilterAdapter
 import com.example.mymovieapp.features.explore.ui.dialog.ExploreMovieFilterDialog
+import com.example.mymovieapp.features.explore.ui.dialog.ExploreMovieFilterDialog.Companion.FRAGMENT_RESULT_MOVIE_FILTER_ITEM
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
 import com.example.mymovieapp.features.home.domain.model.CategoryType
 import com.example.mymovieapp.features.home.domain.model.Movie
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
@@ -37,6 +43,9 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private val viewModel : ExploreViewModel by viewModels()
     private val args : ExploreFragmentArgs by navArgs()
+
+    private lateinit var  filterItemListAdapter : ExploreMovieFilterAdapter
+    private lateinit var movieFilterItem : MovieFilterItem
 
     private var textChangingListenerJob : Job? = null
 
@@ -63,6 +72,11 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         setBaseViewModel(viewModel)
         categoryType = args.categoryType
 
+        setFragmentResultListener(FRAGMENT_RESULT_LISTENER_KEY){ requestKey, bundle ->
+            val result : MovieFilterItem? = bundle.getParcelable(FRAGMENT_RESULT_MOVIE_FILTER_ITEM)
+            viewModel.setMovieFilterItem(result)
+        }
+
     }
     override fun setUpUI() {
         handleOverlaps()
@@ -75,6 +89,22 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
                 viewModel.getMoviesList(categoryType,"en").collectLatest {
                     firstOpeningPagingData = it
                     pagingAdapter.submitData(it)
+                }
+            }
+            launch {
+                viewModel.savedMovieFilterItem.collectLatest { movieFilterItem ->
+                    this@ExploreFragment.movieFilterItem = movieFilterItem
+                    val adapterList = mutableListOf<MovieFilterDialogItem>()
+                    adapterList.clear()
+                    movieFilterItem.genresFilterItem.forEach {
+                        adapterList.add(it)
+                    }
+                    adapterList.add(movieFilterItem.regionFilterItem)
+                    adapterList.add(movieFilterItem.timeFilterItem)
+                    movieFilterItem.sortFilterItem?.let {
+                        adapterList.add(it)
+                    }
+                    filterItemListAdapter.submitList(adapterList)
                 }
             }
             launch {
@@ -161,8 +191,11 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
                 it.hideKeyboard()
             }
             exploreFilterButton.setOnClickListener {
-                val statsFilterBottomSheetFragment = ExploreMovieFilterDialog()
-                statsFilterBottomSheetFragment.show(childFragmentManager,"")
+                val statsFilterBottomSheetFragment = ExploreMovieFilterDialog.newInstance(
+                    movieFilterItem = movieFilterItem,
+                    requestKey = FRAGMENT_RESULT_LISTENER_KEY
+                )
+                statsFilterBottomSheetFragment.show(parentFragmentManager,"")
             }
         }
     }
@@ -175,6 +208,19 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
             EqualSpacingItemDecoration(
                 12.dp,
                 EqualSpacingItemDecoration.GRID
+            )
+        )
+        filterItemListAdapter = ExploreMovieFilterAdapter(object : MyClickListeners<MovieFilterDialogItem> {
+            override fun click(item: MovieFilterDialogItem) {
+                return
+            }
+        })
+        binding.filterItemRecyclerView.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL,false)
+        binding.filterItemRecyclerView.adapter = filterItemListAdapter
+        binding.filterItemRecyclerView.addItemDecoration(
+            EqualSpacingItemDecoration(
+                4.dp,
+                EqualSpacingItemDecoration.HORIZONTAL
             )
         )
     }
@@ -197,5 +243,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     companion object {
         private val TAG = ExploreFragment::class.java.simpleName
+        const val FRAGMENT_RESULT_LISTENER_KEY = "fragmentResultListenerKey"
     }
 }

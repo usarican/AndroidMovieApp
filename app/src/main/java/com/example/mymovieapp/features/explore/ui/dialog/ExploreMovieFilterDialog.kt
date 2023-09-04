@@ -2,26 +2,31 @@ package com.example.mymovieapp.features.explore.ui.dialog
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseBottomSheetFragment
 import com.example.mymovieapp.databinding.MovieFilterDialogLayoutBinding
+import com.example.mymovieapp.features.explore.ui.ExploreFragment
 import com.example.mymovieapp.features.explore.ui.adapter.ExploreMovieFilterAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.extensions.dp
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExploreMovieFilterDialog : BaseBottomSheetFragment<MovieFilterDialogLayoutBinding>(R.layout.movie_filter_dialog_layout) {
+class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayoutBinding>(R.layout.movie_filter_dialog_layout) {
+
+    @Inject
+    lateinit var movieFilterUtils: MovieFilterUtils
 
     private val viewModel : ExploreMovieFilterDialogViewModel by viewModels()
     private lateinit var  genreFilterAdapter : ExploreMovieFilterAdapter
@@ -29,8 +34,31 @@ class ExploreMovieFilterDialog : BaseBottomSheetFragment<MovieFilterDialogLayout
     private lateinit var  regionFilterAdapter : ExploreMovieFilterAdapter
     private lateinit var  periodFilterAdapter : ExploreMovieFilterAdapter
 
+    private var movieFilterItem : MovieFilterItem? = null
+    private var requestKey : String = ""
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable(MOVIE_FILTER_ITEM,movieFilterItem)
+        outState.putString(REQUEST_KEY,requestKey)
+        super.onSaveInstanceState(outState)
+    }
+    override fun setUpViews(view: View, savedInstanceState: Bundle?) {
+        val bundle = savedInstanceState ?: arguments
+        bundle?.let {
+            movieFilterItem = it.getParcelable(MOVIE_FILTER_ITEM) ?: movieFilterUtils.getInitialMovieFilterItem()
+            requestKey= it.getString(REQUEST_KEY,"")
+        }
+    }
+
+
 
     override fun setUpObservers() {
+        viewModel.getMovieFilterItem().observe(viewLifecycleOwner) {
+            Timber.tag(TAG).d("Collected Filter Item $it")
+            viewModel.getGenreList("en",it)
+            viewModel.initFilterItems(it)
+        }
         lifecycleScope.launch(SupervisorJob()) {
             viewModel.apply {
                 launch {
@@ -61,20 +89,24 @@ class ExploreMovieFilterDialog : BaseBottomSheetFragment<MovieFilterDialogLayout
     }
 
     override fun setUpListeners() {
-        super.setUpListeners()
+        binding.apply {
+            resetButton.setOnClickListener {
+                Timber.tag(TAG).d("Reset Button Triggered")
+                viewModel?.setSavedMovieFilterItem(movieFilterUtils.getInitialMovieFilterItem())
+            }
+            applyButton.setOnClickListener {
+                returnFragmentResult()
+                dismiss()
+            }
+
+        }
     }
 
     override fun setUpUI() {
         binding.viewModel = viewModel
+        viewModel.setSavedMovieFilterItem(movieFilterItem ?: movieFilterUtils.getInitialMovieFilterItem())
         setUpRecyclerViews()
-        viewModel.getGenreList("en")
-        viewModel.initFilterItems()
     }
-
-    override fun setUpViews(view: View, savedInstanceState: Bundle?) {
-
-    }
-
 
     private fun setUpRecyclerViews(){
         genreFilterAdapter = ExploreMovieFilterAdapter(viewModel.myClickListener)
@@ -123,9 +155,30 @@ class ExploreMovieFilterDialog : BaseBottomSheetFragment<MovieFilterDialogLayout
 
     }
 
+    private fun returnFragmentResult(){
+        val result = viewModel.applyFilter()
+        setFragmentResult(
+            requestKey,
+            bundleOf(FRAGMENT_RESULT_MOVIE_FILTER_ITEM to result)
+        )
+    }
+
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 
     companion object {
 
+        private const val MOVIE_FILTER_ITEM = "movieFilterItem"
+        const val FRAGMENT_RESULT_MOVIE_FILTER_ITEM = "FRAGMENT_RESULT_MOVIE_FILTER_ITEM"
+        const val REQUEST_KEY = "REQUEST_KEY"
+        private val TAG = ExploreMovieFilterDialog::class.java.simpleName
+        fun newInstance(
+            movieFilterItem : MovieFilterItem,
+            requestKey : String
+        ) = ExploreMovieFilterDialog().apply {
+            arguments = bundleOf(
+                MOVIE_FILTER_ITEM to movieFilterItem,
+                REQUEST_KEY to requestKey
+            )
+        }
     }
 }

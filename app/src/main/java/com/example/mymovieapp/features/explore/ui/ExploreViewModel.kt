@@ -9,6 +9,8 @@ import androidx.paging.map
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.features.explore.domain.usecase.ExploreMoviesUseCase
 import com.example.mymovieapp.features.explore.domain.usecase.SeeAllMoviesUseCase
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterUtils
 import com.example.mymovieapp.features.home.domain.model.CategoryType
 import com.example.mymovieapp.features.home.domain.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,10 +28,18 @@ import javax.inject.Inject
 class ExploreViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val exploreMoviesUseCase: ExploreMoviesUseCase,
-    private val seeAllMoviesUseCase: SeeAllMoviesUseCase
+    private val seeAllMoviesUseCase: SeeAllMoviesUseCase,
+    private val movieFilterUtils: MovieFilterUtils
 ) : BaseViewModel() {
 
     private val searchStringInput = MutableStateFlow<String?>(null)
+
+    val savedMovieFilterItem = savedStateHandle.getStateFlow(
+        SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL,movieFilterUtils.getInitialMovieFilterItem())
+
+    fun setMovieFilterItem(movieFilterItem: MovieFilterItem?) {
+        savedStateHandle[SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL] = movieFilterItem
+    }
 
     fun setSearchStringInput(searchString : String?){
         viewModelScope.launch {
@@ -56,5 +66,6 @@ class ExploreViewModel @Inject constructor(
     companion object {
         private val TAG = ExploreViewModel::class.java.simpleName
         private const val SEARCHING_DELAY_TIME = 500L
+        private const val SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL = "SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL"
     }
 }

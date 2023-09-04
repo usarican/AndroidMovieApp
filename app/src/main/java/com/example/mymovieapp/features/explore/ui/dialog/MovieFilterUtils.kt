@@ -15,7 +15,7 @@ class MovieFilterUtils constructor(
     private val movieFilterSortItemKeyList = listOf(
         "popularity.desc","primary_release_date.desc","vote_average.desc"
     )
-    fun getMovieFilterRegionItems() : List<MovieFilterDialogItem> {
+    fun getMovieFilterRegionItems(movieFilterItem: MovieFilterItem) : List<MovieFilterDialogItem> {
         val movieFilterRegionItemList = mutableListOf<MovieFilterDialogItem>()
         val initialItem =
             MovieFilterDialogItem(
@@ -37,10 +37,18 @@ class MovieFilterUtils constructor(
                 )
             movieFilterRegionItemList.add(movieFilterRegionItem)
         }
-        return movieFilterRegionItemList
+        return movieFilterRegionItemList.map { currentListItem ->
+            if (currentListItem.id == movieFilterItem.regionFilterItem.id){
+                currentListItem.copy(
+                    isItemSelected = true
+                )
+            } else currentListItem.copy(
+                isItemSelected = false
+            )
+        }
     }
 
-    fun getMovieFilterSortItems() : List<MovieFilterDialogItem> {
+    fun getMovieFilterSortItems(movieFilterItem: MovieFilterItem) : List<MovieFilterDialogItem> {
         val movieFilterSortItemList = mutableListOf<MovieFilterDialogItem>()
         stringProvider.getStringArray(R.array.movieFilterSortList).forEachIndexed { index, s ->
             val movieFilterRegionItem =
@@ -53,10 +61,18 @@ class MovieFilterUtils constructor(
                 )
             movieFilterSortItemList.add(movieFilterRegionItem)
         }
-        return movieFilterSortItemList
+        return movieFilterSortItemList.map { currentListItem ->
+            if (currentListItem.id == movieFilterItem.sortFilterItem?.id){
+                currentListItem.copy(
+                    isItemSelected = true
+                )
+            } else currentListItem.copy(
+                isItemSelected = false
+            )
+        }
     }
 
-    fun getMovieFilterTimeItems() : List<MovieFilterDialogItem> {
+    fun getMovieFilterTimeItems(movieFilterItem: MovieFilterItem) : List<MovieFilterDialogItem> {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val movieFilterPeriodItemList = mutableListOf<MovieFilterDialogItem>()
         val initialItem =
@@ -81,7 +97,41 @@ class MovieFilterUtils constructor(
             movieFilterPeriodItemList.add(movieFilterPeriodItem)
             j++
         }
-        return movieFilterPeriodItemList
+        return movieFilterPeriodItemList.map { currentListItem ->
+            if (currentListItem.id == movieFilterItem.timeFilterItem.id){
+                currentListItem.copy(
+                    isItemSelected = true
+                )
+            } else currentListItem.copy(
+                isItemSelected = false
+            )
+        }
     }
+
+    fun getInitialMovieFilterItem() = MovieFilterItem(
+        regionFilterItem = MovieFilterDialogItem(
+            itemCategory =FilterDialogItemCategory.REGIONS,
+            id = 0,
+            itemCode = null,
+            itemName = stringProvider.getString(R.string.all_regions),
+            isItemSelected = true
+        ),
+        genresFilterItem = listOf(
+            MovieFilterDialogItem(
+                itemCategory = FilterDialogItemCategory.GENRE,
+                id = 0,
+                itemCode = null,
+                itemName = stringProvider.getString(R.string.all_genres),
+                isItemSelected = true
+            )
+        ),
+        timeFilterItem = MovieFilterDialogItem(
+            itemCategory =FilterDialogItemCategory.TIME,
+            id = 0,
+            itemCode = null,
+            itemName = stringProvider.getString(R.string.all_periods),
+            isItemSelected = true
+        )
+    )
 
 }
