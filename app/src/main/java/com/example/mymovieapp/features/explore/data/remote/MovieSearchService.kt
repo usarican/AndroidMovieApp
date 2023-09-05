@@ -12,4 +12,14 @@ interface MovieSearchService {
         @Query("query") searchString : String,
         @Query("page") page : Int
     ): MovieResponse
+
+    @GET("discover/movie")
+    suspend fun getDiscoveryMovieResult(
+        @Query("page") page : Int,
+        @Query("language") language : String,
+        @Query("sort_by") sortFilter : String?,
+        @Query("with_genres") genreListFilter : String?,
+        @Query("region") regionFilter : String?,
+        @Query("year") yearFilter : Int?,
+    ): MovieResponse
 }

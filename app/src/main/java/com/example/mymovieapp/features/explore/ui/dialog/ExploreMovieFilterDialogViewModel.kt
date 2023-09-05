@@ -9,10 +9,7 @@ import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
 import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.StringProvider
-import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -63,45 +60,45 @@ class ExploreMovieFilterDialogViewModel @Inject constructor(
     fun getMovieFilterButtonState(): StateFlow<Boolean> =
         _isEnabledMovieFilterApplyButton.asStateFlow()
 
+    private var genreList : HashMap<Int,String> = hashMapOf()
+
 
 
     fun getGenreList(language: String,movieFilterItem: MovieFilterItem) {
-            genreListUseCase.invoke(language).doOnSuccess { genreListMap ->
-                val genreItemList = mutableListOf<MovieFilterDialogItem>()
-                val initialGenreListItem =
-                    MovieFilterDialogItem(
-                        itemCategory = FilterDialogItemCategory.GENRE,
-                        id = 0,
-                        itemCode = null,
-                        itemName = stringProvider.getString(R.string.all_genres),
-                        isItemSelected = true
-                    )
-                genreItemList.add(initialGenreListItem)
-                genreListMap.onEachIndexed { index, entry ->
-                    val item = MovieFilterDialogItem(
-                        itemCategory = FilterDialogItemCategory.GENRE,
-                        id = index + 1,
-                        itemCode = entry.key,
-                        itemName = entry.value,
-                        isItemSelected = false
-                    )
-                    genreItemList.add(item)
-                }
-                movieFilterItem.genresFilterItem.forEach { savedListItem ->
-                    genreItemList.replaceAll {
-                        if (it.id == savedListItem.id) {
-                            it.copy(
-                                isItemSelected = true
-                            )
-                        } else {
-                            it.copy(
-                                isItemSelected = false
-                            )
-                        }
+        viewModelScope.launch {
+            var genreItemList = mutableListOf<MovieFilterDialogItem>()
+            val initialGenreListItem =
+                MovieFilterDialogItem(
+                    itemCategory = FilterDialogItemCategory.GENRE,
+                    id = 0,
+                    itemCode = null,
+                    itemName = stringProvider.getString(R.string.all_genres),
+                    isItemSelected = false
+                )
+            genreItemList.add(initialGenreListItem)
+            this@ExploreMovieFilterDialogViewModel.genreList.onEachIndexed { index, entry ->
+                val item = MovieFilterDialogItem(
+                    itemCategory = FilterDialogItemCategory.GENRE,
+                    id = index + 1,
+                    itemCode = entry.key,
+                    itemName = entry.value,
+                    isItemSelected = false
+                )
+                genreItemList.add(item)
+            }
+            movieFilterItem.genresFilterItem.forEach { savedListItem ->
+                genreItemList = genreItemList.map {
+                    if (it.id == savedListItem.id) {
+                        it.copy(
+                            isItemSelected = true
+                        )
+                    } else {
+                        it
                     }
-                }
-                _movieFilterGenreListMutableStateFlow.emit(genreItemList)
-        }.launchIn(viewModelScope)
+                } as MutableList<MovieFilterDialogItem>
+            }
+            _movieFilterGenreListMutableStateFlow.emit(genreItemList)
+        }
     }
 
     fun initFilterItems(movieFilterItem: MovieFilterItem) {
@@ -227,6 +224,7 @@ class ExploreMovieFilterDialogViewModel @Inject constructor(
                     movieFilterDialogItem.copy(isItemSelected = false)
                 }
             }
+            _isEnabledMovieFilterApplyButton.emit(true)
             _movieFilterSortListMutableStateFlow.emit(list)
         }
     }
@@ -248,6 +246,17 @@ class ExploreMovieFilterDialogViewModel @Inject constructor(
             timeFilterItem = timeFilterItem,
             sortFilterItem = sortFilterItem
         )
+    }
+
+    fun resetFilter() {
+        setSavedMovieFilterItem(movieFilterUtils.getInitialMovieFilterItem())
+        viewModelScope.launch {
+            _isEnabledMovieFilterApplyButton.emit(true)
+        }
+    }
+
+    fun setGenreList(genreList: HashMap<Int, String>) {
+        this.genreList = genreList
     }
 
     companion object {

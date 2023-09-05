@@ -36,11 +36,13 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
 
     private var movieFilterItem : MovieFilterItem? = null
     private var requestKey : String = ""
+    private var genreList : HashMap<Int,String> = hashMapOf()
 
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(MOVIE_FILTER_ITEM,movieFilterItem)
         outState.putString(REQUEST_KEY,requestKey)
+        outState.putSerializable(GENRE_LIST_ITEM,genreList)
         super.onSaveInstanceState(outState)
     }
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +50,7 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
         bundle?.let {
             movieFilterItem = it.getParcelable(MOVIE_FILTER_ITEM) ?: movieFilterUtils.getInitialMovieFilterItem()
             requestKey= it.getString(REQUEST_KEY,"")
+            genreList = it.getSerializable(GENRE_LIST_ITEM) as HashMap<Int, String>
         }
     }
 
@@ -91,8 +94,7 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
     override fun setUpListeners() {
         binding.apply {
             resetButton.setOnClickListener {
-                Timber.tag(TAG).d("Reset Button Triggered")
-                viewModel?.setSavedMovieFilterItem(movieFilterUtils.getInitialMovieFilterItem())
+                viewModel?.resetFilter()
             }
             applyButton.setOnClickListener {
                 returnFragmentResult()
@@ -105,6 +107,7 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
     override fun setUpUI() {
         binding.viewModel = viewModel
         viewModel.setSavedMovieFilterItem(movieFilterItem ?: movieFilterUtils.getInitialMovieFilterItem())
+        viewModel.setGenreList(genreList)
         setUpRecyclerViews()
     }
 
@@ -121,25 +124,25 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
 
         binding.filterDialogGenreRecyclerView.addItemDecoration(
             EqualSpacingItemDecoration(
-                4.dp,EqualSpacingItemDecoration.HORIZONTAL,false
+                2.dp,EqualSpacingItemDecoration.HORIZONTAL,false
             )
         )
 
         binding.filterDialogRegionsRecyclerView.addItemDecoration(
             EqualSpacingItemDecoration(
-                4.dp,EqualSpacingItemDecoration.HORIZONTAL,false
+                2.dp,EqualSpacingItemDecoration.HORIZONTAL,false
             )
         )
 
         binding.filterDialogTimePeriodRecyclerView.addItemDecoration(
             EqualSpacingItemDecoration(
-                4.dp,EqualSpacingItemDecoration.HORIZONTAL,false
+                2.dp,EqualSpacingItemDecoration.HORIZONTAL,false
             )
         )
 
         binding.filterDialogSortRecyclerView.addItemDecoration(
             EqualSpacingItemDecoration(
-                4.dp,EqualSpacingItemDecoration.HORIZONTAL,false
+                2.dp,EqualSpacingItemDecoration.HORIZONTAL,false
             )
         )
 
@@ -169,15 +172,18 @@ class ExploreMovieFilterDialog() : BaseBottomSheetFragment<MovieFilterDialogLayo
 
         private const val MOVIE_FILTER_ITEM = "movieFilterItem"
         const val FRAGMENT_RESULT_MOVIE_FILTER_ITEM = "FRAGMENT_RESULT_MOVIE_FILTER_ITEM"
+        const val GENRE_LIST_ITEM = "GENRE_LIST_ITEM"
         const val REQUEST_KEY = "REQUEST_KEY"
         private val TAG = ExploreMovieFilterDialog::class.java.simpleName
         fun newInstance(
             movieFilterItem : MovieFilterItem,
-            requestKey : String
+            requestKey : String,
+            genreList : Map<Int,String>
         ) = ExploreMovieFilterDialog().apply {
             arguments = bundleOf(
                 MOVIE_FILTER_ITEM to movieFilterItem,
-                REQUEST_KEY to requestKey
+                REQUEST_KEY to requestKey,
+                GENRE_LIST_ITEM to genreList
             )
         }
     }

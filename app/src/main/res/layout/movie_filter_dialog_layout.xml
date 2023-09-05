@@ -22,7 +22,7 @@
             style="@style/Movies.H1"
             android:textSize="40sp"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginVertical="@dimen/space_16"
+            android:layout_marginVertical="@dimen/space_12"
             android:gravity="center" />
 
         <View
@@ -30,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_2"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_title"
-            android:layout_marginVertical="@dimen/space_16"
-            android:background="@color/white_three" />
+            android:layout_marginVertical="@dimen/space_12"
+            android:background="@color/warm_grey" />
 
         <TextView
             android:id="@+id/filter_dialog_regions_text"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/regions"
             style="@style/Filter.Dialog.Title"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_line" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_regions_text"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/filter_dialog_filter_item" />
 
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="@string/genres"
             style="@style/Filter.Dialog.Title"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_regions_recycler_view" />
 
@@ -70,7 +70,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_genre_text"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             tools:listitem="@layout/filter_dialog_filter_item" />
 
         <TextView
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="@string/time_period"
             style="@style/Filter.Dialog.Title"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_genre_recycler_view" />
 
@@ -90,7 +90,7 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_time_period_text"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             tools:listitem="@layout/filter_dialog_filter_item" />
 
         <TextView
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sort"
             style="@style/Filter.Dialog.Title"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_time_period_recycler_view" />
 
@@ -110,7 +110,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_sort_text"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_12"
             tools:listitem="@layout/filter_dialog_filter_item" />
 
         <View
@@ -118,8 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_2"
             app:layout_constraintTop_toBottomOf="@id/filter_dialog_sort_recycler_view"
-            android:layout_marginVertical="@dimen/space_16"
-            android:background="@color/white_three" />
+            android:layout_marginVertical="@dimen/space_12"
+            android:background="@color/warm_grey" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/resetButton"
@@ -131,8 +131,8 @@
             app:layout_constraintTop_toBottomOf="@+id/filter_dialog_line2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/applyButton"
-            android:layout_marginVertical="@dimen/space_16"
-            android:layout_marginStart="@dimen/space_16" />
+            android:layout_marginVertical="@dimen/space_12"
+            android:layout_marginStart="@dimen/space_12" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/applyButton"
@@ -141,7 +141,7 @@
             style="@style/Button.Main"
             android:enabled="@{viewModel.movieFilterButtonState}"
             android:text="@string/apply"
-            android:layout_margin="@dimen/space_16"
+            android:layout_margin="@dimen/space_12"
             app:layout_constraintTop_toBottomOf="@+id/filter_dialog_line2"
             app:layout_constraintStart_toEndOf="@id/resetButton"
             app:layout_constraintEnd_toEndOf="parent" />

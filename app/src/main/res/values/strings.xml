@@ -47,6 +47,7 @@
     <string name="popularity">Popularity</string>
     <string name="latest_release">Latest Release</string>
     <string name="movie_score">Movie Score</string>
+    <string name="explore_title">%1$s Movies See All Page</string>
 
     <string-array name="movieFilterRegionList">
         <item>@string/tr</item>

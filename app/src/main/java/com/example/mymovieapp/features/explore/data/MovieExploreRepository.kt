@@ -9,4 +9,12 @@ interface MovieExploreRepository {
     fun getSearchingMovieResults(
         searchingQuery : String
     ) : Flow<PagingData<MovieDto>>
+
+    fun getDiscoveryMovieResults(
+        language : String,
+        sortFilter : String?,
+        genreListFilter : String?,
+        regionFilter : String?,
+        yearFilter : Int?
+    ) : Flow<PagingData<MovieDto>>
 }
