@@ -10,4 +10,19 @@ class MovieExploreDataSource @Inject constructor(
     suspend fun getSearchingMovieResult(page : Int,searchingQuery : String) : MovieResponse {
         return movieSearchService.getSearchingResult(page = page, searchString = searchingQuery)
     }
+    suspend fun getDiscoveryMovieResult(
+        page : Int,
+        language : String,
+        sortFilter : String?,
+        genreListFilter : String?,
+        regionFilter : String?,
+        yearFilter : Int?
+    ) : MovieResponse = movieSearchService.getDiscoveryMovieResult(
+        page = page,
+        language = language,
+        sortFilter = sortFilter,
+        genreListFilter = genreListFilter,
+        regionFilter = regionFilter,
+        yearFilter = yearFilter
+    )
 }

@@ -31,4 +31,32 @@ class MovieExploreRepositoryImp @Inject constructor(
             }
         ).flow
     }
+
+    override fun getDiscoveryMovieResults(
+        language: String,
+        sortFilter: String?,
+        genreListFilter: String?,
+        regionFilter: String?,
+        yearFilter: Int?
+    ): Flow<PagingData<MovieDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.ITEMS_PER_PAGE
+            ),
+            pagingSourceFactory = {
+                MoviesPagingSource(
+                    getMoviesFunc = { page ->
+                        movieExploreDataSource.getDiscoveryMovieResult(
+                            page = page,
+                            language = language,
+                            sortFilter = sortFilter,
+                            genreListFilter = genreListFilter,
+                            regionFilter = regionFilter,
+                            yearFilter = yearFilter
+                        )
+                    }
+                )
+            }
+        ).flow
+    }
 }

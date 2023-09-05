@@ -3,6 +3,8 @@ package com.example.mymovieapp.features.explore.di
 import com.example.mymovieapp.features.explore.data.MovieExploreRepository
 import com.example.mymovieapp.features.explore.data.MovieExploreRepositoryImp
 import com.example.mymovieapp.features.explore.data.remote.MovieSearchService
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterUtils
+import com.example.mymovieapp.utils.StringProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

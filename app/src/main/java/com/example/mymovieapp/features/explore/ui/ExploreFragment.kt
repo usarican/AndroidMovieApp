@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,26 +16,42 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentExploreBinding
+import com.example.mymovieapp.features.explore.ui.adapter.ExploreMovieFilterAdapter
+import com.example.mymovieapp.features.explore.ui.dialog.ExploreMovieFilterDialog
+import com.example.mymovieapp.features.explore.ui.dialog.ExploreMovieFilterDialog.Companion.FRAGMENT_RESULT_MOVIE_FILTER_ITEM
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterUtils
 import com.example.mymovieapp.features.home.domain.model.CategoryType
 import com.example.mymovieapp.features.home.domain.model.Movie
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.extensions.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
 
     private val viewModel : ExploreViewModel by viewModels()
     private val args : ExploreFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var filterUtils: MovieFilterUtils
+
+    private lateinit var  filterItemListAdapter : ExploreMovieFilterAdapter
+    private lateinit var movieFilterItem : MovieFilterItem
+    private lateinit var genreList : Map<Int,String>
 
     private var textChangingListenerJob : Job? = null
 
@@ -48,6 +65,8 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     }
 
     private var firstOpeningPagingData : PagingData<Movie>? = null
+    private var discoveredPagingData : PagingData<Movie>? = null
+
 
     private val pagingAdapter : ExploreMoviePagingAdapter by lazy {
         ExploreMoviePagingAdapter(clickListeners = exploreMoviesClickListener)
@@ -60,6 +79,14 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     override fun setUpViews(view: View, savedInstanceState: Bundle?) {
         setBaseViewModel(viewModel)
         categoryType = args.categoryType
+        viewModel.getGenreList("en")
+
+        setFragmentResultListener(FRAGMENT_RESULT_LISTENER_KEY){ requestKey, bundle ->
+            val result : MovieFilterItem? = bundle.getParcelable(FRAGMENT_RESULT_MOVIE_FILTER_ITEM)
+            viewModel.setMovieFilterItem(result)
+        }
+
+        binding.exploreFragmentTitle.text = String.format(resources.getString(R.string.explore_title),resources.getString(categoryType.categoryName))
 
     }
     override fun setUpUI() {
@@ -76,8 +103,42 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
                 }
             }
             launch {
+                viewModel.movieGenreList.collectLatest {
+                    Timber.tag(TAG).d("Genre List : $it")
+                    genreList = it
+                }
+            }
+            launch {
+                viewModel.savedMovieFilterItem.collectLatest { movieFilterItem ->
+                    this@ExploreFragment.movieFilterItem = movieFilterItem
+                    val adapterList = mutableListOf<MovieFilterDialogItem>()
+                    if (movieFilterItem == filterUtils.getInitialMovieFilterItem()) {
+                        binding.filterItemRecyclerView.toGone()
+                    } else {
+                        binding.filterItemRecyclerView.toVisible()
+                    }
+                    movieFilterItem.genresFilterItem.forEach {
+                        adapterList.add(it)
+                    }
+                    adapterList.add(movieFilterItem.regionFilterItem)
+                    adapterList.add(movieFilterItem.timeFilterItem)
+                    movieFilterItem.sortFilterItem?.let {
+                        adapterList.add(it)
+                    }
+                    filterItemListAdapter.submitList(adapterList)
+                }
+            }
+            launch {
                 viewModel.getSearchingMovieList("en").collectLatest {
                     it?.let {
+                        pagingAdapter.submitData(it)
+                    }
+                }
+            }
+            launch {
+                viewModel.getDiscoveryMovieList("en").collectLatest {
+                    it?.let {
+                        discoveredPagingData = it
                         pagingAdapter.submitData(it)
                     }
                 }
@@ -122,10 +183,17 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         binding.apply {
             searchTextInputField.doAfterTextChanged {
                 if (it.isNullOrEmpty()){
+                    Timber.tag(TAG).d("inputFieldDoAfterTextChange Triggered")
                     textChangingListenerJob?.cancel()
                     searchTextInputField.clearFocus()
                     deleteTextButton.toGone()
-                    lifecycleScope.launch { firstOpeningPagingData?.let { pagingData ->  pagingAdapter.submitData(pagingData) } }
+                    lifecycleScope.launch {
+                        if (movieFilterItem == filterUtils.getInitialMovieFilterItem()) {
+                            firstOpeningPagingData?.let { pagingData ->  pagingAdapter.submitData(pagingData) }
+                        } else {
+                            discoveredPagingData?.let { pagingData ->  pagingAdapter.submitData(pagingData) }
+                        }
+                    }
                     root.hideKeyboard()
                 } else {
                     textChangingListenerJob?.cancel()
@@ -140,23 +208,33 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
             }
             searchTextInputField.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus || !searchString.isNullOrEmpty()) {
-                    searchBarContainer.setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.primary_color)))
+                    searchBarContainer.setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.primary_color)))
+                    searchBarContainer.setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.primary_color_soft)))
                 } else {
-                    searchBarContainer.setCardBackgroundColor(resources.getColor(R.color.icon_unselect_color))
+                    searchBarContainer.setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.warmGrey)))
+                    searchBarContainer.setCardBackgroundColor(resources.getColor(R.color.white_three))
                 }
             }
             deleteTextButton.setOnClickListener {
                 searchString = ""
                 searchTextInputField.text?.clear()
                 searchTextInputField.clearFocus()
-                searchBarContainer.setCardBackgroundColor(resources.getColor(R.color.icon_unselect_color))
+                searchBarContainer.setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.warmGrey)))
+                searchBarContainer.setCardBackgroundColor(resources.getColor(R.color.white_three))
                 lifecycleScope.launch { firstOpeningPagingData?.let { pagingData ->  pagingAdapter.submitData(pagingData) } }
                 it.hideKeyboard()
             }
 
-            container.setOnClickListener {
-                searchTextInputField.clearFocus()
-                it.hideKeyboard()
+            exploreFilterButton.setOnClickListener {
+                val statsFilterBottomSheetFragment = ExploreMovieFilterDialog.newInstance(
+                    movieFilterItem = movieFilterItem,
+                    requestKey = FRAGMENT_RESULT_LISTENER_KEY,
+                    genreList = genreList
+                )
+                statsFilterBottomSheetFragment.show(parentFragmentManager,"")
+            }
+            movieExploreBackButton.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
     }
@@ -171,6 +249,24 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
                 EqualSpacingItemDecoration.GRID
             )
         )
+        filterItemListAdapter = ExploreMovieFilterAdapter(object : MyClickListeners<MovieFilterDialogItem> {
+            override fun click(item: MovieFilterDialogItem) {
+                return
+            }
+        })
+        binding.filterItemRecyclerView.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL,false)
+        binding.filterItemRecyclerView.adapter = filterItemListAdapter
+        binding.filterItemRecyclerView.addItemDecoration(
+            EqualSpacingItemDecoration(
+                2.dp,
+                EqualSpacingItemDecoration.HORIZONTAL
+            )
+        )
+    }
+
+    override fun onDestroy() {
+        firstOpeningPagingData = null
+        super.onDestroy()
     }
 
 
@@ -191,5 +287,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     companion object {
         private val TAG = ExploreFragment::class.java.simpleName
+        const val FRAGMENT_RESULT_LISTENER_KEY = "fragmentResultListenerKey"
     }
 }
