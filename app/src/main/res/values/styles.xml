@@ -79,6 +79,23 @@
         <item name="android:textSize">32sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="Movies.WelcomePage.Title" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/playfair_display_bold</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Movies.WelcomePage.Content" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Movies.LoginPage.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/playfair_display_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="Movies.H2" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="android:fontFamily">@font/playfair_display_black</item>
@@ -297,6 +314,19 @@
         <item name="rippleColor">@color/primary_color</item>
     </style>
 
+    <style name="Button.Main.White" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:backgroundTint">@color/gallery</item>
+        <item name="android:fontFamily">@font/playfair_display_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/greyishBrown</item>
+        <item name="android:textSize">18sp</item>
+        <item name="cornerRadius">36dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="rippleColor">@color/primary_color</item>
+    </style>
+
 
     <style name="Filter.Item.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/stats_filter_button_selector</item>
@@ -348,6 +378,22 @@
         <item name="rippleColor">@color/ripple_greyish_brown</item>
     </style>
 
+    <style name="Button.Icon" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="cornerRadius">@dimen/space_8</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconSize">40dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="rippleColor">@color/ripple_greyish_brown</item>
+    </style>
+
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheet</item>
     </style>
@@ -365,6 +411,25 @@
         <item name="android:paddingVertical">@dimen/space_16</item>
         <item name="android:paddingHorizontal">@dimen/space_8</item>
         <item name="behavior_hideable">true</item>
+    </style>
+
+    <style name="TextInputLayout.Auth" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/stroke_color_textinput</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="boxStrokeErrorColor">@color/primary_color</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxBackgroundColor">#05000000</item>
+        <item name="startIconTint">@color/warm_grey</item>
+        <item name="errorTextColor">@color/primary_color</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+
+    <style name="TextInputLayout.Appearance.Base" parent="Widget.Design.TextInputLayout">
+        <item name="colorControlNormal">@color/greyishBrown</item>
+        <item name="colorControlActivated">@color/greyishBrown</item>
+        <item name="colorControlHighlight">@color/greyishBrown</item>
     </style>
 
 
