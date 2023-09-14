@@ -28,6 +28,8 @@
     <string name="create_account">Create Account</string>
     <string name="log_in">Sign In</string>
     <string name="remember_me">Remember me</string>
+    <string name="login_title">Login to Your Account</string>
+    <string name="sign_up_title">Create Your Account</string>
 
     <string name="sort_and_filter">Sort &amp; Filter</string>
     <string name="regions">Regions</string>
