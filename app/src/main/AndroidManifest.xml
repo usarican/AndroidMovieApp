@@ -12,23 +12,29 @@
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovieApp"
         tools:targetApi="31">
         <activity
             android:name=".features.auth.ui.AuthenticationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.main.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize"
+            >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".features.main.MainActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

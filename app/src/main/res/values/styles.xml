@@ -445,6 +445,21 @@
     </style>
 
 
+    <style name="TextInputLayout.EditProfile" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/stroke_color_textinput</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="boxStrokeErrorColor">@color/rouge</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxBackgroundColor">@color/background_color_textinput</item>
+        <item name="startIconTint">@color/warm_grey</item>
+        <item name="endIconTint">@color/warm_grey</item>
+        <item name="errorTextColor">@color/rouge</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+
+
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
 

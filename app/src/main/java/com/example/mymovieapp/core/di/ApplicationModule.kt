@@ -5,7 +5,9 @@ import androidx.fragment.app.FragmentActivity
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.features.dialog.LoadingDialog
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterUtils
+import com.example.mymovieapp.utils.JsonConverter
 import com.example.mymovieapp.utils.NetworkUtils
+import com.example.mymovieapp.utils.PathHelper
 import com.example.mymovieapp.utils.StringProvider
 import dagger.Module
 import dagger.Provides
@@ -22,6 +24,17 @@ object ApplicationModule {
     @Provides
     fun provideStringResource(@ApplicationContext context: Context) =
         StringProvider(context)
+
+    @Singleton
+    @Provides
+    fun providePathHelper(
+        @ApplicationContext context: Context,
+        jsonConverter: JsonConverter
+    ) : PathHelper =
+        PathHelper(context,jsonConverter)
+    @Singleton
+    @Provides
+    fun provideJsonConverter() : JsonConverter = JsonConverter()
 
     @Provides
     fun provideNetworkUtils(@ApplicationContext context: Context) : NetworkUtils =

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.mymovieapp.features.auth.ui.AuthenticationViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="@dimen/space_8"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/stroke_color_textinput"
+            android:layout_width="match_parent"
+            android:backgroundTint="@color/background_color_textinput"
+            android:layout_height="wrap_content">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/user_phone_country_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="🇹🇴"
+                    android:text="🇹🇴"
+                    android:textColor="@color/warm_grey"
+                    android:textSize="30sp"
+                    android:layout_marginStart="@dimen/space_8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/dropdown_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_drop_down"
+                    android:layout_marginStart="@dimen/space_8"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/user_phone_country_flag"/>
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="@dimen/space_2"
+                    android:layout_height="0dp"
+                    android:background="#52969696"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/dropdown_button"
+                    app:layout_constraintEnd_toStartOf="@id/user_phone_number"
+                    android:layout_marginHorizontal="@dimen/space_2"
+                    />
+
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/user_phone_number"
+                    style="@style/TextInputLayout.EditProfile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:endIconDrawable="@drawable/ic_close"
+                    app:boxStrokeWidth="0dp"
+                    app:endIconMode="clear_text"
+                    android:layout_marginStart="@dimen/space_4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/line"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/playfair_display_regular"
+                        android:hint="+90 (555) 555 55 55"
+                        android:maxLength="19"
+                        android:singleLine="true"
+                        android:textColorHint="@color/brownGrey"
+                        android:textSize="16sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/user_phone_country_flag_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</layout>
