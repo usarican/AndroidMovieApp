@@ -56,15 +56,14 @@ class ExploreMovieFilterAdapter(
                 oldItem: MovieFilterDialogItem,
                 newItem: MovieFilterDialogItem
             ): Boolean {
-                return oldItem.id == newItem.id &&
-                        oldItem.itemCategory == newItem.itemCategory
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
                 oldItem: MovieFilterDialogItem,
                 newItem: MovieFilterDialogItem
             ): Boolean {
-                return oldItem.isItemSelected == newItem.isItemSelected
+                return oldItem == newItem
             }
         }
     }
