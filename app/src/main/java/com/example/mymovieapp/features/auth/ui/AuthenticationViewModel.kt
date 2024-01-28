@@ -28,18 +28,11 @@ import javax.inject.Inject
 class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
     @ApplicationContext context : Context,
-    database: MovieAppDatabase,
     private val downloadWorkManager: DownloadWorkManager
 ) : BaseViewModel() {
 
-
-    private val genreDatabase = database.genreDatabase
     init {
         downloadWorkManager.startDownloadMovieGenres()
-        genreListUseCase.getGenreListFromDatabase().doOnSuccess {
-            Timber.tag(TAG).d(it.toString())
-        }
-        viewModelScope.launch { genreListUseCase.insertGenreListInDb("en") }
     }
 
 
