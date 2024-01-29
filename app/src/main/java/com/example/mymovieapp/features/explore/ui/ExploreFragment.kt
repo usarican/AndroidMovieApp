@@ -90,7 +90,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     }
     override fun setUpUI() {
-        handleOverlaps()
+        handleToolbarOverlaps(binding.exploreToolbar)
         setUpRecyclerView()
     }
 
@@ -268,23 +268,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         firstOpeningPagingData = null
         super.onDestroy()
     }
-
-
-
-    private fun handleOverlaps(){
-        ViewCompat.setOnApplyWindowInsetsListener(binding.container) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams>{
-                leftMargin = insets.left
-                bottomMargin = insets.bottom
-                rightMargin = insets.right
-                topMargin = insets.top
-            }
-
-            WindowInsetsCompat.CONSUMED
-        }
-    }
-
     companion object {
         private val TAG = ExploreFragment::class.java.simpleName
         const val FRAGMENT_RESULT_LISTENER_KEY = "fragmentResultListenerKey"

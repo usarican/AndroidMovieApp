@@ -57,6 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
         viewModel.setUIStateLoading()
         viewModel.getTrendMoviesOfWeek()
         viewModel.getCategoryMoviesList()
+        handleToolbarOverlaps(binding.bannerMoviesViewPager)
         setUpViewPager()
         setUpRecyclerView()
     }
