@@ -44,38 +44,3 @@ class GenreDownloadWorker @AssistedInject constructor(
         private val TAG = GenreDownloadWorker::class.java.simpleName
     }
 }
-
-class CustomWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context,params){
-
-    val flow = flow {
-        emit(State.Loading)
-        delay(1000L)
-        emit(State.Success(10))
-    }
-
-    override suspend fun doWork(): Result {
-        Timber.tag("Utku").d("Simple Worker Working...")
-        var result : ListenableWorker.Result = Result.failure()
-        flow.collectLatest { state ->
-            when(state){
-                is State.Error -> {
-                    Timber.tag("Utku").d("Flow Error")
-                    result = Result.failure()
-                }
-                State.Loading -> {
-                    Timber.tag("Utku").d("Flow Loading")
-                    result = Result.success()
-                }
-                is State.Success -> {
-                    Timber.tag("Utku").d("Flow Success data is ${state.data}")
-                }
-            }
-        }
-        return result
-    }
-
-
-}

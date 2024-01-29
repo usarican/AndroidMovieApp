@@ -4,5 +4,5 @@ import com.example.mymovieapp.core.data.State
 import kotlinx.coroutines.flow.Flow
 
 interface MovieGenreRepository {
-    suspend fun getMovieGenreList(language : String) : State<Boolean>
+    suspend fun getMovieGenreList(language : String)
 }

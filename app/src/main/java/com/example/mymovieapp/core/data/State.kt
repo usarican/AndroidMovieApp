@@ -8,3 +8,4 @@ sealed class State<out T> {
 
     object Loading : State<Nothing>()
 }
+

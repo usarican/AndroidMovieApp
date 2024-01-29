@@ -2,23 +2,16 @@ package com.example.mymovieapp.features.auth.ui
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.example.mymovieapp.R
 import com.example.mymovieapp.core.data.local.database.MovieAppDatabase
-import com.example.mymovieapp.core.services.CustomWorker
 import com.example.mymovieapp.core.services.DownloadWorkManager
-import com.example.mymovieapp.core.services.GenreDownloadWorker
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
-import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
-import com.example.mymovieapp.features.home.ui.HomeViewModel
 import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -27,12 +20,17 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
-    @ApplicationContext context : Context,
+    private val database: MovieAppDatabase,
     private val downloadWorkManager: DownloadWorkManager
 ) : BaseViewModel() {
-
     init {
         downloadWorkManager.startDownloadMovieGenres()
+    }
+
+    fun clearDatabaseTable(){
+        viewModelScope.launch(Dispatchers.IO){
+            database.clearAllTables()
+        }
     }
 
 

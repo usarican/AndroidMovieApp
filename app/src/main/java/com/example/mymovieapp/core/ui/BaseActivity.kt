@@ -1,24 +1,27 @@
 package com.example.mymovieapp.core.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import com.example.mymovieapp.features.dialog.DialogManager
 import com.example.mymovieapp.features.dialog.LoadingDialog
 import javax.inject.Inject
 
-abstract class BaseActivity<VDB : ViewDataBinding>(): AppCompatActivity() {
+abstract class BaseActivity<VDB : ViewDataBinding>() : AppCompatActivity() {
 
     @Inject
-    lateinit var loadingDialog : LoadingDialog
+    lateinit var loadingDialog: LoadingDialog
 
     @Inject
     lateinit var dialogManager: DialogManager
 
-    open val binding : VDB by lazy {  bindingFactory(layoutInflater) }
+    open val binding: VDB by lazy { bindingFactory(layoutInflater) }
 
-    abstract fun bindingFactory(layoutInflater: LayoutInflater) : VDB
+    abstract fun bindingFactory(layoutInflater: LayoutInflater): VDB
 
     protected open fun setUpViews(savedInstanceState: Bundle?) {}
 
@@ -28,6 +31,17 @@ abstract class BaseActivity<VDB : ViewDataBinding>(): AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        window.attributes.layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         binding.lifecycleOwner = this
         setContentView(binding.root)
         setUpViews(savedInstanceState)
@@ -35,8 +49,8 @@ abstract class BaseActivity<VDB : ViewDataBinding>(): AppCompatActivity() {
         setUpObservers()
     }
 
-    fun setBaseViewModel(viewModel: BaseViewModel){
-        viewModel.showLoading.observe(this){ showLoading ->
+    fun setBaseViewModel(viewModel: BaseViewModel) {
+        viewModel.showLoading.observe(this) { showLoading ->
             showLoading?.let {
                 showLoadingDialog(it)
             }
@@ -50,13 +64,13 @@ abstract class BaseActivity<VDB : ViewDataBinding>(): AppCompatActivity() {
 
     }
 
-    open fun showLoadingDialog(showLoading : Boolean){
+    open fun showLoadingDialog(showLoading: Boolean) {
         if (showLoading) loadingDialog.showLoadingDialog() else loadingDialog.hideLoadingDialog()
     }
 
-    open fun showUIComponent (component: MyUIComponents) {
+    open fun showUIComponent(component: MyUIComponents) {
         when (component) {
-            is MyActivity-> {}
+            is MyActivity -> {}
             is MyDialog -> dialogManager.showDialogFragment(component)
         }
     }

@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".features.auth.ui.WelcomeAppFragment">
 
         <ImageView
@@ -34,7 +35,7 @@
                 android:id="@+id/welcome_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:text="Welcome to MovieApp"
+                android:text="Welcome to MovieApp"
                 android:textColor="@color/white"
                 android:background="#03FFFFFF"
                 style="@style/Movies.WelcomePage.Title"
@@ -49,7 +50,7 @@
                 android:id="@+id/welcome_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:text="The best movie application of the century to make your days great!"
+                android:text="The best movie application of the century to make your days great!"
                 android:textColor="@color/white"
                 android:background="#03FFFFFF"
                 android:padding="@dimen/space_8"

@@ -12,6 +12,26 @@ fun <T, R> State<T>.map(transform: (T) -> R): State<R> {
     }
 }
 
+suspend fun <T> State<T>.converter(
+    doWhenStateSuccess: (suspend (_: T) -> Unit)? = null,
+    doWhenStateError: ((_: Throwable) -> Unit)? = null,
+    doWhenStateLoading: (() -> Unit)? = null
+) {
+    when (this) {
+        is State.Success -> if (doWhenStateSuccess != null) {
+            doWhenStateSuccess(data)
+        }
+
+        is State.Error -> if (doWhenStateError != null) {
+            doWhenStateError(exception)
+        }
+
+        is State.Loading -> if (doWhenStateLoading != null) {
+            doWhenStateLoading()
+        }
+    }
+}
+
 fun <T> Flow<State<T>>.doOnSuccess(action: suspend (T) -> Unit): Flow<State<T>> =
     transform { value ->
         if (value is State.Success) {

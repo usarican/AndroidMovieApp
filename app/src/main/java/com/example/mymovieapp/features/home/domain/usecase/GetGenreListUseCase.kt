@@ -23,12 +23,4 @@ class GetGenreListUseCase @Inject constructor(
         }
     }
 
-    suspend fun insertGenreListInDb(language : String) = genreRepository.getMovieGenreList(language)
-
-    fun getGenreListFromDatabase() = genreRepository.getMovieGenreListFromDatabase().map { state ->
-        state.map { list ->
-            list.map { it.entityToDto() }
-        }
-    }
-
 }
