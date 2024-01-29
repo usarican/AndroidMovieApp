@@ -26,9 +26,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/loading_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/LoadingText"
+            android:gravity="center_horizontal"
             app:layout_constraintStart_toStartOf="@id/loading_dot_view"
             app:layout_constraintEnd_toEndOf="@id/loading_dot_view"
             app:layout_constraintTop_toBottomOf="@id/loading_dot_view"

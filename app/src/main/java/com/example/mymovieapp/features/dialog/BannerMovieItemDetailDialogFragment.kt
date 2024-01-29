@@ -31,16 +31,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBannerMovieDetailsBinding>(R.layout.dialog_layout_banner_movie_details) {
+class BannerMovieItemDetailDialogFragment :
+    BaseDialogFragment<DialogLayoutBannerMovieDetailsBinding>(R.layout.dialog_layout_banner_movie_details) {
 
-    private var movieDetailItem : MovieDetail? = null
-    private var clickListener : MyClickListeners<Int>? = null
-    private val movieGenreListAdapter : BannerMovieGenreListAdapter by lazy {
+    private var movieDetailItem: MovieDetail? = null
+    private var clickListener: MyClickListeners<Int>? = null
+    private val movieGenreListAdapter: BannerMovieGenreListAdapter by lazy {
         BannerMovieGenreListAdapter()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(MOVIE_DETAIL_ITEM,movieDetailItem)
+        outState.putParcelable(MOVIE_DETAIL_ITEM, movieDetailItem)
         super.onSaveInstanceState(outState)
     }
 
@@ -64,12 +65,12 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
         }
     }
 
-    fun setClickListener(clickListeners: MyClickListeners<Int>){
+    fun setClickListener(clickListeners: MyClickListeners<Int>) {
         this.clickListener = clickListeners
     }
 
     override fun setUpUI() {
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val context = activity?.applicationContext
                 context?.let {
@@ -87,7 +88,7 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
                                 )
                             )
 
-                            val color = ColorUtils.setAlphaComponent(dominantColor,25)
+                            val color = ColorUtils.setAlphaComponent(dominantColor, 25)
 
                             binding.container.setBackgroundColor(color)
                         }
@@ -95,7 +96,7 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
 
                     binding.bannerMovieDetailBackgroundImage.setImageDrawable(bitmapDrawable)
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 return@launch
             }
         }
@@ -108,9 +109,9 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
         }
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         binding.apply {
-            genreListRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL,false)
+            genreListRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
             genreListRecyclerView.adapter = movieGenreListAdapter
             movieGenreListAdapter.setData(movieDetailItem?.genres?.take(2) ?: emptyList())
             genreListRecyclerView.addItemDecoration(
@@ -125,7 +126,7 @@ class BannerMovieItemDetailDialogFragment : BaseDialogFragment<DialogLayoutBanne
     companion object {
         private const val MOVIE_DETAIL_ITEM = "movieDetailItem"
 
-        fun newInstance(movieDetailItem : MovieDetail) =
+        fun newInstance(movieDetailItem: MovieDetail) =
             BannerMovieItemDetailDialogFragment().apply {
                 arguments = bundleOf(
                     MOVIE_DETAIL_ITEM to movieDetailItem
