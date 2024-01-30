@@ -25,6 +25,7 @@
     <string name="search_your_movie">Search your movie…</string>
     <string name="email">E Mail</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="create_account">Create Account</string>
     <string name="log_in">Sign In</string>
     <string name="remember_me">Remember me</string>

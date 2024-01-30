@@ -32,11 +32,6 @@ abstract class BaseActivity<VDB : ViewDataBinding>() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-
         binding.lifecycleOwner = this
         setContentView(binding.root)
         setUpViews(savedInstanceState)
