@@ -33,6 +33,7 @@
     <string name="sign_up_title">Create Your Account</string>
     <string name="is_empty_validation_text">This area should not be empty.</string>
     <string name="password_validation_text">This password is not valid.</string>
+    <string name="password_confirm_validation_text">Passwords does not match</string>
     <string name="email_validation_text">This email is not valid.</string>
 
     <string name="sort_and_filter">Sort &amp; Filter</string>
