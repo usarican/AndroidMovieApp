@@ -31,6 +31,9 @@
     <string name="remember_me">Remember me</string>
     <string name="login_title">Login to Your Account</string>
     <string name="sign_up_title">Create Your Account</string>
+    <string name="is_empty_validation_text">This area should not be empty.</string>
+    <string name="password_validation_text">This password is not valid.</string>
+    <string name="email_validation_text">This email is not valid.</string>
 
     <string name="sort_and_filter">Sort &amp; Filter</string>
     <string name="regions">Regions</string>
