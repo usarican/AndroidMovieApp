@@ -40,4 +40,11 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
             return validation1 && validation2 && validation3
         }
     }
+
+    private fun clearTextInputsFocus() {
+        val editTextFields = listOf(binding.textinputEmail.editText,binding.textinputPassword.editText,binding.textinputPasswordConfirm.editText)
+        editTextFields.forEach { t ->
+            t?.clearFocus()
+        }
+    }
 }
