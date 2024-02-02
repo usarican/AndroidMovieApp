@@ -11,11 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WelcomeAppFragment : BaseFragment<FragmentWelcomeAppBinding>(R.layout.fragment_welcome_app) {
-    private val viewModel : AuthenticationViewModel by viewModels()
-
-    override fun setUpViews(view: View, savedInstanceState: Bundle?) {
-        viewModel.clearDatabaseTable()
-    }
     override fun setUpListeners() {
         binding.apply {
             buttonSignUp.setOnClickListener {

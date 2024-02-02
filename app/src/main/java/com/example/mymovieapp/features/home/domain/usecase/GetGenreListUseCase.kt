@@ -1,7 +1,7 @@
 package com.example.mymovieapp.features.home.domain.usecase
 
 import com.example.mymovieapp.core.data.State
-import com.example.mymovieapp.core.data.remote.repository.MovieGenreRepositoryImp
+import com.example.mymovieapp.core.data.MovieGenreRepositoryImp
 import com.example.mymovieapp.features.home.data.HomeRepository
 import com.example.mymovieapp.features.home.domain.mapper.GenreListMapper
 import com.example.mymovieapp.utils.extensions.map

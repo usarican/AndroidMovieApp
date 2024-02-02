@@ -7,7 +7,7 @@ import com.example.mymovieapp.core.data.local.entity.GenreEntity
 @Database(
     entities = [
         GenreEntity::class
-    ], version = 1
+    ], version = 1, exportSchema = true
 )
 abstract class MovieAppDatabase : RoomDatabase() {
     abstract val genreDatabase : GenreDatabase

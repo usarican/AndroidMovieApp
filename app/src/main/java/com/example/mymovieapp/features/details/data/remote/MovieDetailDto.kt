@@ -1,6 +1,7 @@
 package com.example.mymovieapp.features.details.data.remote
 
 import com.example.mymovieapp.core.data.remote.response.GenreListResponse
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.squareup.moshi.Json
 
 data class MovieDetailDto(
@@ -12,7 +13,7 @@ data class MovieDetailDto(
     @Json(name = "backdrop_path") val backdropPath : String?,
     @Json(name = "release_date") val releaseDate: String?,
     @Json(name = "production_countries") val productionCountries : List<ProductionCountryDto>,
-    val genres: List<GenreListResponse.GenreDto>,
+    val genres: List<GenreResponse>,
     @Json(name = "vote_count") val voteCount: Int,
     @Json(name = "vote_average") val voteAverage: Double,
     @Json(name = "status") val status : String
