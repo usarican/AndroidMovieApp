@@ -47,7 +47,7 @@ class AuthenticationViewModel @Inject constructor(
                         movieFilterDialogItem
                     }
                 }
-                _movieGenreListMutableStateFlow.emit(list)
+                  _movieGenreListMutableStateFlow.emit(list)
             }
         }
 
