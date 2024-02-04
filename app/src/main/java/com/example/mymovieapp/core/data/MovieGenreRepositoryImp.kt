@@ -25,7 +25,9 @@ class MovieGenreRepositoryImp @Inject constructor(
         withContext(dispatcher) {
             val localGenreList = fetchGenreListFromDatabase()
             if (localGenreList.isEmpty()) {
-                apiCall { movieGenreRemoteDataSource.getMovieGenreList(language) }
+                apiCall {
+                    movieGenreRemoteDataSource.getMovieGenreList(language)
+                }
                     .collectLatest { state ->
                         state.converter(
                             doWhenStateSuccess = { response ->
