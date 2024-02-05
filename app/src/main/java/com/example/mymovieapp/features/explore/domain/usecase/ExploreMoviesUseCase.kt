@@ -3,6 +3,7 @@ package com.example.mymovieapp.features.explore.domain.usecase
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.mymovieapp.core.data.State
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.data.remote.response.MovieDto
 import com.example.mymovieapp.features.explore.data.MovieExploreRepository
 import com.example.mymovieapp.features.home.domain.mapper.GenreListMapper
@@ -30,7 +31,7 @@ class ExploreMoviesUseCase @Inject constructor(
         } else {
             return genreListUseCase.invoke(language).combine(
                 movieExploreRepository.getSearchingMovieResults(searchingQuery)
-            ) { genreListMapState : State<Map<Int,String>>, searchingMoviePagingData : PagingData<MovieDto> ->
+            ) { genreListMapState : State<List<GenreResponse>>, searchingMoviePagingData : PagingData<MovieDto> ->
                 if (genreListMapState is State.Success) {
                     val genreListMap = genreListMapState.data
                     searchingMoviePagingData.map { movieDto ->

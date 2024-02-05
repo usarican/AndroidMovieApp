@@ -5,6 +5,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.data.State
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.data.remote.response.MovieDto
 import com.example.mymovieapp.features.home.data.HomeRepository
 import com.example.mymovieapp.features.home.domain.mapper.GenreListMapper
@@ -35,7 +36,7 @@ class GetCategoryMoviesUseCase @Inject constructor(
         ) { popularMoviesPagingData: PagingData<MovieDto>,
             topRatedMoviesPagingData: PagingData<MovieDto>,
             upComingMoviesPagingData: PagingData<MovieDto>,
-            stateGenreList: State<Map<Int, String>> ->
+            stateGenreList: State<List<GenreResponse>> ->
 
             State.Loading
             val mutableCategoryList = mutableListOf<Category>()
@@ -49,7 +50,7 @@ class GetCategoryMoviesUseCase @Inject constructor(
                         val movie = movieMapper.mapOnMovieDto(movieDto)
                         movie.copy(
                             genreList = genreListMapper.mapOnGenreListKeyToValue(
-                                genreListMap = genreListMap,
+                                genreResponseList = genreListMap,
                                 genreKeys = movieDto.genreIds
                             )
                         )
@@ -63,7 +64,7 @@ class GetCategoryMoviesUseCase @Inject constructor(
                         val movie = movieMapper.mapOnMovieDto(movieDto)
                         movie.copy(
                             genreList = genreListMapper.mapOnGenreListKeyToValue(
-                                genreListMap = genreListMap,
+                                genreResponseList = genreListMap,
                                 genreKeys = movieDto.genreIds
                             )
                         )
@@ -77,7 +78,7 @@ class GetCategoryMoviesUseCase @Inject constructor(
                         val movie = movieMapper.mapOnMovieDto(movieDto)
                         movie.copy(
                             genreList = genreListMapper.mapOnGenreListKeyToValue(
-                                genreListMap = genreListMap,
+                                genreResponseList = genreListMap,
                                 genreKeys = movieDto.genreIds
                             )
                         )

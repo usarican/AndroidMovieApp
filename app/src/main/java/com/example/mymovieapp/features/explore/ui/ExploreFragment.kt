@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentExploreBinding
 import com.example.mymovieapp.features.explore.ui.adapter.ExploreMovieFilterAdapter
@@ -51,7 +52,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private lateinit var  filterItemListAdapter : ExploreMovieFilterAdapter
     private lateinit var movieFilterItem : MovieFilterItem
-    private lateinit var genreList : Map<Int,String>
+    private lateinit var genreList : List<GenreResponse>
 
     private var textChangingListenerJob : Job? = null
 
@@ -229,7 +230,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
                 val statsFilterBottomSheetFragment = ExploreMovieFilterDialog.newInstance(
                     movieFilterItem = movieFilterItem,
                     requestKey = FRAGMENT_RESULT_LISTENER_KEY,
-                    genreList = genreList
+                    genreList = genreList.associate { it.id to it.name }
                 )
                 statsFilterBottomSheetFragment.show(parentFragmentManager,"")
             }

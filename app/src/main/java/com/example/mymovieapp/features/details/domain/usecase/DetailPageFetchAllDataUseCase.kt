@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.mymovieapp.core.data.State
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.data.remote.response.MovieDto
 import com.example.mymovieapp.features.details.data.MovieDetailsRepository
 import com.example.mymovieapp.features.details.data.remote.MovieDetailReviewDto
@@ -64,7 +65,7 @@ class DetailPageFetchAllDataUseCase @Inject constructor(
             flow
         ) { pagingDataMovieDetailReview: PagingData<MovieDetailReviewDto>,
             pagingDataMovieDetailMoreLikeThis: PagingData<MovieDto>,
-            stateGenreList : State<Map<Int,String>>,
+            stateGenreList : State<List<GenreResponse>>,
             stateMovieDetailPageItem : State<MovieDetailPageItem> ->
 
             State.Loading

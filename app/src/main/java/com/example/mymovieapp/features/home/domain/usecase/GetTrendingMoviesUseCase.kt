@@ -1,6 +1,7 @@
 package com.example.mymovieapp.features.home.domain.usecase
 
 import com.example.mymovieapp.core.data.State
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.data.remote.response.MovieResponse
 import com.example.mymovieapp.features.home.data.HomeRepository
 import com.example.mymovieapp.features.home.domain.mapper.GenreListMapper
@@ -23,15 +24,15 @@ class GetTrendingMoviesUseCase @Inject constructor(
         return combine(
                 homeRepository.getTrendingMoviesOfWeek(language),
                 genreListUseCase(language)
-            ) { stateMovieResponse : State<MovieResponse>, stateGenreList : State<Map<Int, String>> ->
+            ) { stateMovieResponse : State<MovieResponse>, stateGenreList : State<List<GenreResponse>> ->
                 State.Loading
-                val genreList = if (stateGenreList is State.Success) stateGenreList.data else emptyMap()
+                val genreList = if (stateGenreList is State.Success) stateGenreList.data else emptyList()
                 stateMovieResponse.map { movieResponse ->
                     movieResponse.results.map { movieDto ->
                         val movie = movieMapper.mapOnMovieDto(movieDto)
                         movie.copy(
                             genreList = genreListMapper.mapOnGenreListKeyToValue(
-                                genreListMap = genreList,
+                                genreResponseList = genreList,
                                 genreKeys = movieDto.genreIds
                             )
                         )

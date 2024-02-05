@@ -11,15 +11,18 @@ import com.example.mymovieapp.databinding.FragmentSetupProfileSection1Binding
 import com.example.mymovieapp.features.explore.ui.adapter.ExploreMovieFilterAdapter
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.extensions.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SetupProfileSection1Fragment : BaseFragment<FragmentSetupProfileSection1Binding>(R.layout.fragment_setup_profile_section1) {
+class SetupProfileSection1Fragment :
+    BaseFragment<FragmentSetupProfileSection1Binding>(R.layout.fragment_setup_profile_section1) {
 
-    val viewModel : AuthenticationViewModel by activityViewModels()
+    val viewModel: AuthenticationViewModel by activityViewModels()
 
-    private lateinit var  genreFilterAdapter : ExploreMovieFilterAdapter
+    private lateinit var genreFilterAdapter: ExploreMovieFilterAdapter
 
     override fun setUpObservers() {
         lifecycleScope.launch(SupervisorJob()) {
@@ -29,21 +32,29 @@ class SetupProfileSection1Fragment : BaseFragment<FragmentSetupProfileSection1Bi
                 }
             }
         }
+        lifecycleScope.launch {
+            viewModel.getLayoutViewState().collectLatest {
+                withContext(Dispatchers.Main) {
+                    binding.layoutViewState = it
+                }
+            }
+        }
     }
 
     override fun setUpUI() {
-        viewModel.getGenreList("en", emptyList())
+        viewModel.getGenreList("en")
         setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
         genreFilterAdapter = ExploreMovieFilterAdapter(viewModel.genreListClickListener)
-        binding.setupSection1RecyclerView.layoutManager = GridLayoutManager(requireContext(),2,RecyclerView.VERTICAL,false)
+        binding.setupSection1RecyclerView.layoutManager =
+            GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         binding.setupSection1RecyclerView.adapter = genreFilterAdapter
 
         binding.setupSection1RecyclerView.addItemDecoration(
             EqualSpacingItemDecoration(
-                4.dp, EqualSpacingItemDecoration.GRID,false
+                4.dp, EqualSpacingItemDecoration.GRID, false
             )
         )
         binding.setupSection1RecyclerView.setHasFixedSize(true)

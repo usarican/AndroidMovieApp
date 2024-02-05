@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
 import com.example.mymovieapp.core.data.State
+import com.example.mymovieapp.core.data.remote.response.GenreResponse
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.features.explore.domain.usecase.DiscoveryMoviesUseCase
 import com.example.mymovieapp.features.explore.domain.usecase.ExploreMoviesUseCase
@@ -41,7 +42,7 @@ class ExploreViewModel @Inject constructor(
     val savedMovieFilterItem = savedStateHandle.getStateFlow(
         SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL,movieFilterUtils.getInitialMovieFilterItem())
 
-    val movieGenreList = MutableStateFlow<Map<Int,String>>(hashMapOf())
+    val movieGenreList = MutableStateFlow<List<GenreResponse>>(emptyList())
 
     fun setMovieFilterItem(movieFilterItem: MovieFilterItem?) {
         savedStateHandle[SAVED_MOVIE_FILTER_ITEM_EXPLORE_VIEW_MODEL] = movieFilterItem
