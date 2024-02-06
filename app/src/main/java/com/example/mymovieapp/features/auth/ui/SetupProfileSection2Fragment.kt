@@ -22,9 +22,10 @@ import javax.inject.Inject
 import kotlin.math.max
 
 @AndroidEntryPoint
-class SetupProfileSection2Fragment : BaseFragment<FragmentSetupProfileSection2Binding>(R.layout.fragment_setup_profile_section2) {
+class SetupProfileSection2Fragment :
+    BaseFragment<FragmentSetupProfileSection2Binding>(R.layout.fragment_setup_profile_section2) {
 
-    val viewModel : AuthenticationViewModel by activityViewModels()
+    val viewModel: AuthenticationViewModel by activityViewModels()
 
     @Inject
     lateinit var pathHelper: PathHelper
@@ -44,23 +45,23 @@ class SetupProfileSection2Fragment : BaseFragment<FragmentSetupProfileSection2Bi
     }
 
     private fun setupGenreListEditText() {
-        val genreList = listOf("Male","Female")
-        val adapter = ArrayAdapter(requireContext(),R.layout.user_genre_list_item,genreList)
+        val genreList = listOf("Male", "Female")
+        val adapter = ArrayAdapter(requireContext(), R.layout.user_genre_list_item, genreList)
         (binding.setupSection2UserGenre.editText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
 
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // Callback is invoked after the user selects a media item or closes the
-        // photo picker.
-        if (uri != null) {
-            FileUtils(context).getPath(uri)?.let { fileToBitmap(it)?.let { b ->
-                binding.setupSection2ProfileImage.setImageBitmap(b)
-            } }
-            Timber.tag("PhotoPicker").d("Selected URI: $uri")
-        } else {
-            Timber.tag("PhotoPicker").d("No media selected")
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                FileUtils(context).getPath(uri)?.let {
+                    fileToBitmap(it)?.let { b ->
+                        binding.setupSection2ProfileImage.setImageBitmap(b)
+                    }
+                }
+            } else {
+                Timber.tag("PhotoPicker").d("No media selected")
+            }
         }
-    }
 
     private fun fileToBitmap(filepath: String): Bitmap? {
         var bitmap: Bitmap? = null
@@ -131,7 +132,6 @@ class SetupProfileSection2Fragment : BaseFragment<FragmentSetupProfileSection2Bi
             false
         )
     }
-
 
 
 }

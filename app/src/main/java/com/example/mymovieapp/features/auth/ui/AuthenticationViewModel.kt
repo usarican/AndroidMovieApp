@@ -1,11 +1,13 @@
 package com.example.mymovieapp.features.auth.ui
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import com.example.mymovieapp.core.data.local.database.MovieAppDatabase
 import com.example.mymovieapp.core.services.DownloadWorkManager
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.core.ui.LayoutViewState
+import com.example.mymovieapp.features.auth.data.AuthUserData
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
@@ -30,6 +32,11 @@ class AuthenticationViewModel @Inject constructor(
         downloadWorkManager.startDownloadMovieGenres()
     }
 
+    private val authUserData = AuthUserData()
+
+    private val _authUserDataMutableStateFlow = MutableStateFlow(authUserData)
+    fun getAuthUserDataStateFlow(): StateFlow<AuthUserData> =
+        _authUserDataMutableStateFlow.asStateFlow()
 
     private val _layoutViewState =
         MutableStateFlow(LayoutViewState(UserInterfaceState.DisplayLoading))
@@ -58,6 +65,38 @@ class AuthenticationViewModel @Inject constructor(
         }
 
     }
+    private fun updateAuthUserData(authUserData: AuthUserData) {
+        viewModelScope.launch {
+            _authUserDataMutableStateFlow.emit(authUserData)
+        }
+    }
+
+    fun setUserEmail(userEmail : String?) {
+        authUserData.userMail = userEmail
+        updateAuthUserData(authUserData)
+    }
+    fun setUserProfilePicture(picture : Bitmap?) {
+        authUserData.userProfilePicture = picture
+        updateAuthUserData(authUserData)
+    }
+    fun setUserFullName(userFullName : String?) {
+        authUserData.userFullName = userFullName
+        updateAuthUserData(authUserData)
+    }
+    fun setUserNickName(userNickName : String?) {
+        authUserData.userNickName = userNickName
+        updateAuthUserData(authUserData)
+    }
+    fun setUserGenre(userGenre : String?) {
+        authUserData.userGenre = userGenre
+        updateAuthUserData(authUserData)
+    }
+    fun setUserMovieGenreInterestList(userMovieGenreInterestList : List<MovieFilterDialogItem>?) {
+        authUserData.userMovieGenreInterestList = userMovieGenreInterestList
+        updateAuthUserData(authUserData)
+    }
+
+
 
     fun getGenreList(language: String) {
         genreListUseCase.invoke(language)

@@ -2,6 +2,8 @@ package com.example.mymovieapp.features.auth.ui
 
 
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentSignUpBinding
@@ -13,14 +15,16 @@ import com.example.mymovieapp.utils.validatorHelper.PasswordValidator
 import com.google.android.material.snackbar.Snackbar
 
 class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sign_up) {
+
+    private val viewModel : AuthenticationViewModel by activityViewModels()
     override fun setUpListeners() {
         binding.apply {
             loginButtonSignUp.setOnClickListener {
-                val validation = validateAll()
-                val toast =
-                    if (!validation) Toast.makeText(context,"Validation Fail",Toast.LENGTH_LONG)
-                    else Toast.makeText(context,"Validation Fail",Toast.LENGTH_LONG)
-                toast.show()
+                if (validateAll()){
+                    viewModel.setUserEmail(textinputEmail.editText?.text.toString())
+                    val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
 
@@ -38,13 +42,6 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
                 ConfirmPasswordValidator(textinputPassword.editText?.text.toString()),EmptyValidator()
             )
             return validation1 && validation2 && validation3
-        }
-    }
-
-    private fun clearTextInputsFocus() {
-        val editTextFields = listOf(binding.textinputEmail.editText,binding.textinputPassword.editText,binding.textinputPasswordConfirm.editText)
-        editTextFields.forEach { t ->
-            t?.clearFocus()
         }
     }
 }

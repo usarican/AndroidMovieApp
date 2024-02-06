@@ -12,6 +12,7 @@ import com.example.mymovieapp.utils.EqualSpacingItemDecoration
 import com.example.mymovieapp.utils.extensions.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,6 +34,7 @@ class SetupProfileSection1Fragment :
         }
         lifecycleScope.launch {
             viewModel.getLayoutViewState().collectLatest {
+                delay(200L)
                 withContext(Dispatchers.Main) {
                     binding.layoutViewState = it
                 }
