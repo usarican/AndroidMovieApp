@@ -39,6 +39,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
     }
 
+    override fun setUpUI() {
+        viewModel.resetViewPagerCurrentPage()
+    }
+
     private fun userLogIn() {
         if (userEnteringTheAppIsFirstTime) {
             val action = LoginFragmentDirections.actionLoginFragmentToSetupProfileFragment()

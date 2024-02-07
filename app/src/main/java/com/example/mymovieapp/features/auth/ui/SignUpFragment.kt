@@ -27,7 +27,6 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
                 }
             }
         }
-
     }
 
     private fun validateAll() : Boolean {

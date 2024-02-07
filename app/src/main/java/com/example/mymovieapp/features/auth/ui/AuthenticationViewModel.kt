@@ -32,6 +32,14 @@ class AuthenticationViewModel @Inject constructor(
         downloadWorkManager.startDownloadMovieGenres()
     }
 
+    val viewPagerCurrentPage = MutableStateFlow(0)
+
+    fun resetViewPagerCurrentPage(){
+        viewModelScope.launch {
+            viewPagerCurrentPage.emit(0)
+        }
+    }
+
     private val authUserData = AuthUserData()
 
     private val _authUserDataMutableStateFlow = MutableStateFlow(authUserData)

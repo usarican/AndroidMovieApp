@@ -2,6 +2,7 @@ package com.example.mymovieapp.features.auth.ui
 
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
@@ -45,6 +46,12 @@ class SetupProfileSection1Fragment :
     override fun setUpUI() {
         viewModel.getGenreList("en")
         setupRecyclerView()
+    }
+
+    override fun setUpListeners() {
+        binding.applyButton.setOnClickListener {
+            viewModel.viewPagerCurrentPage.compareAndSet(0,1)
+        }
     }
 
     private fun setupRecyclerView() {

@@ -8,6 +8,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mymovieapp.R
@@ -15,11 +17,14 @@ import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.core.ui.BasePageAdapterForFragment
 import com.example.mymovieapp.databinding.FragmentSetupProfileBinding
 import com.example.mymovieapp.features.home.ui.adapter.BannerMoviesAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
 class SetupProfileFragment : BaseFragment<FragmentSetupProfileBinding>(R.layout.fragment_setup_profile) {
 
+    val viewModel: AuthenticationViewModel by activityViewModels()
     override fun setUpUI() {
         initViewPager()
         handleToolbarOverlaps(binding.exploreToolbar)
@@ -36,15 +41,13 @@ class SetupProfileFragment : BaseFragment<FragmentSetupProfileBinding>(R.layout.
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.setupFragmentTitle.text = pageTitle[position]
-                nextPageIsAvailable = position != 1
             }
         })
-        binding.applyButton.setOnClickListener {
-            if (nextPageIsAvailable) {
-                binding.setupViewPager.setCurrentItem(1,true)
+        binding.backButton.setOnClickListener {
+            if (viewModel.viewPagerCurrentPage.value == 1) {
+                viewModel.viewPagerCurrentPage.compareAndSet(1,0)
             } else {
-                val action = SetupProfileFragmentDirections.actionSetupProfileFragmentToMainActivity()
-                findNavController().navigate(action)
+                findNavController().popBackStack()
             }
         }
     }
@@ -59,6 +62,14 @@ class SetupProfileFragment : BaseFragment<FragmentSetupProfileBinding>(R.layout.
             isUserInputEnabled = false
             adapter =  BasePageAdapterForFragment(this@SetupProfileFragment, fragments)
             offscreenPageLimit = fragments.size
+        }
+    }
+
+    override fun setUpObservers() {
+        lifecycleScope.launch {
+            viewModel.viewPagerCurrentPage.collectLatest {
+                binding.setupViewPager.setCurrentItem(it,true)
+            }
         }
     }
 }
