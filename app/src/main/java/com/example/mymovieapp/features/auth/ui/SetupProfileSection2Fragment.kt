@@ -1,5 +1,6 @@
 package com.example.mymovieapp.features.auth.ui
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -10,12 +11,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentSetupProfileSection2Binding
 import com.example.mymovieapp.utils.FileUtils
 import com.example.mymovieapp.utils.PathHelper
+import com.example.mymovieapp.utils.extensions.validate
+import com.example.mymovieapp.utils.validatorHelper.ConfirmPasswordValidator
+import com.example.mymovieapp.utils.validatorHelper.EmailValidator
+import com.example.mymovieapp.utils.validatorHelper.EmptyValidator
+import com.example.mymovieapp.utils.validatorHelper.PasswordValidator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -31,6 +40,7 @@ class SetupProfileSection2Fragment :
     lateinit var pathHelper: PathHelper
 
     override fun setUpUI() {
+        binding.viewmodel = viewModel
         binding.apply {
             val countryList = pathHelper.getCountryPhoneCode() ?: emptyList()
             userPhoneEditView.setCountryList(countryList)
@@ -38,9 +48,36 @@ class SetupProfileSection2Fragment :
         setupGenreListEditText()
     }
 
+    override fun setUpObservers() {
+        lifecycleScope.launch {
+            viewModel.getAuthUserDataStateFlow().collectLatest {
+                /*if (it.userMail != null) {
+                    binding.setupSection2UserEmail.apply {
+                        editText?.setText(it.userMail)
+                        setBoxBackgroundColorResource(R.color.gallery)
+                        setBoxStrokeColorStateList(ColorStateList.valueOf())
+                    }
+                }*/
+            }
+        }
+
+    }
+
     override fun setUpListeners() {
         binding.buttonChangeProfilePhoto.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        binding.applyButton.setOnClickListener {
+            if (validateNickName()) {
+                viewModel.apply {
+                    binding.apply {
+                        setUserFullName(setupSection2UserFullName.editText?.text.toString())
+                        setUserGenre(setupSection2UserGenre.editText?.text.toString())
+                        setUserPhoneNumber(userPhoneEditView.mBinding.userPhoneNumber.editText?.text.toString())
+                        setUserNickName(setupSection2UserNickName.editText?.text.toString())
+                    }
+                }
+            }
         }
     }
 
@@ -56,12 +93,19 @@ class SetupProfileSection2Fragment :
                 FileUtils(context).getPath(uri)?.let {
                     fileToBitmap(it)?.let { b ->
                         binding.setupSection2ProfileImage.setImageBitmap(b)
+                        viewModel.setUserProfilePicture(b)
                     }
                 }
             } else {
                 Timber.tag("PhotoPicker").d("No media selected")
             }
         }
+
+    private fun validateNickName(): Boolean {
+        return binding.setupSection2UserNickName.validate(
+            EmptyValidator()
+        )
+    }
 
     private fun fileToBitmap(filepath: String): Bitmap? {
         var bitmap: Bitmap? = null
@@ -132,6 +176,5 @@ class SetupProfileSection2Fragment :
             false
         )
     }
-
-
 }
+

@@ -10,6 +10,7 @@ import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.features.auth.data.AuthUserData
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
+import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
 import com.example.mymovieapp.features.home.ui.UserInterfaceState
 import com.example.mymovieapp.utils.MyClickListeners
@@ -100,21 +101,25 @@ class AuthenticationViewModel @Inject constructor(
         authUserData.userGenre = userGenre
         updateAuthUserData(authUserData)
     }
-    fun setUserMovieGenreInterestList(userMovieGenreInterestList : List<MovieFilterDialogItem>?) {
-        authUserData.userMovieGenreInterestList = userMovieGenreInterestList
+    fun setUserPhoneNumber(userPhoneNumber : String?) {
+        authUserData.userPhoneNumber = userPhoneNumber
+        updateAuthUserData(authUserData)
+    }
+    fun setUserMovieGenreInterestList() {
+        authUserData.userMovieGenreInterestList = _movieGenreListMutableStateFlow.value.filter { it.isItemSelected }
         updateAuthUserData(authUserData)
     }
 
 
 
-    fun getGenreList(language: String) {
+    fun getGenreList(language: String,movieFilterItem: List<MovieFilterDialogItem>?) {
         genreListUseCase.invoke(language)
             .doOnLoading {
                 _layoutViewState.emit(LayoutViewState(UserInterfaceState.DisplayLoading))
             }
-            .doOnSuccess {
-                val genreItemList = mutableListOf<MovieFilterDialogItem>()
-                it.onEachIndexed { index, genreResponse ->
+            .doOnSuccess { list ->
+                var genreItemList = mutableListOf<MovieFilterDialogItem>()
+                list.onEachIndexed { index, genreResponse ->
                     val item = MovieFilterDialogItem(
                         itemCategory = FilterDialogItemCategory.GENRE,
                         id = index + 1,
@@ -123,6 +128,18 @@ class AuthenticationViewModel @Inject constructor(
                         isItemSelected = false
                     )
                     genreItemList.add(item)
+
+                    movieFilterItem?.forEach { savedListItem ->
+                        genreItemList = genreItemList.map {
+                            if (it.id == savedListItem.id) {
+                                it.copy(
+                                    isItemSelected = true
+                                )
+                            } else {
+                                it
+                            }
+                        } as MutableList<MovieFilterDialogItem>
+                    }
                 }
                 _movieGenreListMutableStateFlow.emit(genreItemList)
                 delay(1000L)

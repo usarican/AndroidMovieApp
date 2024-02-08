@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="viewmodel"
+            type="com.example.mymovieapp.features.auth.ui.AuthenticationViewModel" />
     </data>
 
     <ScrollView
@@ -117,6 +119,8 @@
                 android:layout_marginHorizontal="@dimen/space_16"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/gallery"
+                app:boxStrokeColor="@color/warm_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/setup_section_2_user_nick_name"
@@ -128,11 +132,12 @@
                     android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%'*+-/=?^_`{}~@."
                     android:fontFamily="@font/playfair_display_regular"
                     android:hint="E Mail"
+                    android:text="@{viewmodel.authUserDataStateFlow.userMail}"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLength="100"
                     android:singleLine="true"
-                    android:textColorHint="@color/brownGrey"
+                    android:textColorHint="@color/warm_grey"
                     android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

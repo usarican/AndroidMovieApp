@@ -28,6 +28,7 @@ class SetupProfileSection1Fragment :
     override fun setUpObservers() {
         lifecycleScope.launch(SupervisorJob()) {
             launch {
+
                 viewModel.getMovieGenreListStateFlow().collectLatest {
                     genreFilterAdapter.submitList(it)
                 }
@@ -43,13 +44,18 @@ class SetupProfileSection1Fragment :
     }
 
     override fun setUpUI() {
-        viewModel.getGenreList("en")
+        lifecycleScope.launch {
+            viewModel.getAuthUserDataStateFlow().collectLatest {
+                viewModel.getGenreList("en",it.userMovieGenreInterestList)
+            }
+        }
         setupRecyclerView()
     }
 
     override fun setUpListeners() {
         binding.applyButton.setOnClickListener {
             viewModel.viewPagerCurrentPage.compareAndSet(0,1)
+            viewModel.setUserMovieGenreInterestList()
         }
     }
 

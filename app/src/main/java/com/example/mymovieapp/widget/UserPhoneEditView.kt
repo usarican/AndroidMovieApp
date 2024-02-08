@@ -23,7 +23,7 @@ class UserPhoneEditView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val mBinding : UserPhoneEditViewBinding
+    val mBinding : UserPhoneEditViewBinding
     private val countrySelectionClickListener : MyClickListeners<CountryPhoneCodeModel>
     private val recyclerAdapter : PhoneCountryListAdapter
 
