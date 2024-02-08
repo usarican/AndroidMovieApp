@@ -24,14 +24,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowDisablePreview">true</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="AppTheme.NoActionBar.Light" parent="AppTheme.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/white</item>
@@ -187,6 +179,22 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="Login" parent="AppTheme.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <style name="Button.Back" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:insetLeft">0dp</item>
