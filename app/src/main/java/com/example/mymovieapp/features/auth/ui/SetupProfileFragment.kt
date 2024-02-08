@@ -27,7 +27,6 @@ class SetupProfileFragment : BaseFragment<FragmentSetupProfileBinding>(R.layout.
     val viewModel: AuthenticationViewModel by activityViewModels()
     override fun setUpUI() {
         initViewPager()
-        handleToolbarOverlaps(binding.exploreToolbar)
     }
     private var nextPageIsAvailable = true
 

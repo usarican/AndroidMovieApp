@@ -35,7 +35,6 @@ class SetupProfileSection1Fragment :
         }
         lifecycleScope.launch {
             viewModel.getLayoutViewState().collectLatest {
-                delay(200L)
                 withContext(Dispatchers.Main) {
                     binding.layoutViewState = it
                 }

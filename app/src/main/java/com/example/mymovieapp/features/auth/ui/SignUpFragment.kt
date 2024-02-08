@@ -26,6 +26,9 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
                     findNavController().navigate(action)
                 }
             }
+            buttonBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -124,6 +125,7 @@ class AuthenticationViewModel @Inject constructor(
                     genreItemList.add(item)
                 }
                 _movieGenreListMutableStateFlow.emit(genreItemList)
+                delay(1000L)
                 _layoutViewState.emit(LayoutViewState(UserInterfaceState.DisplayUI))
             }
             .doOnError {

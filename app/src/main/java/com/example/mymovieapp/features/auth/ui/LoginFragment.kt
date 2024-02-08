@@ -28,6 +28,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             loginButtonSignIn.setOnClickListener {
                 userLogIn()
             }
+            buttonBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 
