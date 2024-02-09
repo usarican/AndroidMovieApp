@@ -9,14 +9,17 @@ import android.widget.AutoCompleteTextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.widget.doAfterTextChanged
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentSetupProfileSection2Binding
 import com.example.mymovieapp.utils.FileUtils
 import com.example.mymovieapp.utils.PathHelper
+import com.example.mymovieapp.utils.extensions.disableKeyboard
 import com.example.mymovieapp.utils.extensions.validate
 import com.example.mymovieapp.utils.validatorHelper.ConfirmPasswordValidator
 import com.example.mymovieapp.utils.validatorHelper.EmailValidator
@@ -44,41 +47,30 @@ class SetupProfileSection2Fragment :
         binding.apply {
             val countryList = pathHelper.getCountryPhoneCode() ?: emptyList()
             userPhoneEditView.setCountryList(countryList)
+            userPhoneEditView.setViewModel(viewModel)
+            setupSection2UserGenre.disableKeyboard()
         }
         setupGenreListEditText()
     }
 
-    override fun setUpObservers() {
-        lifecycleScope.launch {
-            viewModel.getAuthUserDataStateFlow().collectLatest {
-                /*if (it.userMail != null) {
-                    binding.setupSection2UserEmail.apply {
-                        editText?.setText(it.userMail)
-                        setBoxBackgroundColorResource(R.color.gallery)
-                        setBoxStrokeColorStateList(ColorStateList.valueOf())
-                    }
-                }*/
-            }
-        }
-
-    }
 
     override fun setUpListeners() {
-        binding.buttonChangeProfilePhoto.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-        binding.applyButton.setOnClickListener {
-            if (validateNickName()) {
-                viewModel.apply {
-                    binding.apply {
-                        setUserFullName(setupSection2UserFullName.editText?.text.toString())
-                        setUserGenre(setupSection2UserGenre.editText?.text.toString())
-                        setUserPhoneNumber(userPhoneEditView.mBinding.userPhoneNumber.editText?.text.toString())
-                        setUserNickName(setupSection2UserNickName.editText?.text.toString())
-                    }
+        binding.apply {
+            buttonChangeProfilePhoto.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            applyButton.setOnClickListener {
+                if (validateNickName()) {
+                    val action = SetupProfileFragmentDirections.actionSetupProfileFragmentToMainActivity()
+                    findNavController().navigate(action)
                 }
             }
+            setupSection2UserFullName.editText?.doAfterTextChanged { viewModel.setUserFullName(it.toString()) }
+            setupSection2UserGenre.editText?.doAfterTextChanged { viewModel.setUserGenre(it.toString()) }
+            userPhoneEditView.mBinding.userPhoneNumber.editText?.doAfterTextChanged { viewModel.setUserPhoneNumber(it.toString()) }
+            setupSection2UserNickName.editText?.doAfterTextChanged { viewModel.setUserNickName(it.toString()) }
         }
+
     }
 
     private fun setupGenreListEditText() {

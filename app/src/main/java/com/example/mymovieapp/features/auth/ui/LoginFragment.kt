@@ -49,6 +49,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private fun userLogIn() {
         if (userEnteringTheAppIsFirstTime) {
             val action = LoginFragmentDirections.actionLoginFragmentToSetupProfileFragment()
+            viewModel.setUserEmail(binding.textinputEmail.editText?.text.toString())
             findNavController().navigate(action)
         } else {
             val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()

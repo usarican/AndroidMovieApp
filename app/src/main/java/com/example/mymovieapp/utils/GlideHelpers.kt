@@ -36,6 +36,15 @@ object GlideHelpers {
     fun getBitmapOfImage(context : Context, source: String?): Bitmap =
         Glide.with(context).asBitmap().load(source).error(R.drawable.ic_error_with_running).submit(BITMAP_WIDTH,BITMAP_HEIGHT).get()
 
+    fun setImage(imageView: ImageView,bitmap: Bitmap) {
+        Glide
+            .with(imageView.context)
+            .load(bitmap)
+            .error(R.drawable.ic_error_with_running)
+            .placeholder(R.drawable.user_photo)
+            .into(imageView)
+    }
+
     private const val BITMAP_HEIGHT = 400
     private const val BITMAP_WIDTH = 400
 }

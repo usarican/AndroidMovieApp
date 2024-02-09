@@ -1,6 +1,7 @@
 package com.example.mymovieapp.utils.extensions
 
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
@@ -12,6 +13,13 @@ import com.google.android.material.imageview.ShapeableImageView
 fun ImageView.bindImage(url : String?){
     if (url != null){
         GlideHelpers.setImage(this,url)
+    }
+}
+
+@BindingAdapter("loadBitmap")
+fun ImageView.loadBitmap(bitmap: Bitmap?){
+    if (bitmap != null){
+        GlideHelpers.setImage(this,bitmap)
     }
 }
 

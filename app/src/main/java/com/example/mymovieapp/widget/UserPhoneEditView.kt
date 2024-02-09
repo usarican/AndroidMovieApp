@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.databinding.UserPhoneEditViewBinding
+import com.example.mymovieapp.features.auth.ui.AuthenticationViewModel
 import com.example.mymovieapp.features.auth.ui.adapter.PhoneCountryListAdapter
 import com.example.mymovieapp.model.auth.CountryPhoneCodeModel
 import com.example.mymovieapp.utils.EqualSpacingItemDecoration
@@ -69,6 +70,10 @@ class UserPhoneEditView @JvmOverloads constructor(
 
     fun setCountryList(newList : List<CountryPhoneCodeModel>) {
         recyclerAdapter.submitList(newList)
+    }
+
+    fun setViewModel(viewModel: AuthenticationViewModel){
+        mBinding.viewModel = viewModel
     }
 
     private fun dropDownButtonStatus() {

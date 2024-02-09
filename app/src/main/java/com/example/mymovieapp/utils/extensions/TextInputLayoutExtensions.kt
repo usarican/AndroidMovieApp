@@ -2,6 +2,7 @@ package com.example.mymovieapp.utils.extensions
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.InputType
 import androidx.core.widget.doAfterTextChanged
 import com.example.mymovieapp.utils.validatorHelper.BaseValidator
 import com.example.mymovieapp.utils.validatorHelper.IValidator
@@ -21,4 +22,9 @@ fun TextInputLayout.validate(vararg validators : IValidator) : Boolean {
             return true
         }
     }
+}
+
+fun TextInputLayout.disableKeyboard() {
+    this.editText?.setRawInputType(InputType.TYPE_NULL)
+    this.isFocusable = true
 }
