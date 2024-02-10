@@ -49,6 +49,7 @@ class SetupProfileSection2Fragment :
             userPhoneEditView.setCountryList(countryList)
             userPhoneEditView.setViewModel(viewModel)
             setupSection2UserGenre.disableKeyboard()
+            setupSection2UserEmail.disableKeyboard()
         }
         setupGenreListEditText()
     }
