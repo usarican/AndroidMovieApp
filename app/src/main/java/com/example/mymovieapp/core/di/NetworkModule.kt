@@ -3,6 +3,7 @@ package com.example.mymovieapp.core.di
 import com.example.mymovieapp.core.data.remote.MovieGenreService
 import com.example.mymovieapp.core.data.remote.RequestInterceptor
 import com.example.mymovieapp.utils.Constants.MOVIE_API_URL
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -64,4 +65,8 @@ object NetworkModule {
     fun provideMovieGenreService(retrofit: Retrofit) : MovieGenreService {
         return retrofit.create(MovieGenreService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
 }
