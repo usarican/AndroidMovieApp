@@ -3,7 +3,11 @@ package com.example.mymovieapp.core.di
 import com.example.mymovieapp.core.data.remote.MovieGenreService
 import com.example.mymovieapp.core.data.remote.RequestInterceptor
 import com.example.mymovieapp.utils.Constants.MOVIE_API_URL
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -68,5 +72,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
+    fun provideFirebaseAuth() : FirebaseAuth = Firebase.auth
+
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore() : FirebaseFirestore = Firebase.firestore
 }

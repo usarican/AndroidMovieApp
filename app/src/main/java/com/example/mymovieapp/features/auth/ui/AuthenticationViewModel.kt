@@ -3,11 +3,14 @@ package com.example.mymovieapp.features.auth.ui
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
+import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.core.data.local.database.MovieAppDatabase
 import com.example.mymovieapp.core.services.DownloadWorkManager
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.core.ui.LayoutViewState
 import com.example.mymovieapp.features.auth.data.AuthUserData
+import com.example.mymovieapp.features.auth.domain.model.User
+import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
@@ -28,7 +31,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
-    private val downloadWorkManager: DownloadWorkManager
+    private val downloadWorkManager: DownloadWorkManager,
+    private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase
 ) : BaseViewModel() {
     init {
         downloadWorkManager.startDownloadMovieGenres()
@@ -41,6 +45,9 @@ class AuthenticationViewModel @Inject constructor(
             viewPagerCurrentPage.emit(0)
         }
     }
+
+    private val _createNewUserStateMutableFlow = MutableStateFlow<State<User>>(State.Loading)
+    fun createNewUserState() : StateFlow<State<User>> = _createNewUserStateMutableFlow.asStateFlow()
 
     private val authUserData = AuthUserData()
 
@@ -108,6 +115,15 @@ class AuthenticationViewModel @Inject constructor(
     fun setUserMovieGenreInterestList() {
         authUserData.userMovieGenreInterestList = _movieGenreListMutableStateFlow.value.filter { it.isItemSelected }
         updateAuthUserData(authUserData)
+    }
+
+    fun createNewUser(email : String, password : String) {
+        firebaseCreateNewUserUseCase.createNewUser(email,password)
+            .onEach { state ->
+                Timber.tag("UTKU").d(state.toString())
+                _createNewUserStateMutableFlow.emit(state)
+            }
+            .launchIn(viewModelScope)
     }
 
 

@@ -21,6 +21,10 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
         binding.apply {
             loginButtonSignUp.setOnClickListener {
                 if (validateAll()){
+                    viewModel.createNewUser(
+                        email = textinputEmail.editText?.text.toString(),
+                        password = textinputPassword.editText?.text.toString()
+                    )
                     viewModel.setUserEmail(textinputEmail.editText?.text.toString())
                     val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
                     findNavController().navigate(action)
