@@ -1,19 +1,18 @@
 package com.example.mymovieapp.features.auth.ui
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import com.example.mymovieapp.core.data.State
-import com.example.mymovieapp.core.data.local.database.MovieAppDatabase
 import com.example.mymovieapp.core.services.DownloadWorkManager
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.core.ui.LayoutViewState
-import com.example.mymovieapp.features.auth.data.AuthUserData
+import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepositoryImp
+import com.example.mymovieapp.features.auth.data.local.AuthUserData
+import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.features.auth.domain.model.User
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
-import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
 import com.example.mymovieapp.features.home.ui.UserInterfaceState
 import com.example.mymovieapp.utils.MyClickListeners
@@ -21,7 +20,6 @@ import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnLoading
 import com.example.mymovieapp.utils.extensions.doOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -32,7 +30,8 @@ import javax.inject.Inject
 class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
     private val downloadWorkManager: DownloadWorkManager,
-    private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase
+    private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase,
+    private val firebaseFirestoreRepositoryImp: FirebaseFirestoreRepositoryImp
 ) : BaseViewModel() {
     init {
         downloadWorkManager.startDownloadMovieGenres()
@@ -46,8 +45,8 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    private val _createNewUserStateMutableFlow = MutableStateFlow<State<User>>(State.Loading)
-    fun createNewUserState() : StateFlow<State<User>> = _createNewUserStateMutableFlow.asStateFlow()
+    private val _createNewUserStateMutableFlow = MutableStateFlow<State<UserDto>>(State.Loading)
+    fun createNewUserState() : StateFlow<State<UserDto>> = _createNewUserStateMutableFlow.asStateFlow()
 
     private val authUserData = AuthUserData()
 
@@ -119,8 +118,15 @@ class AuthenticationViewModel @Inject constructor(
 
     fun createNewUser(email : String, password : String) {
         firebaseCreateNewUserUseCase.createNewUser(email,password)
+            .doOnSuccess {
+                firebaseFirestoreRepositoryImp.insertNewUser(it)
+                    .onEach { Timber.tag("UTKU").d("Firestore state = $it")}
+                    .launchIn(viewModelScope)
+            }
             .onEach { state ->
-                Timber.tag("UTKU").d(state.toString())
+                if (state is State.Success) {
+                    Timber.tag("UTKU").d(state.data.toString())
+                }
                 _createNewUserStateMutableFlow.emit(state)
             }
             .launchIn(viewModelScope)

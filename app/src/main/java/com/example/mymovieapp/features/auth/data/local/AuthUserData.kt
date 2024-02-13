@@ -1,4 +1,4 @@
-package com.example.mymovieapp.features.auth.data
+package com.example.mymovieapp.features.auth.data.local
 
 import android.graphics.Bitmap
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem

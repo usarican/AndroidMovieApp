@@ -1,7 +1,7 @@
 package com.example.mymovieapp.core.ui
 
-abstract class MyUIComponents
+interface MyUIComponents
 
-abstract class MyDialog : MyUIComponents()
+abstract class MyDialog : MyUIComponents
 
-abstract class MyActivity : MyUIComponents()
+abstract class MyActivity : MyUIComponents
