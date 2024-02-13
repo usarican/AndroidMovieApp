@@ -15,14 +15,14 @@ import javax.inject.Inject
 class FirebaseFirestoreRepositoryImp @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : FirebaseFirestoreRepository {
-    override fun insertNewUser(userDto: UserDto): Flow<State<Nothing?>> = flow {
+    override fun insertNewUser(userDto: UserDto): Flow<State<UserDto>> = flow {
         emit(State.Loading)
         firestore
             .collection("users")
             .document(userDto.userUid ?: UUID.randomUUID().toString())
             .set(userDto)
             .await()
-        emit(State.Success(null))
+        emit(State.Success(userDto))
     }.catch {
         emit(State.Error(it))
     }.flowOn(Dispatchers.IO)

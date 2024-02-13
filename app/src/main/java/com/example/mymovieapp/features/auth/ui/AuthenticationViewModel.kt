@@ -45,8 +45,8 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    private val _createNewUserStateMutableFlow = MutableStateFlow<State<UserDto>>(State.Loading)
-    fun createNewUserState() : StateFlow<State<UserDto>> = _createNewUserStateMutableFlow.asStateFlow()
+    private val _createNewUserStateMutableFlow = MutableStateFlow<State<UserDto?>>(State.Loading)
+    fun createNewUserState() : StateFlow<State<UserDto?>> = _createNewUserStateMutableFlow.asStateFlow()
 
     private val authUserData = AuthUserData()
 
@@ -117,11 +117,8 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun createNewUser(email : String, password : String) {
-        firebaseCreateNewUserUseCase.createNewUser(email,password)
+       firebaseCreateNewUserUseCase.createNewUser(email,password)
             .doOnSuccess {
-                firebaseFirestoreRepositoryImp.insertNewUser(it)
-                    .onEach { Timber.tag("UTKU").d("Firestore state = $it")}
-                    .launchIn(viewModelScope)
             }
             .onEach { state ->
                 if (state is State.Success) {
