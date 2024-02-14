@@ -119,11 +119,13 @@ class AuthenticationViewModel @Inject constructor(
     fun createNewUser(email : String, password : String) {
        firebaseCreateNewUserUseCase.createNewUser(email,password)
             .doOnSuccess {
+                showLoading.value = false
             }
+           .doOnLoading {
+               showLoading.value = true
+           }
             .onEach { state ->
-                if (state is State.Success) {
-                    Timber.tag("UTKU").d(state.data.toString())
-                }
+                Timber.tag("UTKU").d(state.toString())
                 _createNewUserStateMutableFlow.emit(state)
             }
             .launchIn(viewModelScope)

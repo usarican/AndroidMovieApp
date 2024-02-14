@@ -7,11 +7,15 @@ import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.features.auth.domain.mapper.UserMapper
 import com.example.mymovieapp.features.auth.domain.model.User
 import com.example.mymovieapp.utils.extensions.map
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import java.lang.Exception
 import javax.inject.Inject
 
 class FirebaseCreateNewUserUseCase @Inject constructor(
@@ -19,29 +23,19 @@ class FirebaseCreateNewUserUseCase @Inject constructor(
     private val firebaseFirestoreRepositoryImp: FirebaseFirestoreRepositoryImp,
     private val userMapper: UserMapper
 ) {
-    fun createNewUser(email: String, password: String): Flow<State<UserDto?>> {
-        return firebaseAuthRepositoryImp.createUser(email, password).flatMapLatest { state ->
-            if (state is State.Success) {
+    fun createNewUser(email: String, password: String): Flow<State<UserDto?>> =
+        flow {
+            emit(State.Loading)
+            val user = firebaseAuthRepositoryImp.createUser(email, password).user
+            user?.let {
                 val userDto = UserDto.Builder()
-                    .setUserEmail(state.data.email ?: email)
-                    .setUserUid(state.data.uid)
+                    .setUserEmail(user.email ?: email)
+                    .setUserUid(user.uid)
                     .build()
                 firebaseFirestoreRepositoryImp.insertNewUser(userDto)
-            } else {
-                flow {
-                    emit(State.Loading)
-                }
-
-            }
-        }
-        /*return firebaseAuthRepositoryImp.createUser(email, password).map { state ->
-            state.map { firebaseUser ->
-                val userDto = UserDto.Builder()
-                    .setUserEmail(firebaseUser.email ?: email)
-                    .setUserUid(firebaseUser.uid)
-                    .build()
-                userDto
-            }
-        }*/
-    }
+                emit(State.Success(userDto))
+            } ?: emit(State.Error(Exception("Firebase User is Null")))
+        }.catch {
+            emit(State.Error(it))
+        }.flowOn(Dispatchers.IO)
 }

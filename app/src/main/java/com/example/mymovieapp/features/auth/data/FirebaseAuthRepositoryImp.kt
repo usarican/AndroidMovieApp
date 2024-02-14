@@ -2,6 +2,7 @@ package com.example.mymovieapp.features.auth.data
 
 import com.example.mymovieapp.core.data.BaseRepository
 import com.example.mymovieapp.core.data.State
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
@@ -16,17 +17,8 @@ import javax.inject.Inject
 class FirebaseAuthRepositoryImp @Inject constructor(
     private val auth : FirebaseAuth
 ) : FirebaseAuthRepository, BaseRepository(){
-    override fun createUser(userEmail: String, userPassword: String): Flow<State<FirebaseUser>> {
-        return flow {
-            emit(State.Loading)
-            val authResult = auth.createUserWithEmailAndPassword(userEmail,userPassword).await()
-            authResult.user?.let { firebaseUser ->
-                emit(State.Success(firebaseUser))
-            }
-        }.catch { error ->
-            error.printStackTrace()
-            emit(State.Error(error))
-        }.flowOn(Dispatchers.IO)
+    override suspend fun createUser(userEmail: String, userPassword: String) : AuthResult {
+        return auth.createUserWithEmailAndPassword(userEmail,userPassword).await()
     }
 
     override fun signIn(userEmail: String, userPassword: String) {
