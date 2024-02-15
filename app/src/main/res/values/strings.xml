@@ -85,6 +85,7 @@
     <string name="do_not_show_this_again">Do not show this again</string>
     <string name="create_account_success_dialog_title">Create Account</string>
     <string name="create_account_failure_dialog_title">Create Account Fail!</string>
+    <string name="sign_in_failure_dialog_title">Sign In Fail!</string>
     <string name="create_account_success_dialog_content">Create account has successfully done.</string>
     <string name="continue_button">Continue</string>
     <string name="try_again_button">Try Again</string>

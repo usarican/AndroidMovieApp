@@ -16,6 +16,7 @@ import com.example.mymovieapp.features.auth.data.local.AuthUserData
 import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.features.auth.domain.model.User
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
+import com.example.mymovieapp.features.auth.domain.usecase.FirebaseSignInWithEmailAndPasswordUseCase
 import com.example.mymovieapp.features.dialog.ErrorDialog
 import com.example.mymovieapp.features.dialog.SuccessDialog
 import com.example.mymovieapp.features.dialog.SuccessDialogFragment
@@ -40,6 +41,7 @@ class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
     private val downloadWorkManager: DownloadWorkManager,
     private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase,
+    private val firebaseSignInWithEmailAndPasswordUseCase: FirebaseSignInWithEmailAndPasswordUseCase
 ) : BaseViewModel() {
     init {
         downloadWorkManager.startDownloadMovieGenres()
@@ -153,6 +155,26 @@ class AuthenticationViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    fun signInWithFirebaseEmailAndPassword(email : String, password : String) {
+        firebaseSignInWithEmailAndPasswordUseCase.signInWithEmailAndPassword(email,password)
+            .doOnSuccess {
+                showLoading.value = false
+            }
+           .doOnLoading {
+               showLoading.value = true
+           }
+           .doOnError {
+               showLoading.value = false
+               showDialog.value = ErrorDialog(
+                   dialogTag = SIGN_IN_WITH_EMAIL_AND_PASSWORD_ERROR_DIALOG_TAG,
+                   titleStrRes = R.string.sign_in_failure_dialog_title,
+                   message = it.message ?: "Unexpected Error Occurs.",
+                   buttonStrRes = R.string.got_it
+               )
+           }
+            .launchIn(viewModelScope)
+    }
+
 
 
     fun getGenreList(language: String,movieFilterItem: List<MovieFilterDialogItem>?) {
@@ -208,5 +230,6 @@ class AuthenticationViewModel @Inject constructor(
         private val TAG = AuthenticationViewModel::class.java.simpleName
         private const val CREATE_ACCOUNT_SUCCESS_DIALOG_TAG = "CREATE_ACCOUNT_SUCCESS_DIALOG_TAG"
         private const val CREATE_ACCOUNT_ERROR_DIALOG_TAG = "CREATE_ACCOUNT_ERROR_DIALOG_TAG"
+        private const val SIGN_IN_WITH_EMAIL_AND_PASSWORD_ERROR_DIALOG_TAG = "SIGN_IN_WITH_EMAIL_AND_PASSWORD_ERROR_DIALOG_TAG"
     }
 }

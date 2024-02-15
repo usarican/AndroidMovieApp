@@ -2,6 +2,8 @@ package com.example.mymovieapp.features.auth.data
 
 import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.features.auth.data.remote.UserDto
+import com.example.mymovieapp.utils.Constants.FIREBASE_FIRESTORE_USER_COLLECTION_NAME
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,14 +19,18 @@ class FirebaseFirestoreRepositoryImp @Inject constructor(
 ) : FirebaseFirestoreRepository {
     override suspend fun insertNewUser(userDto: UserDto) {
         firestore
-            .collection("users")
+            .collection(FIREBASE_FIRESTORE_USER_COLLECTION_NAME)
             .document(userDto.userUid ?: UUID.randomUUID().toString())
             .set(userDto)
             .await()
     }
 
 
-    override fun getUserFromFirestore(): UserDto {
-        TODO("Not yet implemented")
+    override suspend fun getUserFromFirestore(remoteUserUid : String): DocumentSnapshot {
+        return firestore
+            .collection(FIREBASE_FIRESTORE_USER_COLLECTION_NAME)
+            .document(remoteUserUid)
+            .get()
+            .await()
     }
 }

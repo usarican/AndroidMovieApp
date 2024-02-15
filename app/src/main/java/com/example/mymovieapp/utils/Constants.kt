@@ -8,4 +8,5 @@ internal object Constants {
     const val API_KEY =  "1c43b969c6e3c21291826ddc75a81aa1"
     const val STARTING_PAGE = 1
     const val ITEMS_PER_PAGE = 20
+    const val FIREBASE_FIRESTORE_USER_COLLECTION_NAME = "users"
 }

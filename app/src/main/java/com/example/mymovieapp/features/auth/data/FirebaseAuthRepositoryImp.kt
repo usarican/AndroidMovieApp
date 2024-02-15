@@ -21,8 +21,8 @@ class FirebaseAuthRepositoryImp @Inject constructor(
         return auth.createUserWithEmailAndPassword(userEmail,userPassword).await()
     }
 
-    override fun signIn(userEmail: String, userPassword: String) {
-        TODO("Not yet implemented")
+    override suspend fun signIn(userEmail: String, userPassword: String) {
+        auth.signInWithEmailAndPassword(userEmail,userPassword).await()
     }
 
     override fun signOut() {
