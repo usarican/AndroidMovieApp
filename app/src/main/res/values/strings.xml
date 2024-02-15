@@ -84,8 +84,12 @@
     <string name="sign_up_tmdb_sign_up_text">Continue with TMDB Account</string>
     <string name="do_not_show_this_again">Do not show this again</string>
     <string name="create_account_success_dialog_title">Create Account</string>
+    <string name="create_account_failure_dialog_title">Create Account Fail!</string>
     <string name="create_account_success_dialog_content">Create account has successfully done.</string>
     <string name="continue_button">Continue</string>
+    <string name="try_again_button">Try Again</string>
+    <string name="got_it">Got it.</string>
+    <string name="cancel_button">Cancel</string>
 
 
     <string name="empty" translatable="false" />

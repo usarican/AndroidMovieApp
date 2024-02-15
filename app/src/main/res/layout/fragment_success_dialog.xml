@@ -96,7 +96,7 @@
                         app:layout_goneMarginBottom="32dp"
                         app:layout_goneMarginTop="32dp"
                         tools:visibility="visible"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

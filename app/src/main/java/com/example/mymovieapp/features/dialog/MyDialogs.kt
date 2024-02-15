@@ -25,11 +25,12 @@ class BannerMovieDetailDialog(
 class ErrorDialog(
     private val dialogTag: String,
     @StringRes private val titleStrRes: Int,
-    @StringRes private val messageStrRes: Int,
+    @StringRes private val messageStrRes: Int = 0,
     @StringRes private val buttonStrRes: Int,
-    private val actionType: ActionType,
-    @StringRes private val button2StrRes: Int,
-    private val action2Type: ActionType,
+    private val message : String,
+    private val actionType: ActionType = ActionType.CONFIRM,
+    @StringRes private val button2StrRes: Int = 0,
+    private val action2Type: ActionType = ActionType.CANCEL,
     private var showCheckBox: Boolean = false,
     private var cancelable: Boolean = true,
     private var isDismissAfterAction1: Boolean = true,
@@ -42,6 +43,7 @@ class ErrorDialog(
             dialogTag,
             titleStrRes,
             messageStrRes,
+            message,
             buttonStrRes,
             actionType,
             button2StrRes,
@@ -51,7 +53,7 @@ class ErrorDialog(
             isDismissAfterAction1,
             isDismissAfterAction2,
             bundleData,
-            isDismissClickOutOfDialog
+            isDismissClickOutOfDialog,
         )
 
 

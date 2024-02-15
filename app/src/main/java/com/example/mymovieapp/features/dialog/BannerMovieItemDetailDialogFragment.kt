@@ -46,6 +46,7 @@ class BannerMovieItemDetailDialogFragment :
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setStyle(STYLE_NORMAL, android.R.style.ThemeOverlay)
         val bundle = savedInstanceState ?: arguments
         bundle?.let {
             movieDetailItem = it.getParcelable(MOVIE_DETAIL_ITEM)

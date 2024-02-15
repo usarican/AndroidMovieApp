@@ -16,12 +16,14 @@ import com.example.mymovieapp.features.auth.data.local.AuthUserData
 import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.features.auth.domain.model.User
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
+import com.example.mymovieapp.features.dialog.ErrorDialog
 import com.example.mymovieapp.features.dialog.SuccessDialog
 import com.example.mymovieapp.features.dialog.SuccessDialogFragment
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
 import com.example.mymovieapp.features.home.ui.UserInterfaceState
+import com.example.mymovieapp.utils.ActionType
 import com.example.mymovieapp.utils.MyClickListeners
 import com.example.mymovieapp.utils.extensions.doOnError
 import com.example.mymovieapp.utils.extensions.doOnLoading
@@ -139,9 +141,15 @@ class AuthenticationViewModel @Inject constructor(
            .doOnLoading {
                showLoading.value = true
            }
-            .onEach { state ->
-                Timber.tag("UTKU").d(state.toString())
-            }
+           .doOnError {
+               showLoading.value = false
+               showDialog.value = ErrorDialog(
+                   dialogTag = CREATE_ACCOUNT_ERROR_DIALOG_TAG,
+                   titleStrRes = R.string.create_account_failure_dialog_title,
+                   message = it.message ?: "Unexpected Error Occurs.",
+                   buttonStrRes = R.string.got_it
+               )
+           }
             .launchIn(viewModelScope)
     }
 
@@ -198,6 +206,7 @@ class AuthenticationViewModel @Inject constructor(
 
     companion object {
         private val TAG = AuthenticationViewModel::class.java.simpleName
-        private val CREATE_ACCOUNT_SUCCESS_DIALOG_TAG = "CREATE_ACCOUNT_SUCCESS_DIALOG_TAG"
+        private const val CREATE_ACCOUNT_SUCCESS_DIALOG_TAG = "CREATE_ACCOUNT_SUCCESS_DIALOG_TAG"
+        private const val CREATE_ACCOUNT_ERROR_DIALOG_TAG = "CREATE_ACCOUNT_ERROR_DIALOG_TAG"
     }
 }

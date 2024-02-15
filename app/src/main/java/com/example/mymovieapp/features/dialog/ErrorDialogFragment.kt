@@ -29,6 +29,7 @@ class ErrorDialogFragment :
     private var titleStrRes: Int = R.string.empty
     @StringRes
     private var messageStrRes: Int = R.string.empty
+    private var message: String? = null
 
     @StringRes
     private var buttonStrRes: Int = R.string.empty
@@ -66,6 +67,7 @@ class ErrorDialogFragment :
         outState.putBoolean(CANCELABLE, isCancelable)
         outState.putBundle(BUNDLE_DATA, bundleData)
         outState.putBoolean(IS_DISMISS_CLICK_OUT_OF_DIALOG, isDismissClickOutOfDialog)
+        outState.putString(MESSAGE_STRING, message)
         super.onSaveInstanceState(outState)
     }
 
@@ -76,6 +78,7 @@ class ErrorDialogFragment :
             dialogTag = it.getString(DIALOG_TAG) ?: ""
             titleStrRes = it.getInt(TITLE_STRING_RESOURCE)
             messageStrRes = it.getInt(MESSAGE_STRING_RESOURCE)
+            message = it.getString(MESSAGE_STRING)
             buttonStrRes = it.getInt(BUTTON_STRING_RESOURCE)
             actionType = it.getSerializable(ACTION_TYPE) as? ActionType ?: ActionType.CONFIRM
             button2StrRes = it.getInt(BUTTON2_STRING_RESOURCE)
@@ -101,8 +104,11 @@ class ErrorDialogFragment :
 
     override fun setUpUI() {
         binding.textviewDialogHeader.text = getString(titleStrRes).parseAsHtml()
-        binding.textviewDialogInformation.text = getString(messageStrRes).parseAsHtml()
-
+        if (messageStrRes != 0)
+            binding.textviewDialogInformation.text = getString(messageStrRes).parseAsHtml()
+        if (message != null){
+            binding.textviewDialogInformation.text = message
+        }
         if (buttonStrRes != 0) {
             binding.buttonAction.toVisible()
             binding.buttonAction.text = getString(buttonStrRes).parseAsHtml()
@@ -165,26 +171,23 @@ class ErrorDialogFragment :
         private const val ACTION_TYPE = "actionType"
         private const val BUTTON2_STRING_RESOURCE = "button2StringResource"
         private const val ACTION2_TYPE = "action2Type"
-        private const val BUTTON3_STRING_RESOURCE = "button3StringResource"
-        private const val ACTION3_TYPE = "action3Type"
         private const val SHOW_CHECKBOX = "showCheckBox"
         private const val CANCELABLE = "cancelable"
         private const val IS_DISMISS_AFTER_ACTION1 = "isDismissAfterAction1"
         private const val IS_DISMISS_AFTER_ACTION2 = "isDismissAfterAction2"
-        private const val IS_DISMISS_AFTER_ACTION3 = "isDismissAfterAction3"
         private const val IS_DISMISS_CLICK_OUT_OF_DIALOG = "isDismissClickOutOfDialog"
         private const val BUNDLE_DATA = "bundleData"
         private const val IS_CHECKED = "isChecked"
-        private const val CONTENT_TYPE = "contentType"
 
         fun newInstance(
             dialogTag: String,
             @StringRes titleStrRes: Int,
-            @StringRes messageStrRes: Int,
-            @StringRes buttonStrRes: Int,
-            actionType: ActionType,
-            @StringRes button2StrRes: Int,
-            action2Type: ActionType,
+            @StringRes messageStrRes: Int = 0,
+            message : String? = null,
+            @StringRes buttonStrRes: Int = 0,
+            actionType: ActionType = ActionType.CONFIRM,
+            @StringRes button2StrRes: Int = 0,
+            action2Type: ActionType = ActionType.CANCEL,
             showCheckBox: Boolean = false,
             cancelable: Boolean = true,
             isDismissAfterAction1: Boolean = true,
@@ -197,6 +200,7 @@ class ErrorDialogFragment :
                     DIALOG_TAG to dialogTag,
                     TITLE_STRING_RESOURCE to titleStrRes,
                     MESSAGE_STRING_RESOURCE to messageStrRes,
+                    MESSAGE_STRING to message,
                     BUTTON_STRING_RESOURCE to buttonStrRes,
                     ACTION_TYPE to actionType,
                     BUTTON2_STRING_RESOURCE to button2StrRes,
