@@ -1,16 +1,23 @@
 package com.example.mymovieapp.features.auth.ui
 
 import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mymovieapp.R
 import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.core.services.DownloadWorkManager
 import com.example.mymovieapp.core.ui.BaseViewModel
 import com.example.mymovieapp.core.ui.LayoutViewState
+import com.example.mymovieapp.core.ui.event.DialogDismissEvent
+import com.example.mymovieapp.core.ui.event.MyEvent
 import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepositoryImp
 import com.example.mymovieapp.features.auth.data.local.AuthUserData
 import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.features.auth.domain.model.User
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
+import com.example.mymovieapp.features.dialog.SuccessDialog
+import com.example.mymovieapp.features.dialog.SuccessDialogFragment
 import com.example.mymovieapp.features.explore.ui.dialog.FilterDialogItemCategory
 import com.example.mymovieapp.features.explore.ui.dialog.MovieFilterDialogItem
 import com.example.mymovieapp.features.home.domain.usecase.GetGenreListUseCase
@@ -31,7 +38,6 @@ class AuthenticationViewModel @Inject constructor(
     val genreListUseCase: GetGenreListUseCase,
     private val downloadWorkManager: DownloadWorkManager,
     private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase,
-    private val firebaseFirestoreRepositoryImp: FirebaseFirestoreRepositoryImp
 ) : BaseViewModel() {
     init {
         downloadWorkManager.startDownloadMovieGenres()
@@ -45,8 +51,11 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    private val _createNewUserStateMutableFlow = MutableStateFlow<State<UserDto?>>(State.Loading)
-    fun createNewUserState() : StateFlow<State<UserDto?>> = _createNewUserStateMutableFlow.asStateFlow()
+    private val _navigateLoginPage = MutableLiveData<Boolean?>(null)
+    fun navigateLoginPage() : LiveData<Boolean?> = _navigateLoginPage
+    fun setNavigateLoginPageToFalse() {
+        _navigateLoginPage.value = false
+    }
 
     private val authUserData = AuthUserData()
 
@@ -120,13 +129,18 @@ class AuthenticationViewModel @Inject constructor(
        firebaseCreateNewUserUseCase.createNewUser(email,password)
             .doOnSuccess {
                 showLoading.value = false
+                showDialog.value = SuccessDialog(
+                    dialogTag = CREATE_ACCOUNT_SUCCESS_DIALOG_TAG,
+                    title = R.string.create_account_success_dialog_title,
+                    message = R.string.create_account_success_dialog_content,
+                    buttonStrRes = R.string.continue_button
+                )
             }
            .doOnLoading {
                showLoading.value = true
            }
             .onEach { state ->
                 Timber.tag("UTKU").d(state.toString())
-                _createNewUserStateMutableFlow.emit(state)
             }
             .launchIn(viewModelScope)
     }
@@ -172,7 +186,18 @@ class AuthenticationViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    override fun onEventReceiver(myEvent: MyEvent) {
+        when(myEvent){
+            is DialogDismissEvent -> {
+                if (myEvent.dialogTag == CREATE_ACCOUNT_SUCCESS_DIALOG_TAG) {
+                    _navigateLoginPage.value = true
+                }
+            }
+        }
+    }
+
     companion object {
         private val TAG = AuthenticationViewModel::class.java.simpleName
+        private val CREATE_ACCOUNT_SUCCESS_DIALOG_TAG = "CREATE_ACCOUNT_SUCCESS_DIALOG_TAG"
     }
 }

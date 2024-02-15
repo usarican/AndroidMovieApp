@@ -1,7 +1,12 @@
 package com.example.mymovieapp.core.ui
 
-interface MyUIComponents
+import android.app.Activity
+import androidx.fragment.app.DialogFragment
 
-abstract class MyDialog : MyUIComponents
+interface MyUIComponents<T : Any> {
+    fun create() : T
+}
 
-abstract class MyActivity : MyUIComponents
+interface MyDialog : MyUIComponents<DialogFragment>
+
+interface MyActivity : MyUIComponents<Activity>

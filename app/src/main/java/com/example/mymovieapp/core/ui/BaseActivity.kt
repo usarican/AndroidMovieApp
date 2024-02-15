@@ -58,7 +58,7 @@ abstract class BaseActivity<VDB : ViewDataBinding>() : AppCompatActivity() {
         if (showLoading) loadingDialog.showLoadingDialog() else loadingDialog.hideLoadingDialog()
     }
 
-    open fun showUIComponent(component: MyUIComponents) {
+    open fun showUIComponent(component: MyUIComponents<*>) {
         when (component) {
             is MyActivity -> {}
             is MyDialog -> dialogManager.showDialogFragment(component)

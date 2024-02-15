@@ -9,17 +9,8 @@ class DialogManager(
 ) {
 
     fun showDialogFragment(dialog : MyDialog) {
-        when(dialog) {
-            is BannerMovieDetailDialog -> {
-                val fragment = BannerMovieItemDetailDialogFragment.newInstance(
-                    movieDetailItem = dialog.movieDetailItem
-                )
-                fragment.setClickListener(dialog.clickListeners)
-                showDialog(fragment)
-            }
-        }
+        showDialog(dialog.create())
     }
-
 
     private fun showDialog(fragment: DialogFragment, customTag: String? = null) {
         val tag = customTag ?: fragment.javaClass.simpleName

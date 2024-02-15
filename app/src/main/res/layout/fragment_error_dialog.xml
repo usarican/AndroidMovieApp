@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/black">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/popup_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".85">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:background="@color/rouge"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/textview_dialog_header"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="64dp"
+                        android:fontFamily="@font/playfair_display_black"
+                        android:gravity="center"
+                        tools:text="Failed"
+                        android:textColor="@color/rouge"
+                        android:textSize="30sp"
+                        app:layout_constraintBottom_toTopOf="@id/textview_dialog_information"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/textview_dialog_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/playfair_display_regular"
+                        android:gravity="center"
+                        android:textColor="@color/greyishBrown"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toTopOf="@id/checkbox"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textview_dialog_header"
+                        app:layout_goneMarginBottom="24dp"
+                        tools:text="Registiration Fail" />
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="12dp"
+                        android:button="@drawable/alert_checkbox"
+                        android:checked="false"
+                        android:fontFamily="@font/playfair_display_medium"
+                        android:paddingHorizontal="5dp"
+                        android:text="@string/do_not_show_this_again"
+                        android:textColor="@color/greyishBrown"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@id/button_action"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textview_dialog_information"
+                        tools:checked="true"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_action"
+                        style="@style/Button.Main"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/playfair_display_bold"
+                        android:text="@string/log_in"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        android:backgroundTint="@color/rouge"
+                        app:layout_constraintBottom_toTopOf="@id/button_action2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/checkbox"
+                        app:layout_goneMarginBottom="32dp"
+                        app:layout_goneMarginTop="32dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_action2"
+                        style="@style/Button.Text.OnWhite"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_goneMarginBottom="@dimen/space_16"
+                        android:fontFamily="@font/playfair_display_bold"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/button_action"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:text="@tools:sample/lorem"
+                        tools:visibility="visible" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

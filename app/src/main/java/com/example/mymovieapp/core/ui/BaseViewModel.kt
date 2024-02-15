@@ -10,7 +10,7 @@ abstract class BaseViewModel : ViewModel(){
 
     open val showLoading = MutableLiveData<Boolean?>(null)
 
-    open val showDialog = MutableLiveData<MyUIComponents?>()
+    open val showDialog = MutableLiveData<MyUIComponents<*>>()
 
     private val myEventListener = object : MyEventListener {
         override fun receiveEvent(event: MyEvent) {

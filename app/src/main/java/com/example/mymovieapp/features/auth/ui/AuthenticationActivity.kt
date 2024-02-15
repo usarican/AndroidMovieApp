@@ -26,4 +26,8 @@ class AuthenticationActivity : BaseActivity<ActivityAuthenticationBinding>() {
         return ActivityAuthenticationBinding.inflate(layoutInflater)
     }
 
+    override fun setUpViews(savedInstanceState: Bundle?) {
+        setBaseViewModel(viewModel)
+    }
+
 }

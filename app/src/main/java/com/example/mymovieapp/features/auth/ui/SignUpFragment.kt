@@ -26,12 +26,22 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
                         password = textinputPassword.editText?.text.toString()
                     )
                     viewModel.setUserEmail(textinputEmail.editText?.text.toString())
-                    val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
-                    findNavController().navigate(action)
                 }
             }
             buttonBack.setOnClickListener {
                 findNavController().popBackStack()
+            }
+        }
+    }
+
+    override fun setUpObservers() {
+        viewModel.navigateLoginPage().observe(viewLifecycleOwner){
+            it?.let {
+                if (it) {
+                    viewModel.setNavigateLoginPageToFalse()
+                    val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
     }
@@ -50,4 +60,6 @@ class SignUpFragment :  BaseFragment<FragmentSignUpBinding>(R.layout.fragment_si
             return validation1 && validation2 && validation3
         }
     }
+
+
 }
