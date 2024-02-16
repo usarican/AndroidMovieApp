@@ -1,23 +1,15 @@
 package com.example.mymovieapp.features.auth.data
 
-import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.features.auth.data.remote.UserDto
 import com.example.mymovieapp.utils.Constants.FIREBASE_FIRESTORE_USER_COLLECTION_NAME
-import com.example.mymovieapp.utils.JsonConverter
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 import javax.inject.Inject
 
 class FirebaseFirestoreRepositoryImp @Inject constructor(
-    private val firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore
 ) : FirebaseFirestoreRepository {
     override suspend fun insertNewUser(userDto: UserDto) {
         firestore
@@ -44,6 +36,17 @@ class FirebaseFirestoreRepositoryImp @Inject constructor(
             .collection(FIREBASE_FIRESTORE_USER_COLLECTION_NAME)
             .document(remoteUserUid)
             .update(updates)
+            .await()
+    }
+
+    override suspend fun updateUserAfterProfileSetupSection(
+        remoteUserUid: String,
+        updateInformation : Map<String,Any?>
+    ) {
+        firestore
+            .collection(FIREBASE_FIRESTORE_USER_COLLECTION_NAME)
+            .document(remoteUserUid)
+            .update(updateInformation)
             .await()
     }
 }

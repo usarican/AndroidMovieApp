@@ -62,6 +62,7 @@ class SetupProfileSection2Fragment :
             }
             applyButton.setOnClickListener {
                 if (validateNickName()) {
+                    viewModel.updateUserInformation()
                     val action = SetupProfileFragmentDirections.actionSetupProfileFragmentToMainActivity()
                     findNavController().navigate(action)
                 }

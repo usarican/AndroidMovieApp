@@ -15,4 +15,8 @@ class UserLocalDataSource @Inject constructor(
 
     suspend fun getUserWithUserUid(userUid : String) : UserEntity =
         userDatabase.getUserWithUserUid(userUid)
+
+    suspend fun updateUser(user: UserEntity) {
+        userDatabase.updateUser(user)
+    }
 }

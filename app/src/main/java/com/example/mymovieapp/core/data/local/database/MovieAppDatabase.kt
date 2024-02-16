@@ -10,7 +10,7 @@ import com.example.mymovieapp.features.auth.data.local.entity.UserEntity
     entities = [
         GenreEntity::class,
         UserEntity::class
-    ], version = 2, exportSchema = true
+    ], version = 3, exportSchema = true
 )
 abstract class MovieAppDatabase : RoomDatabase() {
     abstract val genreDatabase: GenreDatabase

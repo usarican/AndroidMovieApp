@@ -9,4 +9,5 @@ internal object Constants {
     const val STARTING_PAGE = 1
     const val ITEMS_PER_PAGE = 20
     const val FIREBASE_FIRESTORE_USER_COLLECTION_NAME = "users"
+    const val EMPTY_STRING = ""
 }

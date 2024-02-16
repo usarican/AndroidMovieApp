@@ -14,4 +14,8 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun insertUserToDatabase(user: UserEntity) {
         userLocalDataSource.insertNewUser(user)
     }
+
+    override suspend fun updateUserInDatabase(user: UserEntity) {
+        userLocalDataSource.updateUser(user)
+    }
 }
