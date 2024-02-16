@@ -1,17 +1,9 @@
 package com.example.mymovieapp.features.auth.data
 
 import com.example.mymovieapp.core.data.BaseRepository
-import com.example.mymovieapp.core.data.State
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
 
 class FirebaseAuthRepositoryImp @Inject constructor(
@@ -21,8 +13,8 @@ class FirebaseAuthRepositoryImp @Inject constructor(
         return auth.createUserWithEmailAndPassword(userEmail,userPassword).await()
     }
 
-    override suspend fun signIn(userEmail: String, userPassword: String) {
-        auth.signInWithEmailAndPassword(userEmail,userPassword).await()
+    override suspend fun signIn(userEmail: String, userPassword: String): AuthResult {
+        return auth.signInWithEmailAndPassword(userEmail,userPassword).await()
     }
 
     override fun signOut() {

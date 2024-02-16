@@ -48,11 +48,16 @@ object ApplicationModule {
     @Provides
     fun provideMovieAppDatabase(
         @ApplicationContext context : Context
-    ) : MovieAppDatabase = Room.databaseBuilder(
-        context,
-        MovieAppDatabase::class.java,
-        "db-movie-app"
-    ).build()
+    ) : MovieAppDatabase {
+        val room = Room.databaseBuilder(
+            context,
+            MovieAppDatabase::class.java,
+            "db-movie-app"
+        )
+
+        room.fallbackToDestructiveMigration()
+        return room.build()
+    }
 
     @Provides
     fun provideDownloadWorkerManager(

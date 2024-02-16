@@ -61,6 +61,12 @@ class AuthenticationViewModel @Inject constructor(
         _navigateLoginPage.value = false
     }
 
+    private val _userEnteredOnce = MutableLiveData<Boolean?>(null)
+    fun userEnteredOnce() : LiveData<Boolean?> = _userEnteredOnce
+    fun setUserEnteredOnceToNull() {
+        _userEnteredOnce.value = null
+    }
+
     private val authUserData = AuthUserData()
 
     private val _authUserDataMutableStateFlow = MutableStateFlow(authUserData)
@@ -159,6 +165,7 @@ class AuthenticationViewModel @Inject constructor(
         firebaseSignInWithEmailAndPasswordUseCase.signInWithEmailAndPassword(email,password)
             .doOnSuccess {
                 showLoading.value = false
+                _userEnteredOnce.value = it?.userEnteredFirstTime
             }
            .doOnLoading {
                showLoading.value = true

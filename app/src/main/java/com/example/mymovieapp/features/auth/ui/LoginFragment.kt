@@ -1,10 +1,5 @@
 package com.example.mymovieapp.features.auth.ui
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,13 +15,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     private val viewModel: AuthenticationViewModel by activityViewModels()
 
-    // TODO: Bunu Firebase'de parametre olarak tut
-    private var userEnteringTheAppIsFirstTime: Boolean = true
-
     override fun setUpListeners() {
         binding.apply {
             loginButtonSignIn.setOnClickListener {
-                userLogIn()
+                userLogIn(
+                    userEmail = textinputEmail.editText?.text.toString(),
+                    userPassword = textinputPassword.editText?.text.toString()
+                )
             }
             buttonBack.setOnClickListener {
                 findNavController().popBackStack()
@@ -40,20 +35,26 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 binding.textinputEmail.editText?.setText(it.userMail)
             }
         }
+        viewModel.userEnteredOnce().observe(viewLifecycleOwner) { userEnteredOnce ->
+            userEnteredOnce?.let {
+                if (it) {
+                    viewModel.setUserEnteredOnceToNull()
+                    val action = LoginFragmentDirections.actionLoginFragmentToSetupProfileFragment()
+                    viewModel.setUserEmail(binding.textinputEmail.editText?.text.toString())
+                    findNavController().navigate(action)
+                } else {
+                    val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
+                    findNavController().navigate(action)
+                }
+            }
+        }
     }
 
     override fun setUpUI() {
         viewModel.resetViewPagerCurrentPage()
     }
 
-    private fun userLogIn() {
-        if (userEnteringTheAppIsFirstTime) {
-            val action = LoginFragmentDirections.actionLoginFragmentToSetupProfileFragment()
-            viewModel.setUserEmail(binding.textinputEmail.editText?.text.toString())
-            findNavController().navigate(action)
-        } else {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
-            findNavController().navigate(action)
-        }
+    private fun userLogIn(userEmail: String, userPassword: String) {
+        viewModel.signInWithFirebaseEmailAndPassword(userEmail, userPassword)
     }
 }
