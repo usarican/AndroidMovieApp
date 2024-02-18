@@ -3,6 +3,7 @@ package com.example.mymovieapp.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -40,6 +41,15 @@ object GlideHelpers {
         Glide
             .with(imageView.context)
             .load(bitmap)
+            .error(R.drawable.ic_error_with_running)
+            .placeholder(R.drawable.user_photo)
+            .into(imageView)
+    }
+
+    fun setImage(imageView: ImageView,uri: Uri) {
+        Glide
+            .with(imageView.context)
+            .load(uri)
             .error(R.drawable.ic_error_with_running)
             .placeholder(R.drawable.user_photo)
             .into(imageView)

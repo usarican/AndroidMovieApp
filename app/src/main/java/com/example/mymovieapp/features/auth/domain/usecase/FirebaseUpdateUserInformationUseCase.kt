@@ -3,6 +3,7 @@ package com.example.mymovieapp.features.auth.domain.usecase
 import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.features.auth.data.AuthRepository
 import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepositoryImp
+import com.example.mymovieapp.features.auth.data.FirebaseStorageRepositoryImp
 import com.example.mymovieapp.features.auth.data.local.entity.UserEntity
 import com.example.mymovieapp.features.auth.domain.mapper.GenreMapper
 import com.example.mymovieapp.features.auth.domain.mapper.UserMapper
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class FirebaseUpdateUserInformationUseCase @Inject constructor(
     private val firebaseFirestoreRepositoryImp: FirebaseFirestoreRepositoryImp,
     private val authRepository: AuthRepository,
+    private val firebaseStorageRepositoryImp: FirebaseStorageRepositoryImp,
     private val userMapper: UserMapper
 ) {
 
@@ -30,6 +32,11 @@ class FirebaseUpdateUserInformationUseCase @Inject constructor(
                     it,
                     updateInformation
                 )
+                authUserDataStateModel.userProfilePicture?.let { profilePicture ->
+                    firebaseStorageRepositoryImp.uploadUserImageToFirebase(
+                        profilePicture,
+                        it)
+                }
                 val userEntity =
                     userMapper.authUserDataStateModelToUserEntity(authUserDataStateModel)
                 authRepository.insertUserToDatabase(userEntity)

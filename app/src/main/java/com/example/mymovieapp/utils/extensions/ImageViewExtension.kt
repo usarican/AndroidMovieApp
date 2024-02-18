@@ -2,6 +2,7 @@ package com.example.mymovieapp.utils.extensions
 
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
@@ -20,6 +21,12 @@ fun ImageView.bindImage(url : String?){
 fun ImageView.loadBitmap(bitmap: Bitmap?){
     if (bitmap != null){
         GlideHelpers.setImage(this,bitmap)
+    }
+}
+@BindingAdapter("loadUri")
+fun ImageView.loadUri(uri: Uri?){
+    if (uri != null){
+        GlideHelpers.setImage(this,uri)
     }
 }
 

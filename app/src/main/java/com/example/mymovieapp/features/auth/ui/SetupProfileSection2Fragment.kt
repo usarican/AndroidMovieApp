@@ -20,6 +20,7 @@ import com.example.mymovieapp.databinding.FragmentSetupProfileSection2Binding
 import com.example.mymovieapp.utils.FileUtils
 import com.example.mymovieapp.utils.PathHelper
 import com.example.mymovieapp.utils.extensions.disableKeyboard
+import com.example.mymovieapp.utils.extensions.scale
 import com.example.mymovieapp.utils.extensions.validate
 import com.example.mymovieapp.utils.validatorHelper.ConfirmPasswordValidator
 import com.example.mymovieapp.utils.validatorHelper.EmailValidator
@@ -87,7 +88,7 @@ class SetupProfileSection2Fragment :
                 FileUtils(context).getPath(uri)?.let {
                     fileToBitmap(it)?.let { b ->
                         binding.setupSection2ProfileImage.setImageBitmap(b)
-                        viewModel.setUserProfilePicture(b)
+                        viewModel.setUserProfilePicture(uri)
                     }
                 }
             } else {
@@ -143,32 +144,6 @@ class SetupProfileSection2Fragment :
             e.printStackTrace()
         }
         return bitmap
-    }
-
-    private fun Bitmap.scale(maxWidthAndHeight: Int): Bitmap {
-        val newWidth: Int
-        val newHeight: Int
-
-        if (this.width >= this.height) {
-            val ratio: Float = this.width.toFloat() / this.height.toFloat()
-
-            newWidth = maxWidthAndHeight
-            // Calculate the new height for the scaled bitmap
-            newHeight = Math.round(maxWidthAndHeight / ratio)
-        } else {
-            val ratio: Float = this.height.toFloat() / this.width.toFloat()
-
-            // Calculate the new width for the scaled bitmap
-            newWidth = Math.round(maxWidthAndHeight / ratio)
-            newHeight = maxWidthAndHeight
-        }
-
-        return Bitmap.createScaledBitmap(
-            this,
-            newWidth,
-            newHeight,
-            false
-        )
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.mymovieapp.features.auth.ui
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -108,7 +109,7 @@ class AuthenticationViewModel @Inject constructor(
         updateAuthUserData(authUserDataStateModel)
     }
 
-    fun setUserProfilePicture(picture: Bitmap?) {
+    fun setUserProfilePicture(picture: Uri?) {
         authUserDataStateModel.userProfilePicture = picture
         updateAuthUserData(authUserDataStateModel)
     }

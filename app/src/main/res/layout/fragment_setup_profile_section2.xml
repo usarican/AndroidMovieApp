@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ProfileImage"
                 app:srcCompat="@drawable/user_photo"
-                loadBitmap="@{viewmodel.authUserDataStateFlow.userProfilePicture}"
+                loadUri="@{viewmodel.authUserDataStateFlow.userProfilePicture}"
                 android:scaleType="fitXY"
                 tools:src="@drawable/user_photo" />
 
