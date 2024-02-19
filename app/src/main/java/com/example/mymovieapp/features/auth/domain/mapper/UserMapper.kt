@@ -1,5 +1,6 @@
 package com.example.mymovieapp.features.auth.domain.mapper
 
+import android.net.Uri
 import com.example.mymovieapp.features.auth.data.local.entity.UserEntity
 import com.example.mymovieapp.features.auth.data.remote.UserResponse
 import com.example.mymovieapp.features.auth.domain.model.AuthUserDataStateModel
@@ -11,7 +12,7 @@ class UserMapper @Inject constructor(
     private val jsonConverter: JsonConverter,
     private val genreMapper: GenreMapper
 ) {
-    fun responseToEntity(response: UserResponse): UserEntity =
+    fun responseToEntity(response: UserResponse,userProfilePicture : Uri?): UserEntity =
         with(response) {
             UserEntity(
                 userUid = userUid,
@@ -21,7 +22,7 @@ class UserMapper @Inject constructor(
                 userGenre = userGenre,
                 userGenreInterestList = jsonConverter.convertObjectToJson(userGenreInterestList),
                 userEmail = userEmail,
-
+                userProfilePicture = userProfilePicture.toString()
                 )
         }
 
@@ -53,7 +54,8 @@ class UserMapper @Inject constructor(
                 userPhoneNumber = userPhoneNumber,
                 userEmail = userMail ?: EMPTY_STRING,
                 userGenreInterestList = jsonConverter.convertObjectToJson(genreDtoList),
-                userGenre = userGenre
+                userGenre = userGenre,
+                userProfilePicture = userProfilePicture.toString()
             )
         }
     }

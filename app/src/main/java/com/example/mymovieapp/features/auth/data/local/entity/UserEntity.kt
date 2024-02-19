@@ -11,5 +11,6 @@ data class UserEntity(
     val userPhoneNumber: String?,
     val userGenre: String?,
     val userGenreInterestList: String?,
-    val userEmail: String
+    val userEmail: String,
+    val userProfilePicture : String? = null
 )

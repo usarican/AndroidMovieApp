@@ -4,6 +4,7 @@ import com.example.mymovieapp.core.data.State
 import com.example.mymovieapp.features.auth.data.AuthRepository
 import com.example.mymovieapp.features.auth.data.FirebaseAuthRepositoryImp
 import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepositoryImp
+import com.example.mymovieapp.features.auth.data.FirebaseStorageRepositoryImp
 import com.example.mymovieapp.features.auth.data.remote.UserResponse
 import com.example.mymovieapp.features.auth.domain.mapper.UserMapper
 import com.google.firebase.firestore.toObject
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class FirebaseSignInWithEmailAndPasswordUseCase @Inject constructor(
     private val firebaseAuthRepositoryImp: FirebaseAuthRepositoryImp,
     private val firebaseStoreRepositoryImp: FirebaseFirestoreRepositoryImp,
+    private val firebaseStorageRepositoryImp: FirebaseStorageRepositoryImp,
     private val authRepository: AuthRepository,
     private val userMapper: UserMapper
 ) {
@@ -30,11 +32,12 @@ class FirebaseSignInWithEmailAndPasswordUseCase @Inject constructor(
             authUser?.let {
                 val userFromFirestore =
                     firebaseStoreRepositoryImp.getUserFromFirestore(authUser.uid)
-                Timber.tag("Utku").d(userFromFirestore.data.toString())
+                val userProfilePicture =
+                    firebaseStorageRepositoryImp.downloadUserImageFromFirebase(authUser.uid)
                 val userResponse = userFromFirestore.toObject<UserResponse>()
                 if (userResponse != null) {
                     if (!userResponse.userEnteredFirstTime) {
-                        authRepository.insertUserToDatabase(userMapper.responseToEntity(userResponse))
+                        authRepository.insertUserToDatabase(userMapper.responseToEntity(userResponse,userProfilePicture))
                     } else {
                         firebaseStoreRepositoryImp.updateUserEnteredFirstTimeParameter(authUser.uid,false)
                     }
