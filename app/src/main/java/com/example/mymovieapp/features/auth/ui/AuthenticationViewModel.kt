@@ -173,6 +173,7 @@ class AuthenticationViewModel @Inject constructor(
             .doOnSuccess {
                 showLoading.value = false
                 authUserDataStateModel.userUid = it?.userUid ?: UUID.randomUUID().toString()
+                authUserDataStateModel.userMail = it?.userEmail
                 _userEnteredOnce.value = it?.userEnteredFirstTime
             }
             .doOnLoading {
@@ -195,6 +196,7 @@ class AuthenticationViewModel @Inject constructor(
             .doOnSuccess {
                 showLoading.value = false
                 authUserDataStateModel.userUid = it?.userUid ?: UUID.randomUUID().toString()
+                authUserDataStateModel.userMail = it?.userEmail
                 _userEnteredOnce.value = it?.userEnteredFirstTime
             }
             .doOnLoading {

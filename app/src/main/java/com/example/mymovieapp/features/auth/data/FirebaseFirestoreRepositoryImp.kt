@@ -27,19 +27,6 @@ class FirebaseFirestoreRepositoryImp @Inject constructor(
             .document(remoteUserUid)
             .get()
             .await()
-        /*return try {
-            firestore
-                .collection(FIREBASE_FIRESTORE_USER_COLLECTION_NAME)
-                .document(remoteUserUid)
-                .get()
-                .await()
-        } catch (e : FirebaseFirestoreException) {
-            if (e.code == FirebaseFirestoreException.Code.NOT_FOUND) {
-                null
-            } else {
-                throw e
-            }
-        }*/
     }
 
     override suspend fun updateUserEnteredFirstTimeParameter(remoteUserUid : String,userEnteredFirstTime: Boolean) {

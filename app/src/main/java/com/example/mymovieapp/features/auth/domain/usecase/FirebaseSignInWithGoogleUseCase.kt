@@ -52,7 +52,7 @@ class FirebaseSignInWithGoogleUseCase @Inject constructor(
                     .setUserUid(firebaseUser.uid)
                     .build()
                 firebaseFirestoreRepositoryImp.insertNewUser(userDto)
-                emit(State.Success(null))
+                emit(State.Success(userMapper.userDtoToUserResponse(userDto)))
             }
         } ?: emit(State.Error(Exception("Remote user is null.")))
     }

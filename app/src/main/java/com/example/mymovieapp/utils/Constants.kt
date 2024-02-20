@@ -10,4 +10,5 @@ internal object Constants {
     const val ITEMS_PER_PAGE = 20
     const val FIREBASE_FIRESTORE_USER_COLLECTION_NAME = "users"
     const val EMPTY_STRING = ""
+    const val GOOGLE_WEB_CLIENT_ID = "75915502075-ittsi2rmdijnijsi2dcd1lc1trn25ftg.apps.googleusercontent.com"
 }
