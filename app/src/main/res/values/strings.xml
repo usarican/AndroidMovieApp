@@ -35,6 +35,7 @@
     <string name="password_validation_text">This password is not valid.</string>
     <string name="password_confirm_validation_text">Passwords does not match</string>
     <string name="email_validation_text">This email is not valid.</string>
+    <string name="forgot_to_password">Forgot to Password?</string>
 
     <string name="sort_and_filter">Sort &amp; Filter</string>
     <string name="regions">Regions</string>
