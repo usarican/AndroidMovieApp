@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FirebaseFirestoreRepository {
     suspend fun insertNewUser(userDto: UserDto)
-    suspend fun getUserFromFirestore(remoteUserUid : String) : DocumentSnapshot
+    suspend fun getUserFromFirestore(remoteUserUid : String) : DocumentSnapshot?
     suspend fun updateUserEnteredFirstTimeParameter(remoteUserUid : String,userEnteredFirstTime: Boolean)
     suspend fun updateUserAfterProfileSetupSection(remoteUserUid : String,updateInformation : Map<String,Any?>)
 }

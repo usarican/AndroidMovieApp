@@ -12,7 +12,7 @@ class UserMapper @Inject constructor(
     private val jsonConverter: JsonConverter,
     private val genreMapper: GenreMapper
 ) {
-    fun responseToEntity(response: UserResponse,userProfilePicture : Uri?): UserEntity =
+    fun responseToEntity(response: UserResponse, userProfilePicture: Uri?): UserEntity =
         with(response) {
             UserEntity(
                 userUid = userUid,
@@ -23,7 +23,7 @@ class UserMapper @Inject constructor(
                 userGenreInterestList = jsonConverter.convertObjectToJson(userGenreInterestList),
                 userEmail = userEmail,
                 userProfilePicture = userProfilePicture.toString()
-                )
+            )
         }
 
     fun authUserDataStateModelToFirebaseUserModel(authUserDataStateModel: AuthUserDataStateModel): Map<String, Any?> {
@@ -37,7 +37,7 @@ class UserMapper @Inject constructor(
                 "userPhoneNumber" to userPhoneNumber,
                 "userGenre" to userGenre,
                 "userGenreInterestList" to genreDtoList,
-                )
+            )
         }
     }
 

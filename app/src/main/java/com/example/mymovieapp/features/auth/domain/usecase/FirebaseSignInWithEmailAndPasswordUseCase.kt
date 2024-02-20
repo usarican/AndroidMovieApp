@@ -34,7 +34,7 @@ class FirebaseSignInWithEmailAndPasswordUseCase @Inject constructor(
                     firebaseStoreRepositoryImp.getUserFromFirestore(authUser.uid)
                 val userProfilePicture =
                     firebaseStorageRepositoryImp.downloadUserImageFromFirebase(authUser.uid)
-                val userResponse = userFromFirestore.toObject<UserResponse>()
+                val userResponse = userFromFirestore?.toObject<UserResponse>()
                 if (userResponse != null) {
                     if (!userResponse.userEnteredFirstTime) {
                         authRepository.insertUserToDatabase(userMapper.responseToEntity(userResponse,userProfilePicture))
