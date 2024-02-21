@@ -96,4 +96,8 @@
 
     <string name="empty" translatable="false" />
 
+    <string name="facebook_app_id">930923725177555</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">5e73d5437fd1add875453b8b8f5258a5</string>
+
 </resources>

@@ -124,6 +124,10 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
 
+    // Facebook
+    implementation 'com.facebook.android:facebook-login:latest.release'
+
+
     // 3rd Party Lib
     // Youtube Player WebView
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
