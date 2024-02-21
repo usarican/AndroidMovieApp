@@ -41,8 +41,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private lateinit var auth: FirebaseAuth
     // [END declare_auth]
 
-    private lateinit var callbackManager: CallbackManager
     private lateinit var buttonFacebookLogin: LoginButton
+    private val callbackManager = CallbackManager.Factory.create()
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
@@ -62,9 +62,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             }
         }
 
+    private val facebookSignInLauncher = registerForActivityResult(
+        LoginManager.getInstance().createLogInActivityResultContract(callbackManager)
+    ){ result ->
+        callbackManager.onActivityResult(result.requestCode,result.resultCode,result.data)
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        callbackManager = CallbackManager.Factory.create()
         auth = Firebase.auth
 
     }
@@ -82,6 +89,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             }
             loginWithGoogleButton.setOnClickListener {
                 googleSignIn()
+            }
+            loginWithFacebookButton.setOnClickListener {
+                val permissions = listOf("email", "public_profile")
+                facebookSignInLauncher.launch(permissions)
             }
         }
     }
