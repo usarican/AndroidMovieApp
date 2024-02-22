@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,8 +42,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private lateinit var auth: FirebaseAuth
     // [END declare_auth]
 
-    private lateinit var buttonFacebookLogin: LoginButton
     private val callbackManager = CallbackManager.Factory.create()
+    private val loginManager = LoginManager.getInstance()
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
@@ -62,10 +63,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             }
         }
 
+
     private val facebookSignInLauncher = registerForActivityResult(
         LoginManager.getInstance().createLogInActivityResultContract(callbackManager)
     ){ result ->
-        callbackManager.onActivityResult(result.requestCode,result.resultCode,result.data)
+        val resultCode = result.resultCode
+        val data = result.data
+        if (resultCode == RESULT_OK && data != null) {
+            callbackManager.onActivityResult(result.requestCode,result.resultCode,result.data)
+        }
+
     }
 
 
@@ -91,8 +98,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 googleSignIn()
             }
             loginWithFacebookButton.setOnClickListener {
-                val permissions = listOf("email", "public_profile")
-                facebookSignInLauncher.launch(permissions)
+                signInWithFacebook()
             }
         }
     }
@@ -119,27 +125,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     override fun setUpUI() {
         viewModel.resetViewPagerCurrentPage()
-        buttonFacebookLogin = binding.loginButton
-
-        buttonFacebookLogin.setPermissions("email", "public_profile")
-        buttonFacebookLogin.setFragment(this)
-        buttonFacebookLogin.registerCallback(
-            callbackManager,
-            object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    Timber.tag(TAG).d("facebook:onSuccess:$loginResult")
-                    handleFacebookAccessToken(loginResult.accessToken)
-                }
-
-                override fun onCancel() {
-                    Timber.tag(TAG).d( "facebook:onCancel")
-                }
-
-                override fun onError(error: FacebookException) {
-                    Timber.tag(TAG).d( "facebook:onError $error" )
-                }
-            },
-        )
     }
 
     private fun userLogIn(userEmail: String, userPassword: String) {
@@ -151,12 +136,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         googleSignInLauncher.launch(signInIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Pass the activity result back to the Facebook SDK
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
         Timber.tag(TAG).d("handleFacebookAccessToken:$token")
@@ -178,6 +157,28 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                     ).show()
                 }
             }
+    }
+
+    private fun signInWithFacebook(){
+        val permissions = listOf<String>("email", "public_profile")
+        loginManager.registerCallback(
+            callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult) {
+                    Timber.tag("FacebookB").d("facebook:onSuccess:$loginResult")
+                    handleFacebookAccessToken(loginResult.accessToken)
+                }
+
+                override fun onCancel() {
+                    Timber.tag("FacebookB").d( "facebook:onCancel")
+                }
+
+                override fun onError(error: FacebookException) {
+                    Timber.tag("FacebookB").d( "facebook:onError $error" )
+                }
+            },
+        )
+        loginManager.logInWithReadPermissions(this@LoginFragment,callbackManager,permissions)
     }
 
     companion object {
