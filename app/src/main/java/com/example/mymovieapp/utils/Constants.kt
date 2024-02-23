@@ -11,4 +11,5 @@ internal object Constants {
     const val FIREBASE_FIRESTORE_USER_COLLECTION_NAME = "users"
     const val EMPTY_STRING = ""
     const val GOOGLE_WEB_CLIENT_ID = "75915502075-ittsi2rmdijnijsi2dcd1lc1trn25ftg.apps.googleusercontent.com"
+    val FACEBOOK_LOGIN_PERMISSIONS = listOf("email", "public_profile")
 }

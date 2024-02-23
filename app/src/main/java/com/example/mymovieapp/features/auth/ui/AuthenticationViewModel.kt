@@ -14,6 +14,7 @@ import com.example.mymovieapp.core.ui.event.MyEvent
 import com.example.mymovieapp.features.auth.domain.model.AuthUserDataStateModel
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseCreateNewUserUseCase
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseSignInWithEmailAndPasswordUseCase
+import com.example.mymovieapp.features.auth.domain.usecase.FirebaseSignInWithFacebookUseCase
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseSignInWithGoogleUseCase
 import com.example.mymovieapp.features.auth.domain.usecase.FirebaseUpdateUserInformationUseCase
 import com.example.mymovieapp.features.dialog.ErrorDialog
@@ -40,7 +41,8 @@ class AuthenticationViewModel @Inject constructor(
     private val firebaseCreateNewUserUseCase: FirebaseCreateNewUserUseCase,
     private val firebaseSignInWithEmailAndPasswordUseCase: FirebaseSignInWithEmailAndPasswordUseCase,
     private val firebaseUpdateUserInformationUseCase: FirebaseUpdateUserInformationUseCase,
-    private val firebaseSignInWithGoogleUseCase: FirebaseSignInWithGoogleUseCase
+    private val firebaseSignInWithGoogleUseCase: FirebaseSignInWithGoogleUseCase,
+    private val firebaseSignInWithFacebookUseCase: FirebaseSignInWithFacebookUseCase
 ) : BaseViewModel() {
     init {
         downloadWorkManager.startDownloadMovieGenres()
@@ -213,6 +215,31 @@ class AuthenticationViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
+
+    fun signInWithFacebook(idToken : String) {
+        firebaseSignInWithFacebookUseCase.signInWithFacebook(idToken)
+            .doOnSuccess {
+                showLoading.value = false
+                authUserDataStateModel.userUid = it?.userUid ?: UUID.randomUUID().toString()
+                authUserDataStateModel.userMail = it?.userEmail
+                _userEnteredOnce.value = it?.userEnteredFirstTime
+            }
+            .doOnLoading {
+            showLoading.value = true
+        }
+            .doOnError {
+                showLoading.value = false
+                showDialog.value = ErrorDialog(
+                    dialogTag = SIGN_IN_WITH_EMAIL_AND_PASSWORD_ERROR_DIALOG_TAG,
+                    titleStrRes = R.string.sign_in_failure_dialog_title,
+                    message = it.message ?: "Unexpected Error Occurs.",
+                    buttonStrRes = R.string.got_it
+                )
+            }
+            .launchIn(viewModelScope)
+    }
+
+
 
     fun updateUserInformation() {
         firebaseUpdateUserInformationUseCase.updateUser(authUserDataStateModel)

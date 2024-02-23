@@ -1,10 +1,6 @@
 package com.example.mymovieapp.features.auth.ui
 
 import android.app.Activity.RESULT_OK
-import android.content.Intent
-import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,26 +8,19 @@ import androidx.navigation.fragment.findNavController
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
 import com.example.mymovieapp.databinding.FragmentLoginBinding
-import com.facebook.AccessToken
+import com.example.mymovieapp.utils.Constants.FACEBOOK_LOGIN_PERMISSIONS
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.Arrays
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,14 +28,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     private val viewModel: AuthenticationViewModel by activityViewModels()
 
-    private lateinit var auth: FirebaseAuth
-    // [END declare_auth]
-
-    private val callbackManager = CallbackManager.Factory.create()
-    private val loginManager = LoginManager.getInstance()
-
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
+    @Inject
+    lateinit var callbackManager: CallbackManager
+    @Inject
+    lateinit var loginManager: LoginManager
 
     private val googleSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -64,24 +51,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
 
 
-    private val facebookSignInLauncher = registerForActivityResult(
-        LoginManager.getInstance().createLogInActivityResultContract(callbackManager)
-    ){ result ->
-        val resultCode = result.resultCode
-        val data = result.data
-        if (resultCode == RESULT_OK && data != null) {
-            callbackManager.onActivityResult(result.requestCode,result.resultCode,result.data)
-        }
-
-    }
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-
-    }
 
     override fun setUpListeners() {
         binding.apply {
@@ -136,37 +105,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         googleSignInLauncher.launch(signInIntent)
     }
 
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        Timber.tag(TAG).d("handleFacebookAccessToken:$token")
-
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Timber.tag(TAG).d("signInWithCredential:success")
-                    val user = auth.currentUser
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Timber.tag(TAG).w("signInWithCredential:failure ${task.exception}")
-                    Toast.makeText(
-                        context,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            }
-    }
-
     private fun signInWithFacebook(){
-        val permissions = listOf<String>("email", "public_profile")
         loginManager.registerCallback(
             callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Timber.tag("FacebookB").d("facebook:onSuccess:$loginResult")
-                    handleFacebookAccessToken(loginResult.accessToken)
+                    viewModel.signInWithFacebook(loginResult.accessToken.token)
                 }
 
                 override fun onCancel() {
@@ -178,8 +123,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 }
             },
         )
-        loginManager.logInWithReadPermissions(this@LoginFragment,callbackManager,permissions)
+        loginManager.logInWithReadPermissions(this@LoginFragment,callbackManager,FACEBOOK_LOGIN_PERMISSIONS)
     }
+
 
     companion object {
         private const val TAG = "GoogleActivity"

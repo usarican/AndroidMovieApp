@@ -4,6 +4,7 @@ import com.example.mymovieapp.core.data.BaseRepository
 import com.example.mymovieapp.features.auth.ui.LoginFragment
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
@@ -26,8 +27,13 @@ class FirebaseAuthRepositoryImp @Inject constructor(
         return auth.signInWithCredential(credential).await()
     }
 
+    override suspend fun signInWithFacebook(idToken: String): AuthResult {
+        val credential = FacebookAuthProvider.getCredential(idToken)
+        return auth.signInWithCredential(credential).await()
+    }
+
     override fun signOut() {
-        TODO("Not yet implemented")
+        auth.signOut()
     }
 
     companion object {

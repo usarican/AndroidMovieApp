@@ -8,6 +8,7 @@ interface FirebaseAuthRepository {
     suspend fun signIn(userEmail : String, userPassword : String) : AuthResult
 
     suspend fun signInWithGoogle(idToken: String) : AuthResult
+    suspend fun signInWithFacebook(idToken: String) : AuthResult
     fun signOut()
 
 }
