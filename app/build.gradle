@@ -133,6 +133,8 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
     // Expandable TextView
     implementation 'io.github.glailton.expandabletextview:expandabletextview:1.0.4'
+    // Lottie
+    implementation 'com.airbnb.android:lottie:6.3.0'
 
     //Test Implementation
     testImplementation 'junit:junit:4.13.2'
