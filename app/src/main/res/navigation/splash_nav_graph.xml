@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/splash_nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.mymovieapp.features.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_authenticationActivity"
+            app:destination="@id/authenticationActivity" />
+        <action
+            android:id="@+id/action_splashFragment_to_mainActivity2"
+            app:destination="@id/mainActivity2" />
+    </fragment>
+    <activity
+        android:id="@+id/authenticationActivity"
+        android:name="com.example.mymovieapp.features.auth.ui.AuthenticationActivity"
+        android:label="AuthenticationActivity" />
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.mymovieapp.features.main.MainActivity"
+        android:label="MainActivity" />
+</navigation>
