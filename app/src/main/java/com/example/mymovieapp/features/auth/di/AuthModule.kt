@@ -2,6 +2,8 @@ package com.example.mymovieapp.features.auth.di
 
 import com.example.mymovieapp.features.auth.data.AuthRepository
 import com.example.mymovieapp.features.auth.data.AuthRepositoryImp
+import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepository
+import com.example.mymovieapp.features.auth.data.FirebaseFirestoreRepositoryImp
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +17,9 @@ abstract class AuthModule {
     abstract fun bindAuthRepository(
         authRepositoryImp: AuthRepositoryImp
     ) : AuthRepository
+
+    @Binds
+    abstract fun bindFirebaseFirestoreRepository(
+        firebaseFirestoreRepositoryImp: FirebaseFirestoreRepositoryImp
+    ) : FirebaseFirestoreRepository
 }

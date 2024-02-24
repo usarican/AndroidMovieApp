@@ -7,7 +7,7 @@ import javax.inject.Inject
 class AuthRepositoryImp @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) : AuthRepository {
-    override suspend fun getUserDataFromDatabase(userUid : String): UserEntity {
+    override suspend fun getUserDataFromDatabase(userUid: String): UserEntity? {
         return userLocalDataSource.getUserWithUserUid(userUid)
     }
 
