@@ -20,7 +20,7 @@
         android:theme="@style/Theme.MyMovieApp"
         tools:targetApi="31">
         <activity
-            android:name=".features.splash.SplashActivity"
+            android:name=".features.splash.ui.SplashActivity"
             android:exported="true"
             android:theme="@style/Login">
 

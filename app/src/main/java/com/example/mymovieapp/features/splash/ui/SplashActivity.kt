@@ -1,4 +1,4 @@
-package com.example.mymovieapp.features.splash
+package com.example.mymovieapp.features.splash.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
