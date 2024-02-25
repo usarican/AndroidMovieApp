@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.example.mymovieapp.R
 import com.example.mymovieapp.core.ui.BaseFragment
@@ -15,6 +16,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val window = activity?.window
+        window?.let { WindowCompat.setDecorFitsSystemWindows(window, false) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
