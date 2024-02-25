@@ -6,11 +6,12 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
+    id 'com.google.devtools.ksp'
 }
 
 android {
     namespace 'com.example.mymovieapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.mymovieapp"
@@ -39,6 +40,11 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 }
 
@@ -46,13 +52,14 @@ dependencies {
 
     def navigation_version = "2.6.0"
     def lifecycle_version = "2.6.1"
-    def room_version = "2.5.2"
+    def room_version = "2.6.1"
     def retrofit_version = "2.9.0"
-    def moshi_version = "1.14.0"
+    def moshi_version = "1.15.1"
     def paging_version = "3.1.1"
     def work_manager_version = "2.8.1"
     def work_version = "2.7.0"
-    def hilt_version ="2.44"
+    def hilt_version ="2.50"
+
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -86,7 +93,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Dagger Hilt Dependency Injection
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -127,6 +134,15 @@ dependencies {
     // Facebook
     implementation 'com.facebook.android:facebook-login:latest.release'
 
+    // Jetpack Compose
+    implementation("androidx.compose.ui:ui:1.6.2")
+    implementation 'androidx.compose.material:material'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    implementation 'androidx.activity:activity-compose:1.3.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
+    implementation 'androidx.compose.runtime:runtime-livedata'
+
 
     // 3rd Party Lib
     // Youtube Player WebView
@@ -144,6 +160,10 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.8.1'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2'
+
+    // Compose Test
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
 }
 

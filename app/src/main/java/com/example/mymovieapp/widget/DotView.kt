@@ -17,14 +17,14 @@ class DotView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : View(context,attrs,defStyle) {
+) : View(context, attrs, defStyle) {
 
     // Properties
-    private val paint : Paint = Paint().apply { isAntiAlias = true }
-    private var activeColor : Int = 0
-    private var inActiveColor : Int = Color.GRAY
+    private val paint: Paint = Paint().apply { isAntiAlias = true }
+    private var activeColor: Int = 0
+    private var inActiveColor: Int = Color.GRAY
 
-    private var isActive : Boolean = false
+    private var isActive: Boolean = false
     private var heightCircle = 0
     private var circleCenter = 0F
 
@@ -53,7 +53,7 @@ class DotView @JvmOverloads constructor(
         }
     }
 
-    private fun update(){
+    private fun update() {
         val usableWidth = width - (paddingLeft + paddingRight)
         val usableHeight = height - (paddingTop + paddingBottom)
         heightCircle = min(usableWidth, usableHeight)
@@ -62,16 +62,17 @@ class DotView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setIsActive(isActive : Boolean){
+    fun setIsActive(isActive: Boolean) {
         this.isActive = isActive
         invalidate()
     }
 
-    fun setActiveColor(color: Int){
+    fun setActiveColor(color: Int) {
         this.activeColor = color
         invalidate()
     }
-    fun setInactiveColor(color: Int){
+
+    fun setInactiveColor(color: Int) {
         this.inActiveColor = color
         invalidate()
     }
@@ -88,14 +89,13 @@ class DotView @JvmOverloads constructor(
     }
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
         val radius = width / 2.toFloat()
         val centerY = height / 2.toFloat()
 
-        if (isActive){
-            paint.color = ColorUtils.setAlphaComponent(activeColor,255)
+        if (isActive) {
+            paint.color = ColorUtils.setAlphaComponent(activeColor, 255)
         } else {
             paint.color = inActiveColor
         }
@@ -106,5 +106,4 @@ class DotView @JvmOverloads constructor(
             paint
         )
     }
-
 }
