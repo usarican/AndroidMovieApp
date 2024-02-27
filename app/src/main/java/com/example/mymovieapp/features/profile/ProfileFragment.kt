@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import com.example.mymovieapp.R
-import com.example.mymovieapp.core.ui.BaseFragment
-import com.example.mymovieapp.databinding.FragmentProfileBinding
+import com.example.mymovieapp.features.profile.ui.ProfileScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
