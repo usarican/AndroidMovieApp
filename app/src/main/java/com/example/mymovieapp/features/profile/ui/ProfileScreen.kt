@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -30,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.example.mymovieapp.R
 import com.example.mymovieapp.features.profile.ui.components.ProfileText
 import com.example.mymovieapp.features.profile.ui.components.UserAvatarImage
+import com.example.mymovieapp.features.profile.ui.components.subTitle1TextAttributes
+import com.example.mymovieapp.features.profile.ui.components.titleTextAttributes
 
 @Preview(showBackground = true)
 @Composable
@@ -44,10 +47,17 @@ fun ProfileScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         UserAvatarImage("https://firebasestorage.googleapis.com/v0/b/mymovieappdb.appspot.com/o/users%2FuserImages%2FB94NH4uJFyVLmDyGQun3xuLI20C3%2FprofilePicture.jpg?alt=media&token=733df820-deb0-4fc7-b83d-938e9ddbb665")
-        ProfileText("Utku Sarıçan")
-        Spacer(modifier = Modifier
-            .height(16.dp)
-            .fillMaxWidth())
+        ProfileText(
+            text = "Utku Sarıçan",
+            textAttributes = titleTextAttributes,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+        )
+        ProfileText(
+            text = "@utkusarican",
+            textAttributes = subTitle1TextAttributes,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+        )
+
         UserNameField(userName = userName)
         ChangeUserNameButton(
             onChanged = {
