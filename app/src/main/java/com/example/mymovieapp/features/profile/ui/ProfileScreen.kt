@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mymovieapp.R
 import com.example.mymovieapp.features.profile.ui.components.ProfileText
 import com.example.mymovieapp.features.profile.ui.components.UserAvatarImage
@@ -36,10 +38,13 @@ import com.example.mymovieapp.features.profile.ui.components.titleTextAttributes
 
 @Preview(showBackground = true)
 @Composable
-fun ProfileScreen() {
-    var userName by remember {
-        mutableStateOf("")
-    }
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
+
+
+    val counter by viewModel.counterState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,34 +52,23 @@ fun ProfileScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         UserAvatarImage("https://firebasestorage.googleapis.com/v0/b/mymovieappdb.appspot.com/o/users%2FuserImages%2FB94NH4uJFyVLmDyGQun3xuLI20C3%2FprofilePicture.jpg?alt=media&token=733df820-deb0-4fc7-b83d-938e9ddbb665")
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(16.dp))
         ProfileText(
             text = "Utku Sarıçan",
             textAttributes = titleTextAttributes,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
         )
         ProfileText(
             text = "@utkusarican",
             textAttributes = subTitle1TextAttributes,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
         )
 
-        UserNameField(userName = userName)
-        ChangeUserNameButton(
-            onChanged = {
-            userName = "Utku Sarican"
-        })
+        Text(text = viewModel.counterState.collectAsState().value.toString())
+        Button(onClick = { viewModel.incrementCounter() }) {
+            Text(text = "Increment")
+        }
+
     }
 }
 
-
-@Composable
-fun UserNameField(userName: String) {
-    Text(text = userName)
-}
-
-@Composable
-fun ChangeUserNameButton(onChanged: () -> Unit) {
-    Button(onClick = { onChanged.invoke() }) {
-        Text(text = "Change The Name")
-    }
-}
