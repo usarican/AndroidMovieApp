@@ -27,6 +27,6 @@ val subTitle1TextAttributes = TextAttributes(
 
 val buttonTitleTextAttributes = TextAttributes(
     textColor = buttonTextColor,
-    fontSize = 12.sp,
+    fontSize = 16.sp,
     textFontWeight = FontWeight.Medium
 )

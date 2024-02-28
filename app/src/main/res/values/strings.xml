@@ -94,6 +94,13 @@
     <string name="got_it">Got it.</string>
     <string name="cancel_button">Cancel</string>
 
+    <string name="account">Account</string>
+    <string name="language">Language</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="faq">FAQ</string>
+    <string name="log_out">Log Out</string>
+
 
     <string name="empty" translatable="false" />
 

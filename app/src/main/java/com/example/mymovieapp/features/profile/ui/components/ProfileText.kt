@@ -8,12 +8,14 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun ProfileText(
     text : String,
-    textAttributes: TextAttributes
+    textAttributes: TextAttributes,
+    modifier: Modifier = Modifier,
+    textAlign : TextAlign = TextAlign.Center
     ){
     Text(
         text = text,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
+        modifier = modifier,
+        textAlign = textAlign,
         color = textAttributes.textColor,
         maxLines = 1,
         fontFamily = textAttributes.textFontFamily,
