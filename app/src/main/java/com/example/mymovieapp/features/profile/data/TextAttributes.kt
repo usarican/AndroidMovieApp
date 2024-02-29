@@ -1,10 +1,14 @@
-package com.example.mymovieapp.features.profile.ui.components
+package com.example.mymovieapp.features.profile.data
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.example.mymovieapp.features.profile.ui.components.buttonTextColor
+import com.example.mymovieapp.features.profile.ui.components.h1TextColor
+import com.example.mymovieapp.features.profile.ui.components.h2TextColor
+import com.example.mymovieapp.features.profile.ui.components.playFairFontFamily
 
 data class TextAttributes(
     val textColor : Color,

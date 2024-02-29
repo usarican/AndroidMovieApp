@@ -12,17 +12,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor() : ViewModel() {
 
-    private val _counter = MutableStateFlow(0)
-    val counterState = _counter.asStateFlow()
+    private val _showBottomSheet = MutableStateFlow(false)
+    val bottomSheetState = _showBottomSheet.asStateFlow()
 
-    fun incrementCounter(){
+    private val _languageSelection = MutableStateFlow(true)
+
+    fun changeBottomSheetState(state : Boolean){
         viewModelScope.launch {
-            _counter.emit(_counter.value + 1)
-            Timber.tag("Utku").d(_counter.value.toString())
+            _showBottomSheet.emit(state)
+            Timber.tag("Utku").d(_showBottomSheet.value.toString())
         }
-    }
-
-    suspend fun incrementCounterSuspend(){
-        _counter.emit(_counter.value++)
     }
 }
