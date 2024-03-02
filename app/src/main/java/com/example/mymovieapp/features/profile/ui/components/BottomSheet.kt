@@ -4,11 +4,14 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,87 +23,95 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mymovieapp.features.profile.data.titleTextAttributes
+import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ProfileBottomSheet(
-    closeCallBack : () -> Unit
-){
+    closeCallBack: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
     var selectedIndex by remember {
         mutableStateOf(0)
     }
     ModalBottomSheet(
         onDismissRequest = { closeCallBack() },
-        sheetState = sheetState
+        sheetState = sheetState,
+        modifier = Modifier.height(300.dp)
     ) {
         ProfileText(text = "Bottom Sheet", textAttributes = titleTextAttributes)
-        PickerAnimationLazyColumn2(items = listOf("A","B","C","A","B","C","A","B","C","A","B","C","A","B","C",), selectedItemIndex = selectedIndex , onItemSelected = {
-            selectedIndex = it
-        } )
+        PickerAnimationLazyColumn2(
+            items = listOf(
+                "A",
+                "B",
+            ),
+            selectedItemIndex = selectedIndex,
+            onItemSelected = {
+                selectedIndex = it
+            },
+            limit = 10
+        )
     }
 }
 
-@Composable
-fun PickerAnimationLazyColumn(
-    items: List<String>,
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit
-) {
-    LazyColumn {
-        itemsIndexed(items) { index, item ->
-            val isSelected = index == selectedItemIndex
-            PickerItem(
-                text = item,
-                isSelected = isSelected,
-                onClick = { onItemSelected(index) }
-            )
-        }
-    }
-}
-
-@Composable
-fun PickerItem(
-    text: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val scale = if (isSelected) 3f else 1.0f
-    Text(
-        text = text,
-        modifier = Modifier
-            .clickable {  }
-            .clickable { onClick() }
-            .padding(vertical = 8.dp)
-            .graphicsLayer(scaleX = scale, scaleY = scale)
-    )
-}
 
 @Composable
 fun PickerAnimationLazyColumn2(
     items: List<String>,
     selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit
+    onItemSelected: (Int) -> Unit,
+    limit: Int
 ) {
+    val itemHeightPixels = remember { mutableStateOf(0) }
     val listState = rememberLazyListState()
-    LazyColumn(state = listState) {
+    val scrollState = rememberScrollState()
+    var scrollPosition by remember {
+        mutableStateOf(0)
+    }
+    LazyColumn(
+        state = listState,
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(vertical = 45.dp)
+    ) {
         itemsIndexed(items) { index, item ->
             val isSelected = index == selectedItemIndex
             PickerItem(
                 text = item,
                 isSelected = isSelected,
                 onClick = { onItemSelected(index) },
-                scrollPosition = listState.firstVisibleItemIndex,
-                itemIndex = index
+                scrollPosition = scrollPosition,
+                itemIndex = index,
+                itemHeightCallBack = { size ->
+                    itemHeightPixels.value = size
+                }
             )
         }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .collect { index ->
+                Timber.tag("Utku").d("listState $index")
+            }
+    }
+    LaunchedEffect(scrollState){
+        snapshotFlow { scrollState.value }
+            .collect {
+                Timber.tag("Utku").d("Scroll State $it")
+            }
     }
 }
 
@@ -110,7 +121,8 @@ fun PickerItem(
     isSelected: Boolean,
     onClick: () -> Unit,
     scrollPosition: Int,
-    itemIndex: Int
+    itemIndex: Int,
+    itemHeightCallBack: (Int) -> Unit,
 ) {
     val scale = remember { Animatable(1f) }
 
@@ -122,11 +134,13 @@ fun PickerItem(
         )
     }
 
+
     Box(
         modifier = Modifier
             .clickable(onClick = onClick)
             .padding(vertical = 8.dp)
             .scale(scale.value)
+            .onSizeChanged { size -> itemHeightCallBack(size.height) }
     ) {
         Text(
             text = text,
@@ -136,3 +150,8 @@ fun PickerItem(
         )
     }
 }
+
+
+@Composable
+private fun pixelsToDp(pixels: Int) = with(LocalDensity.current) { pixels.toDp() }
+
