@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mymovieapp.features.profile.data.titleTextAttributes
+import com.example.mymovieapp.features.profile.ui.CustomContent
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
@@ -52,7 +53,7 @@ fun ProfileBottomSheet(
         modifier = Modifier.height(300.dp)
     ) {
         ProfileText(text = "Bottom Sheet", textAttributes = titleTextAttributes)
-        PickerAnimationLazyColumn2(
+        /*PickerAnimationLazyColumn2(
             items = listOf(
                 "A",
                 "B",
@@ -62,7 +63,8 @@ fun ProfileBottomSheet(
                 selectedIndex = it
             },
             limit = 10
-        )
+        )*/
+        CustomContent()
     }
 }
 
