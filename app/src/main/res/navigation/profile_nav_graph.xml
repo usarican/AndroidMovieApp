@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.mymovieapp.features.profile.ProfileFragment"
+        android:name="com.example.mymovieapp.features.profile.ui.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>

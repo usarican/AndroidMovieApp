@@ -1,4 +1,4 @@
-package com.example.mymovieapp.features.profile
+package com.example.mymovieapp.features.myList.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import com.example.mymovieapp.R
+import com.example.mymovieapp.core.ui.BaseFragment
+import com.example.mymovieapp.databinding.FragmentMyListBinding
+import com.example.mymovieapp.features.myList.ui.screens.MyListScreen
 import com.example.mymovieapp.features.profile.ui.ProfileScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class MyListFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
 
@@ -34,7 +38,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         composeView.setContent {
-            ProfileScreen()
+            MyListScreen()
         }
     }
 

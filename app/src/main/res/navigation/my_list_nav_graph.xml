@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/myListFragment"
-        android:name="com.example.mymovieapp.features.myList.MyListFragment"
+        android:name="com.example.mymovieapp.features.myList.ui.MyListFragment"
         android:label="MyListFragment" />
 </navigation>
